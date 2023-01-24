@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1057531460160",
+    "project_id": "footballdiscussionfinalproject",
+    "storage_bucket": "footballdiscussionfinalproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1057531460160:android:8ac4a5731ebcf6db22fda5",
+        "android_client_info": {
+          "package_name": "com.example.footballdiscussion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1057531460160-prtt1a769g57j8oqb3lo4n9pc9kusl9s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6eCrosAnbJD0DXIJSiDz9pE85aa5WDnI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1057531460160-prtt1a769g57j8oqb3lo4n9pc9kusl9s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
