@@ -2,7 +2,6 @@ package com.example.footballdiscussion.fragments.recycler_adapters;
 
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 
@@ -10,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.footballdiscussion.databinding.FragmentUpcomingGameRowBinding;
-import com.example.footballdiscussion.databinding.FragmentUpcomingGamesBinding;
 import com.example.footballdiscussion.models.entities.UpcomingGame;
 
 import java.util.List;

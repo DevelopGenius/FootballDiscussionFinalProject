@@ -3,9 +3,6 @@ package com.example.footballdiscussion.fragments;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
@@ -20,9 +17,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -30,6 +24,7 @@ import com.example.footballdiscussion.databinding.FragmentRegisterPageBinding;
 import com.example.footballdiscussion.models.entities.User;
 import com.example.footballdiscussion.models.models.UserModel;
 import com.example.footballdiscussion.models.models.UserPostModel;
+import com.example.footballdiscussion.view_modals.RegisterPageViewModel;
 
 import java.util.UUID;
 

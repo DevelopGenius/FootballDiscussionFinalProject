@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.example.footballdiscussion.databinding.FragmentUpcomingGamesBinding;
 import com.example.footballdiscussion.fragments.recycler_adapters.UpcomingGamesRecyclerAdapter;
+import com.example.footballdiscussion.view_modals.UpcomingGamesViewModel;
 
 public class UpcomingGamesFragment extends Fragment {
 

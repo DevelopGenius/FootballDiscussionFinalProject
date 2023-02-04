@@ -3,6 +3,7 @@ package com.example.footballdiscussion.fragments;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.footballdiscussion.databinding.FragmentLoginPageBinding;
+import com.example.footballdiscussion.view_modals.LoginPageViewModel;
 
 public class LoginPageFragment extends Fragment {
 
