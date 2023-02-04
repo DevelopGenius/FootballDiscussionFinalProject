@@ -19,8 +19,15 @@ public class User {
     public String email="";
     public String imageUrl="";
 
-    public User(){
+    @Ignore
+    public User(String username, String password, String phone, String email, String imageUrl){
+        this.username = username;
+        this.password = password;
+        this.phone = phone;
+        this.email = email;
+        this.imageUrl = imageUrl;
     }
+
     public User( String id,String username, String password, String phone, String email, String imageUrl) {
         this.id = id;
         this.username = username;

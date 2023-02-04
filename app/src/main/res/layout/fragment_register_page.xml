@@ -23,6 +23,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <ImageView
                     android:id="@+id/avatar_img"
                     android:layout_width="match_parent"
@@ -30,13 +31,25 @@
                     android:layout_marginTop="8dp"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/empty_profile" />
+
                 <ImageButton
                     android:id="@+id/gallery_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top|right"
                     android:layout_margin="40dp"
+                    android:backgroundTint="#4D69B1"
                     android:src="@drawable/baseline_edit_24" />
+
+                <ImageButton
+                    android:id="@+id/camera_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|right"
+                    android:layout_marginTop="85dp"
+                    android:layout_marginRight="40dp"
+                    android:backgroundTint="#4D69B1"
+                    android:src="@drawable/ic_baseline_camera_alt_24" />
             </FrameLayout>
 
             <com.google.android.material.textfield.TextInputLayout
