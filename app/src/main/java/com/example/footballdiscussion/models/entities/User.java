@@ -10,93 +10,72 @@ import java.util.Map;
 
 @Entity
 public class User {
-
     @PrimaryKey
     @NonNull
-    private String id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String imageUrl;
+    public String id="";
+    public String username="";
+    public String password="";
+    public String phone="";
+    public String email="";
+    public String imageUrl="";
 
-    @Ignore
-    public User(String firstName, String lastName, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
+    public User(){
     }
-
-    public User(@NonNull String id, String firstName, String lastName, String email, String imageUrl) {
+    public User( String id,String username, String password, String phone, String email, String imageUrl) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.username = username;
+        this.password = password;
+        this.phone = phone;
         this.email = email;
         this.imageUrl = imageUrl;
-    }
-
-    public static User create(Map<String, Object> user, String id) {
-        String imageUrl = user.get("imageUrl") != null ? user.get("imageUrl").toString() : null;
-
-        return new User(
-                id,
-                user.get("firstName").toString(),
-                user.get("lastName").toString(),
-                user.get("email").toString(),
-                imageUrl
-        );
-    }
-
-    public Map<String, Object> toMap() {
-        return new HashMap<String, Object>() {{
-            put("firstName", firstName);
-            put("lastName", lastName);
-            put("email", email);
-            put("imageUrl", imageUrl);
-        }};
-    }
-
-    public String getFullName() {
-        return this.firstName + " " + this.lastName;
-    }
-
-    @NonNull
-    public String getId() {
-        return this.id;
     }
 
     public void setId(@NonNull String id) {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return this.firstName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public String getLastName() {
-        return this.lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return this.email;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getImageUrl() {
-        return this.imageUrl;
-    }
-
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    @NonNull
+    public String getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

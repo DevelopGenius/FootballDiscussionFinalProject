@@ -7,8 +7,12 @@ import androidx.room.Query;
 
 import com.example.footballdiscussion.models.entities.User;
 
+import java.util.List;
+
 @Dao
 public interface UserDao {
+    @Query("select * from User")
+    List<User> getAll();
 
     @Query("select * from User where id = :id")
     User getById(String id);
