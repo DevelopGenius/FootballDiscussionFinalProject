@@ -55,6 +55,10 @@ public class LoginPageFragment extends Fragment {
         binding.registerLink.setOnClickListener(view -> {
             Navigation.findNavController(view).navigate(LoginPageFragmentDirections.actionLoginPageFragmentToRegisterPageFragment());
         });
+
+        binding.loginButton.setOnClickListener(view -> {
+            Navigation.findNavController(view).navigate(LoginPageFragmentDirections.actionLoginPageFragmentToUpcomingGamesFragment());
+        });
         return binding.getRoot();
 
     }

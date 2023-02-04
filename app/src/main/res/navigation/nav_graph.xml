@@ -33,10 +33,18 @@
         <action
             android:id="@+id/action_loginPageFragment_to_registerPageFragment"
             app:destination="@id/registerPageFragment" />
+        <action
+            android:id="@+id/action_loginPageFragment_to_upcomingGamesFragment"
+            app:destination="@id/upcomingGamesFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerPageFragment"
         android:name="com.example.footballdiscussion.fragments.RegisterPageFragment"
         android:label="fragment_register_page"
         tools:layout="@layout/fragment_register_page" />
+    <fragment
+        android:id="@+id/upcomingGamesFragment"
+        android:name="com.example.footballdiscussion.fragments.UpcomingGamesFragment"
+        android:label="fragment_upcoming_games"
+        tools:layout="@layout/fragment_upcoming_games" />
 </navigation>
