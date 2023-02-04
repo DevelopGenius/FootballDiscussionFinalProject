@@ -6,6 +6,7 @@ import android.os.Looper;
 import androidx.core.os.HandlerCompat;
 
 import com.example.footballdiscussion.models.entities.User;
+import com.example.footballdiscussion.models.firebase.FirebaseModel;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDb;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDbRepository;
 
@@ -19,6 +20,7 @@ public class UserModel {
 
     private Executor executor = Executors.newSingleThreadExecutor();
     private Handler mainHandler = HandlerCompat.createAsync(Looper.getMainLooper());
+    private FirebaseModel firebaseModel = new FirebaseModel();
 
     public static UserModel instance(){
         return _instance;
@@ -30,18 +32,20 @@ public class UserModel {
     public interface GetAllUsersListener{
         void onComplete(List<User> data);
     }
+
     public void getAllUsers(GetAllUsersListener callback){
-        executor.execute(()->{
-            List<User> data = localDb.userDao().getAll();
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            mainHandler.post(()->{
-                callback.onComplete(data);
-            });
-        });
+        firebaseModel.getAllUsers(callback);
+//        executor.execute(()->{
+//            List<User> data = localDb.userDao().getAll();
+//            try {
+//                Thread.sleep(5000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            mainHandler.post(()->{
+//                callback.onComplete(data);
+//            });
+//        });
     }
 
     public interface AddUserListener{
@@ -49,18 +53,19 @@ public class UserModel {
     }
 
     public void addUser(User user, AddUserListener userListener){
-        executor.execute(()->{
-            localDb.userDao().insertAll(user);
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            System.out.println("HEGIA");
-            mainHandler.post(()->{
-                userListener.onComplete();
-            });
-        });
+        firebaseModel.addUser(user, userListener);
+//        executor.execute(()->{
+//            localDb.userDao().insertAll(user);
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//
+//            System.out.println("HEGIA");
+//            mainHandler.post(()->{
+//                userListener.onComplete();
+//            });
+//        });
     }
 }

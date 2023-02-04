@@ -30,6 +30,36 @@ public class User {
         this.imageUrl = imageUrl;
     }
 
+    static final String ID = "id";
+    static final String USERNAME = "name";
+    static final String PASSWORD = "password";
+    static final String PHONE = "phone";
+    static final String EMAIL = "email";
+    static final String IMAGE_URL = "imageUrl";
+
+    public static User fromJson(Map<String,Object> json){
+        String id = (String)json.get(ID);
+        String username = (String)json.get(USERNAME);
+        String password = (String)json.get(PASSWORD);
+        String phone = (String)json.get(PHONE);
+        String email = (String)json.get(EMAIL);
+        String imageUrl = (String)json.get(IMAGE_URL);
+
+        User user = new User(id, username, password, phone, email, imageUrl);
+        return user;
+    }
+
+    public Map<String,Object> toJson(){
+        Map<String, Object> json = new HashMap<>();
+        json.put(ID, getId());
+        json.put(USERNAME, getUsername());
+        json.put(PASSWORD, getPassword());
+        json.put(PHONE, getPhone());
+        json.put(EMAIL, getEmail());
+        json.put(IMAGE_URL, getImageUrl());
+        return json;
+    }
+
     public void setId(@NonNull String id) {
         this.id = id;
     }

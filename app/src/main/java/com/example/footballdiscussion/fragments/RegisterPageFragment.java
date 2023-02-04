@@ -38,7 +38,7 @@ public class RegisterPageFragment extends Fragment {
             String password = binding.passwordRegisterEt.getText().toString();
             String phone = binding.phoneRegisterEt.getText().toString();
             String email = binding.emailRegisterEt.getText().toString();
-            User user = new User("3", username, password, phone, email, "");
+            User user = new User("1", username, password, phone, email, "");
             UserModel.instance().addUser(user, ()-> {
                 Navigation.findNavController(view1).popBackStack();
             });
