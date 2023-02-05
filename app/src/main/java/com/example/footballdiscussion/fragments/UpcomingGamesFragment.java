@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.example.footballdiscussion.databinding.FragmentUpcomingGamesBinding;
 import com.example.footballdiscussion.fragments.recycler_adapters.UpcomingGamesRecyclerAdapter;
+import com.example.footballdiscussion.models.models.UpcomingGameModel;
 
 public class UpcomingGamesFragment extends Fragment {
 
@@ -42,6 +43,20 @@ public class UpcomingGamesFragment extends Fragment {
         upcomingGamesRecyclerAdapter.setOnItemClickListener(pos -> {
             Log.d("TAG", "Clicked Row " + pos);
         });
+
+        UpcomingGameModel._instance.refreshAllUpcomingGames();
+//        LiveData<List<UpcomingGame>>data = UpcomingGameModel._instance.searchUpcomingGames();
+//        data.observe(getViewLifecycleOwner(), list->{
+//            list.forEach(item->{
+//                Log.d("TAG", "Received upcoming games - here's are the titles ->" + item.getGameTitle());
+//            });
+//        });
+
+//        LiveData<Gson> data = UpcomingGamesClient._instance.getStatus();
+//        data.observe(getViewLifecycleOwner(), list->{
+//            System.out.println(list);
+//        });
+
         return binding.getRoot();
     }
 

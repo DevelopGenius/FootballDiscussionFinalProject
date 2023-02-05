@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -37,29 +38,32 @@ public class FirebaseModel {
         db.setFirestoreSettings(settings);
     }
 
-    public void getAllUsers(UserModel.GetAllUsersListener callback){
-        db.collection(USERS_COLLECTION).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<User> list = new LinkedList<>();
-                if (task.isSuccessful()){
-                    QuerySnapshot jsonList = task.getResult();
-                    for (DocumentSnapshot json: jsonList){
-                        User user = User.fromJson(json.getData());
-                        list.add(user);
+    public void getAllUsersSince(Long since, UserModel.Listener<List<User>> callback){
+        db.collection(USERS_COLLECTION)
+                .whereGreaterThanOrEqualTo(User.LAST_UPDATED, new Timestamp(since,0))
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<User> list = new LinkedList<>();
+                        if (task.isSuccessful()){
+                            QuerySnapshot jsonList = task.getResult();
+                            for (DocumentSnapshot json: jsonList){
+                                User user = User.fromJson(json.getData());
+                                list.add(user);
+                            }
+                        }
+                        callback.onComplete(list);
                     }
-                }
-                callback.onComplete(list);
-            }
-        });
+                });
     }
 
-    public void addUser(User user, UserModel.AddUserListener listener) {
+    public void addUser(User user, UserModel.Listener<Void> listener) {
         db.collection(USERS_COLLECTION).document(user.getId()).set(user.toJson())
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        listener.onComplete();
+                        listener.onComplete(null);
                     }
                 });
     }

@@ -1,5 +1,6 @@
 package com.example.footballdiscussion.models.room.daos;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -12,10 +13,10 @@ import java.util.List;
 @Dao
 public interface UserDao {
     @Query("select * from User")
-    List<User> getAll();
+    LiveData<List<User>> getAll();
 
     @Query("select * from User where id = :id")
-    User getById(String id);
+    User getUserById(String id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(User... users);

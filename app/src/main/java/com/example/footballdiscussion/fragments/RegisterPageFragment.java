@@ -3,11 +3,9 @@ package com.example.footballdiscussion.fragments;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -26,12 +24,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.footballdiscussion.ApplicationContext;
+import com.example.footballdiscussion.MainActivity;
 import com.example.footballdiscussion.databinding.FragmentRegisterPageBinding;
 import com.example.footballdiscussion.models.entities.User;
 import com.example.footballdiscussion.models.models.UserModel;
 import com.example.footballdiscussion.models.models.UserPostModel;
 
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RegisterPageFragment extends Fragment {
     private FragmentRegisterPageBinding binding;
@@ -77,23 +79,31 @@ public class RegisterPageFragment extends Fragment {
             String password = binding.passwordRegisterEt.getText().toString();
             String phone = binding.phoneRegisterEt.getText().toString();
             String email = binding.emailRegisterEt.getText().toString();
-            User user = new User(username, password, phone, email, "");
-            user.setId(UUID.randomUUID().toString());
+            if(!isEmailValid(email)) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(view1.getContext());
+                builder.setTitle("Invalid Email")
+                        .setMessage("The email address " + email + " is not valid.")
+                        .setPositiveButton("OK", null)
+                        .show();
+            } else {
+                User user = new User(username, password, phone, email, "");
+                user.setId(UUID.randomUUID().toString());
 
-            if(isImageSelected) {
-                binding.avatarImg.setDrawingCacheEnabled(true);
-                binding.avatarImg.buildDrawingCache();
-                Bitmap bitmap = ((BitmapDrawable) binding.avatarImg.getDrawable()).getBitmap();
-                UserPostModel.instance().uploadImage(user.getUsername(), bitmap, url->{
-                    if (url != null){
-                        user.setImageUrl(url);
-                    }
+                if(isImageSelected) {
+                    binding.avatarImg.setDrawingCacheEnabled(true);
+                    binding.avatarImg.buildDrawingCache();
+                    Bitmap bitmap = ((BitmapDrawable) binding.avatarImg.getDrawable()).getBitmap();
+                    UserPostModel.instance().uploadImage(user.getUsername(), bitmap, url->{
+                        if (url != null){
+                            user.setImageUrl(url);
+                        }
+                    });
+                }
+
+                UserModel.instance().addUser(user, (unused)-> {
+                    Navigation.findNavController(view1).popBackStack();
                 });
             }
-
-            UserModel.instance().addUser(user, ()-> {
-                Navigation.findNavController(view1).popBackStack();
-            });
         });
 
         binding.cameraButton.setOnClickListener(view1->{
@@ -111,5 +121,13 @@ public class RegisterPageFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mViewModel = new ViewModelProvider(this).get(RegisterPageViewModel.class);
+    }
+
+    public static boolean isEmailValid(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }
