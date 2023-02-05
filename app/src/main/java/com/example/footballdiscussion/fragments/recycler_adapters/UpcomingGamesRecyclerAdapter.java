@@ -2,7 +2,6 @@ package com.example.footballdiscussion.fragments.recycler_adapters;
 
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 
@@ -10,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.footballdiscussion.databinding.FragmentUpcomingGameRowBinding;
-import com.example.footballdiscussion.databinding.FragmentUpcomingGamesBinding;
 import com.example.footballdiscussion.models.entities.UpcomingGame;
 
 import java.util.List;
@@ -19,7 +17,7 @@ import java.util.List;
 class UpcomingGamesViewHolder extends RecyclerView.ViewHolder {
     private FragmentUpcomingGameRowBinding binding;
 
-    public UpcomingGamesViewHolder(@NonNull FragmentUpcomingGameRowBinding binding, UpcomingGamesRecyclerAdapter.OnItemClickListener listener, List<UpcomingGame> data) {
+    public UpcomingGamesViewHolder(@NonNull FragmentUpcomingGameRowBinding binding, OnItemClickListener listener, List<UpcomingGame> data) {
         super(binding.getRoot());
         this.binding = binding;
         itemView.setOnClickListener(view -> listener.onItemClick(getAdapterPosition()));
@@ -36,10 +34,6 @@ public class UpcomingGamesRecyclerAdapter extends RecyclerView.Adapter<UpcomingG
     List<UpcomingGame> data;
     LayoutInflater inflater;
     OnItemClickListener listener;
-
-    public static interface OnItemClickListener {
-        void onItemClick(int pos);
-    }
 
     public UpcomingGamesRecyclerAdapter(LayoutInflater inflater, List<UpcomingGame> data) {
         this.inflater = inflater;

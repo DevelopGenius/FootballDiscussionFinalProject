@@ -1,4 +1,4 @@
-package com.example.footballdiscussion;
+package com.example.footballdiscussion.activities;
 
 import android.os.Bundle;
 
@@ -9,6 +9,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.footballdiscussion.R;
 import com.example.footballdiscussion.databinding.ActivityMainBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
