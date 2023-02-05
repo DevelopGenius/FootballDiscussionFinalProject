@@ -14,6 +14,8 @@ import androidx.navigation.Navigation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.footballdiscussion.activities.PostsActivity;
 import com.example.footballdiscussion.databinding.FragmentLoginPageBinding;
 import com.example.footballdiscussion.view_modals.LoginPageViewModel;
 
@@ -59,10 +61,16 @@ public class LoginPageFragment extends Fragment {
         });
 
         binding.loginButton.setOnClickListener(view -> {
-            Navigation.findNavController(view).navigate(LoginPageFragmentDirections.actionLoginPageFragmentToUpcomingGamesFragment());
+            openPostsActivity();
         });
         return binding.getRoot();
 
+    }
+
+    private void openPostsActivity() {
+        Intent postsActivityIntent = new Intent(getActivity(), PostsActivity.class);
+        startActivity(postsActivityIntent);
+        getActivity().finish();
     }
 
     @Override
