@@ -21,8 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.footballdiscussion.ApplicationContext;
-import com.example.footballdiscussion.MainActivity;
 import com.example.footballdiscussion.databinding.FragmentRegisterPageBinding;
 import com.example.footballdiscussion.models.entities.User;
 import com.example.footballdiscussion.models.models.UserModel;
