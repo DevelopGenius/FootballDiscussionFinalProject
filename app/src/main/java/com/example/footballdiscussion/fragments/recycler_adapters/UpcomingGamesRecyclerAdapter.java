@@ -17,7 +17,7 @@ import java.util.List;
 class UpcomingGamesViewHolder extends RecyclerView.ViewHolder {
     private FragmentUpcomingGameRowBinding binding;
 
-    public UpcomingGamesViewHolder(@NonNull FragmentUpcomingGameRowBinding binding, UpcomingGamesRecyclerAdapter.OnItemClickListener listener, List<UpcomingGame> data) {
+    public UpcomingGamesViewHolder(@NonNull FragmentUpcomingGameRowBinding binding, OnItemClickListener listener, List<UpcomingGame> data) {
         super(binding.getRoot());
         this.binding = binding;
         itemView.setOnClickListener(view -> listener.onItemClick(getAdapterPosition()));
@@ -34,10 +34,6 @@ public class UpcomingGamesRecyclerAdapter extends RecyclerView.Adapter<UpcomingG
     List<UpcomingGame> data;
     LayoutInflater inflater;
     OnItemClickListener listener;
-
-    public static interface OnItemClickListener {
-        void onItemClick(int pos);
-    }
 
     public UpcomingGamesRecyclerAdapter(LayoutInflater inflater, List<UpcomingGame> data) {
         this.inflater = inflater;

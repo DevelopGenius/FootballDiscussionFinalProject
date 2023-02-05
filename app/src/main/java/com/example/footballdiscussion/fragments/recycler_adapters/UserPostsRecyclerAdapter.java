@@ -15,7 +15,7 @@ import java.util.List;
 class UserPostsViewHolder extends RecyclerView.ViewHolder {
     private FragmentUserPostRowBinding binding;
 
-    public UserPostsViewHolder(@NonNull FragmentUserPostRowBinding binding, UserPostsRecyclerAdapter.OnItemClickListener listener, List<UserPost> data) {
+    public UserPostsViewHolder(@NonNull FragmentUserPostRowBinding binding, OnItemClickListener listener, List<UserPost> data) {
         super(binding.getRoot());
         this.binding = binding;
         itemView.setOnClickListener(view -> listener.onItemClick(getAdapterPosition()));
@@ -33,15 +33,11 @@ class UserPostsViewHolder extends RecyclerView.ViewHolder {
     }
 }
 
-
 public class UserPostsRecyclerAdapter extends RecyclerView.Adapter<UserPostsViewHolder> {
     List<UserPost> data;
     LayoutInflater inflater;
     OnItemClickListener listener;
 
-    public static interface OnItemClickListener {
-        void onItemClick(int pos);
-    }
 
     public UserPostsRecyclerAdapter(LayoutInflater inflater, List<UserPost> data) {
         this.inflater = inflater;
