@@ -5,7 +5,9 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.footballdiscussion.enums.LoadingState;
+import com.example.footballdiscussion.models.common.Listener;
 import com.example.footballdiscussion.models.entities.User;
+import com.example.footballdiscussion.models.firebase.FirebaseAuthentication;
 import com.example.footballdiscussion.models.firebase.FirebaseModel;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDb;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDbRepository;
@@ -15,22 +17,23 @@ import java.util.concurrent.Executors;
 
 public class UserModel {
     private static final UserModel _instance = new UserModel();
-
+    private FirebaseAuthentication firebaseAuthentication;
     private Executor executor = Executors.newSingleThreadExecutor();
     private FirebaseModel firebaseModel = new FirebaseModel();
     FootballDiscussionLocalDbRepository localDb = FootballDiscussionLocalDb.getAppDb();
-    final public MutableLiveData<LoadingState> EventUsersListLoadingState = new MutableLiveData<LoadingState>(LoadingState.NOT_LOADING);
+    final public MutableLiveData<LoadingState> EventUsersListLoadingState = new MutableLiveData<>(LoadingState.NOT_LOADING);
+    private final MutableLiveData<LoadingState> EventUserLoadingState = new MutableLiveData<>(LoadingState.NOT_LOADING);
 
-    public static UserModel instance(){
+    private final MutableLiveData<User> currentLoggedInUser = new MutableLiveData<>(null);
+
+    public static UserModel instance() {
         return _instance;
     }
 
-    private UserModel(){
+    private UserModel() {
+        firebaseAuthentication = new FirebaseAuthentication();
     }
 
-    public interface Listener<T>{
-        void onComplete(T data);
-    }
 
 //    private LiveData<List<User>> usersList;
 //    public LiveData<List<User>> getAllUsers() {
@@ -41,19 +44,19 @@ public class UserModel {
 //        return usersList;
 //    }
 
-    public void refreshAllUsers(){
+    public void refreshAllUsers() {
         EventUsersListLoadingState.setValue(LoadingState.LOADING);
         // get local last update
         Long localLastUpdate = User.getLocalLastUpdate();
         // get all updated recorde from firebase since local last update
-        firebaseModel.getAllUsersSince(localLastUpdate,list->{
-            executor.execute(()->{
+        firebaseModel.getAllUsersSince(localLastUpdate, list -> {
+            executor.execute(() -> {
                 Log.d("TAG", " firebase return : " + list.size());
                 Long time = localLastUpdate;
-                for(User user:list){
+                for (User user : list) {
                     // insert new records into ROOM
                     localDb.userDao().insertAll(user);
-                    if (time < user.getLastUpdated()){
+                    if (time < user.getLastUpdated()) {
                         time = user.getLastUpdated();
                     }
                 }
@@ -69,10 +72,33 @@ public class UserModel {
         });
     }
 
-    public void addUser(User user, Listener<Void> listener){
-        firebaseModel.addUser(user,(Void)->{
-            refreshAllUsers();
-            listener.onComplete(null);
+    public void addUser(User user,String password, Listener<User> listener) {
+        firebaseAuthentication.register(user.getEmail(), password, (userId) -> {
+            firebaseModel.addUser(user, (newUser) -> {
+                addLoggedInUserToCache(newUser, listener);
+            });
         });
+    }
+
+    private void addLoggedInUserToCache(User user, Listener<User> listener){
+        EventUserLoadingState.postValue(LoadingState.LOADING);
+        executor.execute(() -> {
+            localDb.userDao().insertAll(user);
+            EventUserLoadingState.postValue(LoadingState.NOT_LOADING);
+            currentLoggedInUser.postValue(user);
+            listener.onComplete(user);
+        });
+    }
+
+    public  MutableLiveData<LoadingState> getEventUserLoadingState() {
+        return EventUserLoadingState;
+    }
+
+    public User getCurrentLogInUser(){
+        return currentLoggedInUser.getValue();
+    }
+
+    public void logout(Listener<Void> listener){
+        firebaseAuthentication.logout(listener);
     }
 }

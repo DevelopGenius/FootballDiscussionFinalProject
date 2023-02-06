@@ -21,25 +21,22 @@ public class User {
     @NonNull
     public String id="";
     public String username="";
-    public String password="";
     public String phone="";
     public String email="";
     public String imageUrl="";
     public Long lastUpdated;
 
     @Ignore
-    public User(String username, String password, String phone, String email, String imageUrl){
+    public User(String username, String phone, String email, String imageUrl){
         this.username = username;
-        this.password = password;
         this.phone = phone;
         this.email = email;
         this.imageUrl = imageUrl;
     }
 
-    public User( String id,String username, String password, String phone, String email, String imageUrl) {
+    public User( String id,String username, String phone, String email, String imageUrl) {
         this.id = id;
         this.username = username;
-        this.password = password;
         this.phone = phone;
         this.email = email;
         this.imageUrl = imageUrl;
@@ -57,11 +54,10 @@ public class User {
     public static User fromJson(Map<String,Object> json){
         String id = (String)json.get(ID);
         String username = (String)json.get(USERNAME);
-        String password = (String)json.get(PASSWORD);
         String phone = (String)json.get(PHONE);
         String email = (String)json.get(EMAIL);
         String imageUrl = (String)json.get(IMAGE_URL);
-        User user = new User(id, username, password, phone, email, imageUrl);
+        User user = new User(id, username, phone, email, imageUrl);
         try{
             Timestamp time = (Timestamp) json.get(LAST_UPDATED);
             user.setLastUpdated(time.getSeconds());
@@ -88,7 +84,6 @@ public class User {
         Map<String, Object> json = new HashMap<>();
         json.put(ID, getId());
         json.put(USERNAME, getUsername());
-        json.put(PASSWORD, getPassword());
         json.put(PHONE, getPhone());
         json.put(EMAIL, getEmail());
         json.put(IMAGE_URL, getImageUrl());
@@ -102,10 +97,6 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public void setPhone(String phone) {
@@ -127,10 +118,6 @@ public class User {
 
     public String getUsername() {
         return username;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public String getPhone() {

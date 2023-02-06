@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -21,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.footballdiscussion.activities.PostsActivity;
 import com.example.footballdiscussion.databinding.FragmentRegisterPageBinding;
 import com.example.footballdiscussion.models.entities.User;
 import com.example.footballdiscussion.models.models.UserModel;
@@ -34,9 +36,11 @@ import java.util.regex.Pattern;
 public class RegisterPageFragment extends Fragment {
     private FragmentRegisterPageBinding binding;
     private RegisterPageViewModel mViewModel;
+
     public static RegisterPageFragment newInstance() {
         return new RegisterPageFragment();
     }
+
     ActivityResultLauncher<Void> cameraLauncher;
     ActivityResultLauncher<String> galleryLauncher;
     private Boolean isImageSelected = false;
@@ -57,7 +61,7 @@ public class RegisterPageFragment extends Fragment {
         galleryLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
             @Override
             public void onActivityResult(Uri result) {
-                if (result != null){
+                if (result != null) {
                     binding.avatarImg.setImageURI(result);
                     isImageSelected = true;
                 }
@@ -75,38 +79,35 @@ public class RegisterPageFragment extends Fragment {
             String password = binding.passwordRegisterEt.getText().toString();
             String phone = binding.phoneRegisterEt.getText().toString();
             String email = binding.emailRegisterEt.getText().toString();
-            if(!isEmailValid(email)) {
+            if (!isEmailValid(email)) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(view1.getContext());
                 builder.setTitle("Invalid Email")
                         .setMessage("The email address " + email + " is not valid.")
                         .setPositiveButton("OK", null)
                         .show();
             } else {
-                User user = new User(username, password, phone, email, "");
-                user.setId(UUID.randomUUID().toString());
+                User user = new User(username, phone, email, "");
 
-                if(isImageSelected) {
+                if (isImageSelected) {
                     binding.avatarImg.setDrawingCacheEnabled(true);
                     binding.avatarImg.buildDrawingCache();
                     Bitmap bitmap = ((BitmapDrawable) binding.avatarImg.getDrawable()).getBitmap();
-                    UserPostModel.instance().uploadImage(user.getUsername(), bitmap, url->{
-                        if (url != null){
+                    UserPostModel.instance().uploadImage(user.getUsername(), bitmap, url -> {
+                        if (url != null) {
                             user.setImageUrl(url);
                         }
                     });
                 }
-
-                UserModel.instance().addUser(user, (unused)-> {
-                    Navigation.findNavController(view1).popBackStack();
-                });
+                binding.registerProgressIndicator.show();
+                mViewModel.addUser(user, password, (e) -> openPostsActivity());
             }
         });
 
-        binding.cameraButton.setOnClickListener(view1->{
+        binding.cameraButton.setOnClickListener(view1 -> {
             cameraLauncher.launch(null);
         });
 
-        binding.galleryButton.setOnClickListener(view1->{
+        binding.galleryButton.setOnClickListener(view1 -> {
             galleryLauncher.launch("media/*");
         });
 
@@ -125,5 +126,11 @@ public class RegisterPageFragment extends Fragment {
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
+    }
+
+    private void openPostsActivity() {
+        Intent postsActivityIntent = new Intent(getActivity(), PostsActivity.class);
+        startActivity(postsActivityIntent);
+        getActivity().finish();
     }
 }

@@ -3,7 +3,9 @@ package com.example.footballdiscussion.view_modals;
 import androidx.lifecycle.ViewModel;
 
 import com.example.footballdiscussion.models.entities.UpcomingGame;
+import com.example.footballdiscussion.models.entities.User;
 import com.example.footballdiscussion.models.entities.UserPost;
+import com.example.footballdiscussion.models.models.UserModel;
 
 import java.util.ArrayList;
 import java.util.Date;

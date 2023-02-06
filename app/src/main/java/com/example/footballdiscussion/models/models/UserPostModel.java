@@ -6,6 +6,7 @@ import android.os.Looper;
 
 import androidx.core.os.HandlerCompat;
 
+import com.example.footballdiscussion.models.common.Listener;
 import com.example.footballdiscussion.models.firebase.FirebaseModel;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDb;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDbRepository;
@@ -27,9 +28,6 @@ public class UserPostModel {
     private UserPostModel(){
     }
 
-    public interface Listener<T>{
-        void onComplete(T data);
-    }
 
     public void uploadImage(String name, Bitmap bitmap, Listener<String> listener) {
         firebaseModel.uploadImage(name,bitmap,listener);
