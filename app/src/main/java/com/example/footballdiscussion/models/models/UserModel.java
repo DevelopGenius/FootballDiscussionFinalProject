@@ -22,7 +22,6 @@ public class UserModel {
     private FirebaseModel firebaseModel = new FirebaseModel();
     FootballDiscussionLocalDbRepository localDb = FootballDiscussionLocalDb.getAppDb();
     final public MutableLiveData<LoadingState> EventUsersListLoadingState = new MutableLiveData<>(LoadingState.NOT_LOADING);
-    private final MutableLiveData<LoadingState> EventUserLoadingState = new MutableLiveData<>(LoadingState.NOT_LOADING);
 
     private final MutableLiveData<User> currentLoggedInUser = new MutableLiveData<>(null);
 
@@ -72,7 +71,7 @@ public class UserModel {
         });
     }
 
-    public void addUser(User user,String password, Listener<User> listener) {
+    public void addUser(User user, String password, Listener<Void> listener) {
         firebaseAuthentication.register(user.getEmail(), password, (userId) -> {
             firebaseModel.addUser(user, (newUser) -> {
                 addLoggedInUserToCache(newUser, listener);
@@ -80,25 +79,30 @@ public class UserModel {
         });
     }
 
-    private void addLoggedInUserToCache(User user, Listener<User> listener){
-        EventUserLoadingState.postValue(LoadingState.LOADING);
+    private void addLoggedInUserToCache(User user, Listener<Void> listener) {
         executor.execute(() -> {
             localDb.userDao().insertAll(user);
-            EventUserLoadingState.postValue(LoadingState.NOT_LOADING);
             currentLoggedInUser.postValue(user);
-            listener.onComplete(user);
+            listener.onComplete(null);
         });
     }
 
-    public  MutableLiveData<LoadingState> getEventUserLoadingState() {
-        return EventUserLoadingState;
-    }
-
-    public User getCurrentLogInUser(){
+    public User getCurrentLogInUser() {
         return currentLoggedInUser.getValue();
     }
 
-    public void logout(Listener<Void> listener){
-        firebaseAuthentication.logout(listener);
+    public void logout(Listener<Void> listener) {
+        firebaseAuthentication.logout((unused) -> {
+            currentLoggedInUser.postValue(null);
+            listener.onComplete(null);
+        });
+    }
+
+    public void login(String email, String password, Listener<Void> onSuccessCallback, Listener<Void> onFailureCallback) {
+        firebaseAuthentication.login(email, password, (unused) -> successfulLogin(email, onSuccessCallback), onFailureCallback);
+    }
+
+    public void successfulLogin(String email, Listener<Void> onSuccessCallback) {
+        firebaseModel.getUserByEmail(email, (user) -> addLoggedInUserToCache(user, onSuccessCallback));
     }
 }

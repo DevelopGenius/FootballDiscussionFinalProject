@@ -39,6 +39,21 @@ public class FirebaseModel {
         db.setFirestoreSettings(settings);
     }
 
+    public void getUserByEmail(String email, Listener<User> callback) {
+        db.collection(USERS_COLLECTION).whereEqualTo("email", email)
+                .get().addOnCompleteListener(task -> {
+                    if(task.isSuccessful()){
+                        QuerySnapshot jsonList = task.getResult();
+                        User user = null;
+                        for (DocumentSnapshot json : jsonList) {
+                             user = User.fromJson(json.getData());
+                        }
+
+                        callback.onComplete(user);
+                    }
+                });
+    }
+
     public void getAllUsersSince(Long since, Listener<List<User>> callback) {
         db.collection(USERS_COLLECTION)
                 .whereGreaterThanOrEqualTo(User.LAST_UPDATED, new Timestamp(since, 0))

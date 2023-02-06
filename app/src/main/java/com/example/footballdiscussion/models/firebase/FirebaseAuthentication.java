@@ -31,8 +31,17 @@ public class FirebaseAuthentication {
         return firebaseAuth.getCurrentUser() != null;
     }
 
-    public void logout(Listener<Void> callback){
+    public void logout(Listener<Void> callback) {
         firebaseAuth.signOut();
         callback.onComplete(null);
+    }
+
+    public void login(String email, String password, Listener<Void> onSuccessCallback, Listener<Void> onFailureCallback) {
+        firebaseAuth.signInWithEmailAndPassword(email, password).addOnSuccessListener(authResult -> {
+            onSuccessCallback.onComplete(null);
+        }).addOnFailureListener(e -> {
+            Log.d("TAG", "login: " + e);
+            onFailureCallback.onComplete(null);
+        });
     }
 }
