@@ -13,6 +13,7 @@
         android:title="My posts" />
 
     <item
+        android:id="@+id/createPostFragment"
         android:icon="@drawable/baseline_add_circle_24"
         android:title="Create post" />
 </menu>

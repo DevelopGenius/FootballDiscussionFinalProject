@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_upcomingGamesFragment_to_ownUserPostsFragment"
             app:destination="@id/ownUserPostsFragment" />
+        <action
+            android:id="@+id/action_upcomingGamesFragment_to_createPostFragment"
+            app:destination="@id/createPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/userPostsFragment"
@@ -28,6 +31,12 @@
         <action
             android:id="@+id/action_userPostsFragment_to_ownUserPostsFragment"
             app:destination="@id/ownUserPostsFragment" />
+        <action
+            android:id="@+id/action_userPostsFragment_to_createPostFragment"
+            app:destination="@id/createPostFragment" />
+        <action
+            android:id="@+id/action_userPostsFragment_to_createPostFragment2"
+            app:destination="@id/createPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/ownUserPostsFragment"
@@ -39,6 +48,27 @@
             app:destination="@id/upcomingGamesFragment" />
         <action
             android:id="@+id/action_ownUserPostsFragment_to_userPostsFragment"
+            app:destination="@id/userPostsFragment" />
+        <action
+            android:id="@+id/action_ownUserPostsFragment_to_createPostFragment"
+            app:destination="@id/createPostFragment" />
+        <action
+            android:id="@+id/action_ownUserPostsFragment_to_createPostFragment2"
+            app:destination="@id/createPostFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createPostFragment"
+        android:name="com.example.footballdiscussion.fragments.CreatePostFragment"
+        android:label="fragment_create_post"
+        tools:layout="@layout/fragment_create_post" >
+        <action
+            android:id="@+id/action_createPostFragment_to_ownUserPostsFragment"
+            app:destination="@id/ownUserPostsFragment" />
+        <action
+            android:id="@+id/action_createPostFragment_to_upcomingGamesFragment"
+            app:destination="@id/upcomingGamesFragment" />
+        <action
+            android:id="@+id/action_createPostFragment_to_userPostsFragment"
             app:destination="@id/userPostsFragment" />
     </fragment>
 </navigation>
