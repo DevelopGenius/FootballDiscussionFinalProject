@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_upcomingGamesFragment_to_userPostsFragment"
             app:destination="@id/userPostsFragment" />
+        <action
+            android:id="@+id/action_upcomingGamesFragment_to_ownUserPostsFragment"
+            app:destination="@id/ownUserPostsFragment" />
     </fragment>
     <fragment
         android:id="@+id/userPostsFragment"
@@ -22,5 +25,20 @@
         <action
             android:id="@+id/action_userPostsFragment_to_upcomingGamesFragment"
             app:destination="@id/upcomingGamesFragment" />
+        <action
+            android:id="@+id/action_userPostsFragment_to_ownUserPostsFragment"
+            app:destination="@id/ownUserPostsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ownUserPostsFragment"
+        android:name="com.example.footballdiscussion.fragments.OwnUserPostsFragment"
+        android:label="fragment_own_user_posts"
+        tools:layout="@layout/fragment_own_user_posts" >
+        <action
+            android:id="@+id/action_ownUserPostsFragment_to_upcomingGamesFragment"
+            app:destination="@id/upcomingGamesFragment" />
+        <action
+            android:id="@+id/action_ownUserPostsFragment_to_userPostsFragment"
+            app:destination="@id/userPostsFragment" />
     </fragment>
 </navigation>

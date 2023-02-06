@@ -19,4 +19,11 @@ public class UserPostsViewModel extends ViewModel {
 
         return list;
     }
+
+    public List<UserPost> getOwnUserPosts() {
+        List<UserPost> list = new ArrayList<>();
+        list.add(new UserPost("2","2","Adam", "NEW postttttttttttt?", "URL", true, false));
+
+        return list;
+    }
 }

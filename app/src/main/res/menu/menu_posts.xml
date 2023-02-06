@@ -9,5 +9,10 @@
         android:icon="@drawable/baseline_groups_24"
         android:title="User posts" />
     <item
+        android:id="@+id/ownUserPostsFragment"
         android:title="My posts" />
+
+    <item
+        android:icon="@drawable/baseline_add_circle_24"
+        android:title="Create post" />
 </menu>
