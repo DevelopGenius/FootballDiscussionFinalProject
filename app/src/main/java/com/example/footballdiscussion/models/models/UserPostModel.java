@@ -7,6 +7,7 @@ import android.os.Looper;
 import androidx.core.os.HandlerCompat;
 
 import com.example.footballdiscussion.models.common.Listener;
+import com.example.footballdiscussion.models.entities.UserPost;
 import com.example.footballdiscussion.models.firebase.FirebaseModel;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDb;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDbRepository;
@@ -31,5 +32,14 @@ public class UserPostModel {
 
     public void uploadImage(String name, Bitmap bitmap, Listener<String> listener) {
         firebaseModel.uploadImage(name,bitmap,listener);
+    }
+
+    public void publishUserPost(UserPost userPost, Listener<Void> callback){
+        firebaseModel.addUserPost(userPost,(Void)->{
+
+            //TODO: ADD refresh posts after insert
+           //refreshAllPosts();
+            callback.onComplete(null);
+        });
     }
 }

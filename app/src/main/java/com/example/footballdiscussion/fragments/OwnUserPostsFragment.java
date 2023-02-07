@@ -28,7 +28,7 @@ public class OwnUserPostsFragment extends Fragment {
         binding = FragmentOwnUserPostsBinding.inflate(inflater, container, false);
         binding.ownUserPostsRecyclerView.setHasFixedSize(true);
         binding.ownUserPostsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        ownUserPostsRecyclerAdapter = new UserPostsRecyclerAdapter(getLayoutInflater(), this.viewModel.getOwnUserPosts());
+        ownUserPostsRecyclerAdapter = new UserPostsRecyclerAdapter(getLayoutInflater(), this.viewModel.getOwnUserPosts(), this.viewModel.getCurrentUser().getId());
         binding.ownUserPostsRecyclerView.setAdapter(this.ownUserPostsRecyclerAdapter);
 
         return binding.getRoot();

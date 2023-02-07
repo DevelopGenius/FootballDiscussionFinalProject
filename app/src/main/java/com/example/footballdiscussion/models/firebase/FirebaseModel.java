@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 
 import com.example.footballdiscussion.models.common.Listener;
 import com.example.footballdiscussion.models.entities.User;
+import com.example.footballdiscussion.models.entities.UserPost;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,6 +31,7 @@ public class FirebaseModel {
     FirebaseFirestore db;
     FirebaseStorage storage;
     static final String USERS_COLLECTION = "users";
+    static final String USER_POSTS_COLLECTION = "user_posts";
 
     public FirebaseModel() {
         db = FirebaseFirestore.getInstance();
@@ -37,16 +39,17 @@ public class FirebaseModel {
                 .setPersistenceEnabled(false)
                 .build();
         db.setFirestoreSettings(settings);
+        storage = FirebaseStorage.getInstance();
     }
 
     public void getUserByEmail(String email, Listener<User> callback) {
         db.collection(USERS_COLLECTION).whereEqualTo("email", email)
                 .get().addOnCompleteListener(task -> {
-                    if(task.isSuccessful()){
+                    if (task.isSuccessful()) {
                         QuerySnapshot jsonList = task.getResult();
                         User user = null;
                         for (DocumentSnapshot json : jsonList) {
-                             user = User.fromJson(json.getData());
+                            user = User.fromJson(json.getData());
                         }
 
                         callback.onComplete(user);
@@ -108,6 +111,16 @@ public class FirebaseModel {
                         listener.onComplete(uri.toString());
                     }
                 });
+            }
+        });
+
+    }
+
+    public void addUserPost(UserPost userPost, Listener<Void> callback) {
+        db.collection(USER_POSTS_COLLECTION).document().set(userPost.toJson()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                callback.onComplete(null);
             }
         });
 

@@ -34,7 +34,7 @@ public class UserPostsFragment extends Fragment {
         binding = FragmentUserPostsBinding.inflate(inflater, container, false);
         binding.userPostsRecyclerView.setHasFixedSize(true);
         binding.userPostsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        userPostsRecyclerAdapter = new UserPostsRecyclerAdapter(getLayoutInflater(), this.viewModel.getUserPosts());
+        userPostsRecyclerAdapter = new UserPostsRecyclerAdapter(getLayoutInflater(), this.viewModel.getUserPosts(), this.viewModel.getCurrentUser().getId());
         binding.userPostsRecyclerView.setAdapter(this.userPostsRecyclerAdapter);
 
         userPostsRecyclerAdapter.setOnItemClickListener(pos -> {

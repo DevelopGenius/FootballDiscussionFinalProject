@@ -15,17 +15,25 @@ import java.util.List;
 class UserPostsViewHolder extends RecyclerView.ViewHolder {
     private FragmentUserPostRowBinding binding;
 
-    public UserPostsViewHolder(@NonNull FragmentUserPostRowBinding binding, OnItemClickListener listener, List<UserPost> data) {
+    public UserPostsViewHolder(@NonNull FragmentUserPostRowBinding binding, OnItemClickListener listener) {
         super(binding.getRoot());
         this.binding = binding;
         itemView.setOnClickListener(view -> listener.onItemClick(getAdapterPosition()));
     }
 
-    public void bind(UserPost userPost) {
-        if (userPost.isOwnPost()) {
+    private boolean isOwnPost(UserPost userPost, String currentUserId){
+        return userPost.getUserId().equals(currentUserId);
+    }
+
+    private boolean isLikedPost(UserPost userPost, String currentUserId){
+        return userPost.getUserLikes().contains(currentUserId);
+    }
+
+    public void bind(UserPost userPost, String currentUserId) {
+        if (isOwnPost(userPost,currentUserId)) {
             binding.userPostRowEditLikeIcon.setImageResource(R.drawable.baseline_edit_24);
         } else {
-            binding.userPostRowEditLikeIcon.setImageResource(userPost.isLiked() ?
+            binding.userPostRowEditLikeIcon.setImageResource(isLikedPost(userPost,currentUserId)?
                     R.drawable.baseline_thumb_up_alt_24 : R.drawable.baseline_thumb_up_off_alt_24);
         }
         binding.userPostRowTitle.setText(userPost.getPostTitle());
@@ -35,17 +43,25 @@ class UserPostsViewHolder extends RecyclerView.ViewHolder {
 
 public class UserPostsRecyclerAdapter extends RecyclerView.Adapter<UserPostsViewHolder> {
     List<UserPost> data;
+
+    String currentUserId;
     LayoutInflater inflater;
     OnItemClickListener listener;
 
 
-    public UserPostsRecyclerAdapter(LayoutInflater inflater, List<UserPost> data) {
+    public UserPostsRecyclerAdapter(LayoutInflater inflater, List<UserPost> data, String currentUserId) {
         this.inflater = inflater;
         this.data = data;
+        this.currentUserId = currentUserId;
     }
 
     public void setData(List<UserPost> data) {
         this.data = data;
+        notifyDataSetChanged();
+    }
+
+    public void setCurrentUserId(String currentUserId){
+        this.currentUserId = currentUserId;
         notifyDataSetChanged();
     }
 
@@ -56,7 +72,7 @@ public class UserPostsRecyclerAdapter extends RecyclerView.Adapter<UserPostsView
 
     @Override
     public void onBindViewHolder(@NonNull UserPostsViewHolder holder, int position) {
-        holder.bind(data.get(position));
+        holder.bind(data.get(position), currentUserId);
     }
 
     @Override
@@ -70,6 +86,6 @@ public class UserPostsRecyclerAdapter extends RecyclerView.Adapter<UserPostsView
     @Override
     public UserPostsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         FragmentUserPostRowBinding binding = FragmentUserPostRowBinding.inflate(this.inflater, parent, false);
-        return new UserPostsViewHolder(binding, listener, data);
+        return new UserPostsViewHolder(binding, listener);
     }
 }
