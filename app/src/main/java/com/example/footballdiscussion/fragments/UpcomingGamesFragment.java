@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 import com.example.footballdiscussion.databinding.FragmentUpcomingGamesBinding;
 import com.example.footballdiscussion.fragments.recycler_adapters.UpcomingGamesRecyclerAdapter;
 import com.example.footballdiscussion.models.models.UpcomingGameModel;
+import com.example.footballdiscussion.models.room.FootballDiscussionLocalDb;
+import com.example.footballdiscussion.models.room.FootballDiscussionLocalDbRepository;
 import com.example.footballdiscussion.view_modals.UpcomingGamesViewModel;
 
 public class UpcomingGamesFragment extends Fragment {
@@ -45,8 +47,11 @@ public class UpcomingGamesFragment extends Fragment {
             Log.d("TAG", "Clicked Row " + pos);
         });
 
-        // Need to fix!
-        // UpcomingGameModel._instance.refreshAllUpcomingGames();
+        final FootballDiscussionLocalDbRepository localDb = FootballDiscussionLocalDb.getAppDb();
+        UpcomingGameModel.getInstance().refreshAllUpcomingGames();
+        localDb.upcomingGameDao().getAll().observe(getViewLifecycleOwner(), list -> {
+            upcomingGamesRecyclerAdapter.setData(list);
+        });
 
         return binding.getRoot();
     }

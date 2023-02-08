@@ -8,10 +8,6 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.example.footballdiscussion.ApplicationContext;
-import com.google.gson.annotations.SerializedName;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Entity
 public class UpcomingGame {
@@ -19,29 +15,18 @@ public class UpcomingGame {
 
     @PrimaryKey
     @NonNull
-    @SerializedName("id")
     private String id;
-
-    @SerializedName("name")
     private String leagueName;
-
-    @SerializedName("date")
-    private Date gameDate;
-
-    @SerializedName("name")
+    private String gameDate;
     private String firstTeamName;
-
-    @SerializedName("name")
     private String secondTeamName;
-
-    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM");
 
     @Ignore
     public UpcomingGame() {
 
     }
 
-    public UpcomingGame(@NonNull String id, String leagueName, Date gameDate, String firstTeamName, String secondTeamName) {
+    public UpcomingGame(@NonNull String id, String leagueName, String gameDate, String firstTeamName, String secondTeamName) {
         this.id = id;
         this.leagueName = leagueName;
         this.gameDate = gameDate;
@@ -66,11 +51,11 @@ public class UpcomingGame {
         this.leagueName = leagueName;
     }
 
-    public Date getGameDate() {
+    public String getGameDate() {
         return gameDate;
     }
 
-    public void setGameDate(Date gameDate) {
+    public void setGameDate(String gameDate) {
         this.gameDate = gameDate;
     }
 
@@ -91,7 +76,7 @@ public class UpcomingGame {
     }
 
     public String getGameTitle(){
-        return leagueName + " " + simpleDateFormat.format(gameDate);
+        return leagueName + " " + gameDate;
     }
 
     public String getGameDescription(){

@@ -79,10 +79,10 @@ public class RegisterPageFragment extends Fragment {
             String password = binding.passwordRegisterEt.getText().toString();
             String phone = binding.phoneRegisterEt.getText().toString();
             String email = binding.emailRegisterEt.getText().toString();
-            if (!isEmailValid(email)) {
+            if (!isEmailValid(email) || password.length() < 6) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(view1.getContext());
-                builder.setTitle("Invalid Email")
-                        .setMessage("The email address " + email + " is not valid.")
+                builder.setTitle("Invalid Email or password too short")
+                        .setMessage("The email address is invalid or the password isn't 6 characters at least")
                         .setPositiveButton("OK", null)
                         .show();
             } else {

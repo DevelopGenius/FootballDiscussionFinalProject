@@ -1,11 +1,10 @@
 package com.example.footballdiscussion.models.models;
 
 import android.util.Log;
-
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.footballdiscussion.enums.LoadingState;
+import com.example.footballdiscussion.models.API.GetUpcomingGamesDto;
 import com.example.footballdiscussion.models.API.UpcomingGameAdapter;
 import com.example.footballdiscussion.models.API.UpcomingGamesApi;
 import com.example.footballdiscussion.models.entities.UpcomingGame;
@@ -14,10 +13,13 @@ import com.example.footballdiscussion.models.room.FootballDiscussionLocalDbRepos
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.List;
+import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,61 +36,56 @@ public class UpcomingGameModel {
     UpcomingGamesApi upcomingGamesApi;
 
     private UpcomingGameModel() {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        httpClient.addInterceptor(new Interceptor() {
+            @Override
+            public okhttp3.Response intercept(Chain chain) throws IOException {
+                Request request = chain.request().newBuilder()
+                        .addHeader("x-rapidapi-key", "9f6bb1ad071d43e9090651f98edb5b3c")
+                        .addHeader("x-rapidapi-host", "v3.football.api-sports.io")
+                        .build();
+                return chain.proceed(request);
+            }
+        });
+
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(UpcomingGame.class, new UpcomingGameAdapter())
                 .create();
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .client(httpClient.build())
                 .build();
         upcomingGamesApi = retrofit.create(UpcomingGamesApi.class);
     }
 
+    public static UpcomingGameModel getInstance() {
+        return _instance;
+    }
+
     public void refreshAllUpcomingGames() {
         this.upcomingGamesLoadingState.setValue(LoadingState.LOADING);
-        this.upcomingGamesApi.searchUpcomingGamesForLeague().enqueue(new Callback<List<UpcomingGame>>() {
+        this.upcomingGamesApi.searchUpcomingGamesForLeague().enqueue(new Callback<GetUpcomingGamesDto>() {
             @Override
-            public void onResponse(Call<List<UpcomingGame>> call, Response<List<UpcomingGame>> upcomingGamesResponse) {
-                if (upcomingGamesResponse.isSuccessful()) {
+            public void onResponse(Call<GetUpcomingGamesDto> call, Response<GetUpcomingGamesDto> upcomingGamesResponse) {
+                if (upcomingGamesResponse.body().getResponse() != null) {
                     executor.execute(() -> {
                         if (upcomingGamesResponse.isSuccessful()) {
-                            System.out.println(upcomingGamesResponse.body());
+                            Log.d("TAG", "----- Received upcomingGames from API successfully");
                             upcomingGamesLoadingState.postValue(LoadingState.NOT_LOADING);
+                            upcomingGamesResponse.body().getResponse().forEach(game -> {
+                                localDb.upcomingGameDao().insertAll(game);
+                            });
                         }
                     });
                 }
             }
 
             @Override
-            public void onFailure(Call<List<UpcomingGame>> call, Throwable t) {
+            public void onFailure(Call<GetUpcomingGamesDto> call, Throwable t) {
                 t.printStackTrace();
             }
         });
-    }
-
-    public LiveData<Gson> getStatus() {
-        MutableLiveData<Gson> gsonData = new MutableLiveData<>();
-        Call<Gson> call = upcomingGamesApi.getStatus();
-        call.enqueue(new Callback<Gson>() {
-            @Override
-            public void onResponse(Call<Gson> call, Response<Gson> response) {
-                if(response.isSuccessful()) {
-                    Log.d("TAG","------ getStatus response successfully arrived");
-                    System.out.println(response.body().toString());
-                    Gson res = response.body();
-                    gsonData.setValue(res);
-                } else {
-                    Log.d("TAG","------ getStatus response error");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Gson> call, Throwable t) {
-                Log.d("TAG","------ searchUpcomingGames fetch failed");
-                Log.d("TAG", "The error - " + t.toString());
-            }
-        });
-
-        return gsonData;
     }
 }
