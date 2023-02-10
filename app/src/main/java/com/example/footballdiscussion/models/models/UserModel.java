@@ -73,6 +73,7 @@ public class UserModel {
 
     public void addUser(User user, String password, Listener<Void> listener) {
         firebaseAuthentication.register(user.getEmail(), password, (userId) -> {
+            user.setId(userId);
             firebaseModel.addUser(user, (newUser) -> {
                 addLoggedInUserToCache(newUser, listener);
             });
