@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.footballdiscussion.databinding.FragmentUserPostsBinding;
+import com.example.footballdiscussion.enums.LoadingState;
 import com.example.footballdiscussion.fragments.recycler_adapters.UserPostsRecyclerAdapter;
 import com.example.footballdiscussion.view_modals.UserPostsViewModel;
 
@@ -34,11 +35,23 @@ public class UserPostsFragment extends Fragment {
         binding = FragmentUserPostsBinding.inflate(inflater, container, false);
         binding.userPostsRecyclerView.setHasFixedSize(true);
         binding.userPostsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        userPostsRecyclerAdapter = new UserPostsRecyclerAdapter(getLayoutInflater(), this.viewModel.getUserPosts(), this.viewModel.getCurrentUser().getId());
+        userPostsRecyclerAdapter = new UserPostsRecyclerAdapter(getLayoutInflater(), viewModel.getAllUserPosts().getValue(), this.viewModel.getCurrentUser().getId());
         binding.userPostsRecyclerView.setAdapter(this.userPostsRecyclerAdapter);
 
         userPostsRecyclerAdapter.setOnItemClickListener(pos -> {
             Log.d("TAG", "Clicked Row " + pos);
+        });
+
+        viewModel.getAllUserPosts().observe(getViewLifecycleOwner(),list->{
+            userPostsRecyclerAdapter.setData(list);
+        });
+
+       viewModel.getEventUserPostsLoadingState().observe(getViewLifecycleOwner(),status->{
+            binding.userPostsSwipeRefresh.setRefreshing(status == LoadingState.LOADING);
+        });
+
+        binding.userPostsSwipeRefresh.setOnRefreshListener(()->{
+            viewModel.refreshAllUserPosts();
         });
         return binding.getRoot();
     }

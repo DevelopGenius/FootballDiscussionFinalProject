@@ -2,7 +2,6 @@ package com.example.footballdiscussion.models.firebase;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -24,6 +23,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -123,6 +123,23 @@ public class FirebaseModel {
                 callback.onComplete(null);
             }
         });
+    }
 
+    public void getAllUserPostsSince(Long since, Listener<List<UserPost>> callback) {
+        db.collection(USER_POSTS_COLLECTION).whereGreaterThanOrEqualTo(UserPost.LAST_UPDATED, new Timestamp(since, 0)).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<UserPost> list = new ArrayList<>();
+                        if (task.isSuccessful()) {
+                            QuerySnapshot jsonsList = task.getResult();
+                            for (DocumentSnapshot json : jsonsList) {
+                                UserPost st = UserPost.fromJson(json.getData());
+                                list.add(st);
+                            }
+                        }
+                        callback.onComplete(list);
+                    }
+                });
     }
 }

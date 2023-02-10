@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.footballdiscussion.databinding.FragmentOwnUserPostsBinding;
+import com.example.footballdiscussion.enums.LoadingState;
 import com.example.footballdiscussion.fragments.recycler_adapters.UserPostsRecyclerAdapter;
 import com.example.footballdiscussion.view_modals.UserPostsViewModel;
 
@@ -30,6 +31,18 @@ public class OwnUserPostsFragment extends Fragment {
         binding.ownUserPostsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         ownUserPostsRecyclerAdapter = new UserPostsRecyclerAdapter(getLayoutInflater(), this.viewModel.getOwnUserPosts(), this.viewModel.getCurrentUser().getId());
         binding.ownUserPostsRecyclerView.setAdapter(this.ownUserPostsRecyclerAdapter);
+
+        viewModel.getAllUserPosts().observe(getViewLifecycleOwner(),list->{
+            ownUserPostsRecyclerAdapter.setData(this.viewModel.getOwnUserPosts());
+        });
+
+        viewModel.getEventUserPostsLoadingState().observe(getViewLifecycleOwner(),status->{
+            binding.ownUserPostsSwipeRefresh.setRefreshing(status == LoadingState.LOADING);
+        });
+
+        binding.ownUserPostsSwipeRefresh.setOnRefreshListener(()->{
+            viewModel.refreshAllUserPosts();
+        });
 
         return binding.getRoot();
     }

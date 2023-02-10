@@ -1,9 +1,14 @@
 package com.example.footballdiscussion.models.entities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
+import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.example.footballdiscussion.ApplicationContext;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
 
@@ -12,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Entity
 public class UserPost {
     @PrimaryKey
     @NonNull
@@ -56,7 +62,7 @@ public class UserPost {
     static final String IS_DELETED = "isDeleted";
     static final String USERS_LIKE= "usersLike";
     public static final String LAST_UPDATED = "lastUpdated";
-
+    static final String LOCAL_LAST_UPDATED =  "USER_POST_LOCAL_LAST_UPDATED";
     public static UserPost fromJson(Map<String,Object> json){
         String id = (String)json.get(ID);
         String userId = (String)json.get(USER_ID);
@@ -89,6 +95,19 @@ public class UserPost {
         json.put(LAST_UPDATED, FieldValue.serverTimestamp());
         return json;
     }
+
+    public static Long getLocalLastUpdate() {
+        SharedPreferences sharedPref = ApplicationContext.getContext().getSharedPreferences("USER_POST", Context.MODE_PRIVATE);
+        return sharedPref.getLong(LOCAL_LAST_UPDATED, 0);
+    }
+
+    public static void setLocalLastUpdate(Long time) {
+        SharedPreferences sharedPref = ApplicationContext.getContext().getSharedPreferences("USER_POST", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putLong(LOCAL_LAST_UPDATED,time);
+        editor.commit();
+    }
+
 
 
     @NonNull
