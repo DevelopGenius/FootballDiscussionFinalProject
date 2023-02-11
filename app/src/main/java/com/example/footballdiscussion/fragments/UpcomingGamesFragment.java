@@ -16,10 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.footballdiscussion.databinding.FragmentUpcomingGamesBinding;
+import com.example.footballdiscussion.enums.LoadingState;
 import com.example.footballdiscussion.fragments.recycler_adapters.UpcomingGamesRecyclerAdapter;
 import com.example.footballdiscussion.models.models.UpcomingGameModel;
-import com.example.footballdiscussion.models.room.FootballDiscussionLocalDb;
-import com.example.footballdiscussion.models.room.FootballDiscussionLocalDbRepository;
 import com.example.footballdiscussion.view_modals.UpcomingGamesViewModel;
 
 public class UpcomingGamesFragment extends Fragment {
@@ -40,17 +39,17 @@ public class UpcomingGamesFragment extends Fragment {
 
         binding.upcomingGamesRecyclerView.setHasFixedSize(true);
         binding.upcomingGamesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        upcomingGamesRecyclerAdapter = new UpcomingGamesRecyclerAdapter(getLayoutInflater(), this.viewModel.getUpcomingGames());
+
+        upcomingGamesRecyclerAdapter = new UpcomingGamesRecyclerAdapter(getLayoutInflater(), null);
+        refreshUpcomingGames();
         binding.upcomingGamesRecyclerView.setAdapter(this.upcomingGamesRecyclerAdapter);
 
         upcomingGamesRecyclerAdapter.setOnItemClickListener(pos -> {
             Log.d("TAG", "Clicked Row " + pos);
         });
 
-        final FootballDiscussionLocalDbRepository localDb = FootballDiscussionLocalDb.getAppDb();
-        UpcomingGameModel.getInstance().refreshAllUpcomingGames();
-        localDb.upcomingGameDao().getAll().observe(getViewLifecycleOwner(), list -> {
-            upcomingGamesRecyclerAdapter.setData(list);
+        binding.upcomingGamesSwipeRefresh.setOnRefreshListener(()->{
+            refreshUpcomingGames();
         });
 
         return binding.getRoot();
@@ -60,5 +59,16 @@ public class UpcomingGamesFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         viewModel = new ViewModelProvider(this).get(UpcomingGamesViewModel.class);
+    }
+
+    private void refreshUpcomingGames() {
+        UpcomingGameModel.getInstance().upcomingGamesLoadingState.observe(getViewLifecycleOwner(),status->{
+            binding.upcomingGamesSwipeRefresh.setRefreshing(status == LoadingState.LOADING);
+        });
+
+        this.viewModel.getUpcomingGames();
+        this.viewModel.localDb.upcomingGameDao().getAll().observe(getViewLifecycleOwner(), list -> {
+            upcomingGamesRecyclerAdapter.setData(list);
+        });
     }
 }

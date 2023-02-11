@@ -30,7 +30,7 @@ public class UpcomingGameModel {
     final public static UpcomingGameModel _instance = new UpcomingGameModel();
     private final FootballDiscussionLocalDbRepository localDb = FootballDiscussionLocalDb.getAppDb();
     private final Executor executor = Executors.newSingleThreadExecutor();
-    private final MutableLiveData<LoadingState> upcomingGamesLoadingState = new MutableLiveData<>(LoadingState.NOT_LOADING);
+    public final MutableLiveData<LoadingState> upcomingGamesLoadingState = new MutableLiveData<>(LoadingState.NOT_LOADING);
     final String BASE_URL = "https://v3.football.api-sports.io";
     Retrofit retrofit;
     UpcomingGamesApi upcomingGamesApi;

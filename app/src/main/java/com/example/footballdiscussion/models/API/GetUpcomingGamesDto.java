@@ -10,8 +10,4 @@ public class GetUpcomingGamesDto {
     public List<UpcomingGame> getResponse() {
         return this.response;
     }
-
-    public void setResults(List<UpcomingGame> results) {
-        this.response = results;
-    }
 }

@@ -26,6 +26,7 @@ public class UserPostModel {
 
     private Executor executor = Executors.newSingleThreadExecutor();
     private Handler mainHandler = HandlerCompat.createAsync(Looper.getMainLooper());
+    private UserModel userModel = UserModel.instance();
     private FirebaseModel firebaseModel = new FirebaseModel();
     FootballDiscussionLocalDbRepository localDb = FootballDiscussionLocalDb.getAppDb();
 
@@ -49,6 +50,13 @@ public class UserPostModel {
             refreshAllUserPosts();
             callback.onComplete(null);
         });
+    }
+
+    public void publishUserComment(String comment, Listener<Void> callback) {
+//        firebaseModel.addUserComment(userModel.getCurrentLogInUser(), comment, (Void) -> {
+//            refreshUserPost();
+//            callback.onComplete(null);
+//        });
     }
 
     public void refreshAllUserPosts() {

@@ -13,12 +13,8 @@ import java.util.Date;
 import java.util.List;
 
 public class UpcomingGamesViewModel extends ViewModel {
-    public List<UpcomingGame> getUpcomingGames() {
-        List<UpcomingGame> list = new ArrayList<>();
-        list.add(new UpcomingGame("1","premier league", "27.7.2022", "Arsenal", "Manchester United"));
-        list.add(new UpcomingGame("1","premier league", "28.7.2022", "Arsenal", "Manchester United"));
-        list.add(new UpcomingGame("1","premier league", "29.7.2022", "Arsenal", "Manchester United"));
-        list.add(new UpcomingGame("1","premier league", "30.7.2022", "Arsenal", "Manchester United"));
-        return list;
+    public final FootballDiscussionLocalDbRepository localDb = FootballDiscussionLocalDb.getAppDb();
+    public void getUpcomingGames() {
+        UpcomingGameModel.getInstance().refreshAllUpcomingGames();
     }
 }
