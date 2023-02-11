@@ -2,7 +2,6 @@ package com.example.footballdiscussion.models.firebase;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -152,7 +151,8 @@ public class FirebaseModel {
                 if (task.isSuccessful()) {
                     QuerySnapshot QuerySnapshots = task.getResult();
                     QuerySnapshots.forEach(queryDocumentSnapshot -> {
-                        queryDocumentSnapshot.getReference().update("usersLike", FieldValue.arrayRemove(userId)).addOnCompleteListener(command -> {
+                        queryDocumentSnapshot.getReference().update("usersLike", FieldValue.arrayRemove(userId),
+                                "lastUpdated", FieldValue.serverTimestamp()).addOnCompleteListener(command -> {
                             if (command.isSuccessful()) {
                                 callback.onComplete(null);
                             }
@@ -164,16 +164,34 @@ public class FirebaseModel {
     }
 
     public void addLikeToPost(String userPostId, String userId, Listener<Void> callback) {
-        Log.d("TAG", "addLikeToPost: " + userPostId);
         db.collection(USER_POSTS_COLLECTION).whereEqualTo("id", userPostId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                Log.d("TAG", "addLikeToPost: SUCESS");
-
                 if (task.isSuccessful()) {
                     QuerySnapshot QuerySnapshots = task.getResult();
                     QuerySnapshots.forEach(queryDocumentSnapshot -> {
-                        queryDocumentSnapshot.getReference().update("usersLike", FieldValue.arrayUnion(userId)).addOnCompleteListener(command -> {
+                        queryDocumentSnapshot.getReference().update("usersLike", FieldValue.arrayUnion(userId),
+                                "lastUpdated", FieldValue.serverTimestamp()).addOnCompleteListener(command -> {
+                            if (command.isSuccessful()) {
+                                callback.onComplete(null);
+                            }
+                        });
+                    });
+
+                }
+            }
+        });
+    }
+
+    public void deleteUserPost(String userPostId, Listener<Void> callback) {
+        db.collection(USER_POSTS_COLLECTION).whereEqualTo("id", userPostId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot QuerySnapshots = task.getResult();
+                    QuerySnapshots.forEach(queryDocumentSnapshot -> {
+                        queryDocumentSnapshot.getReference().update("isDeleted", true,
+                                "lastUpdated", FieldValue.serverTimestamp()).addOnCompleteListener(command -> {
                             if (command.isSuccessful()) {
                                 callback.onComplete(null);
                             }

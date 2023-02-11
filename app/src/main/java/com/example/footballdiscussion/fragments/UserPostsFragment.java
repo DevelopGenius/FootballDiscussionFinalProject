@@ -25,6 +25,7 @@ public class UserPostsFragment extends Fragment {
     private UserPostsViewModel viewModel;
     private UserPostsRecyclerAdapter userPostsRecyclerAdapter;
     private FragmentUserPostsBinding binding;
+
     public static UserPostsFragment newInstance() {
         return new UserPostsFragment();
     }
@@ -43,20 +44,23 @@ public class UserPostsFragment extends Fragment {
         });
 
         userPostsRecyclerAdapter.setOnIconClickListener(userPost -> {
-            if(!viewModel.isOwnPost(userPost)){
+            if (!viewModel.isOwnPost(userPost)) {
                 viewModel.handleUserPostLike(userPost);
             }
         });
+        userPostsRecyclerAdapter.setOnDeleteClickListener((userPost) -> {
+            viewModel.deleteUserPost(userPost);
+        });
 
-        viewModel.getAllUserPosts().observe(getViewLifecycleOwner(),list->{
+        viewModel.getAllUserPosts().observe(getViewLifecycleOwner(), list -> {
             userPostsRecyclerAdapter.setData(list);
         });
 
-       viewModel.getEventUserPostsLoadingState().observe(getViewLifecycleOwner(),status->{
+        viewModel.getEventUserPostsLoadingState().observe(getViewLifecycleOwner(), status -> {
             binding.userPostsSwipeRefresh.setRefreshing(status == LoadingState.LOADING);
         });
 
-        binding.userPostsSwipeRefresh.setOnRefreshListener(()->{
+        binding.userPostsSwipeRefresh.setOnRefreshListener(() -> {
             viewModel.refreshAllUserPosts();
         });
         return binding.getRoot();

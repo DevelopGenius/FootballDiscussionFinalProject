@@ -3,7 +3,6 @@ package com.example.footballdiscussion.models.models;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.LiveData;
@@ -11,7 +10,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.footballdiscussion.enums.LoadingState;
 import com.example.footballdiscussion.models.common.Listener;
-import com.example.footballdiscussion.models.entities.User;
 import com.example.footballdiscussion.models.entities.UserPost;
 import com.example.footballdiscussion.models.firebase.FirebaseModel;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDb;
@@ -109,5 +107,12 @@ public class UserPostModel {
                 });
             });
         }
+    }
+
+    public void deleteUserPost(UserPost userPost) {
+        firebaseModel.deleteUserPost(userPost.getId(), (unused) -> executor.execute(() -> {
+                    localDb.userPostDao().delete(userPost);
+                })
+        );
     }
 }

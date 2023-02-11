@@ -1,6 +1,7 @@
 package com.example.footballdiscussion.fragments.recycler_adapters;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -15,13 +16,19 @@ import java.util.List;
 class UserPostsViewHolder extends RecyclerView.ViewHolder {
     private FragmentUserPostRowBinding binding;
 
-    public UserPostsViewHolder(@NonNull FragmentUserPostRowBinding binding, OnItemClickListener listener, OnIconClickListener onIconClickListener, List<UserPost> data) {
+    public UserPostsViewHolder(@NonNull FragmentUserPostRowBinding binding, OnItemClickListener listener,
+                               OnIconClickListener onIconClickListener,
+                               OnIconClickListener onDeleteClickListener,
+                               List<UserPost> data) {
         super(binding.getRoot());
         this.binding = binding;
         itemView.setOnClickListener(view -> listener.onItemClick(getAdapterPosition()));
-        binding.userPostRowEditLikeIcon.setOnClickListener(view -> onIconClickListener.onIconClick(data.stream().filter(userPost -> userPost.getId().equals(binding
-                .userPostRowEditLikeIcon.getTag())).findFirst().get())
-        );
+        binding.userPostRowEditLikeIcon.setOnClickListener(view -> onIconClickListener.onIconClick(data.stream()
+                .filter(userPost -> userPost.getId().equals(binding
+                        .userPostRowEditLikeIcon.getTag())).findFirst().get()));
+        binding.userPostRowDeletePost.setOnClickListener(view -> onDeleteClickListener.onIconClick(data.stream()
+                .filter(userPost -> userPost.getId().equals(binding
+                        .userPostRowEditLikeIcon.getTag())).findFirst().get()));
 
     }
 
@@ -36,7 +43,10 @@ class UserPostsViewHolder extends RecyclerView.ViewHolder {
     public void bind(UserPost userPost, String currentUserId) {
         if (isOwnPost(userPost, currentUserId)) {
             binding.userPostRowEditLikeIcon.setImageResource(R.drawable.baseline_edit_24);
+            binding.userPostRowDeletePost.setVisibility(View.VISIBLE);
+            binding.userPostRowDeletePost.setTag(userPost.getId());
         } else {
+            binding.userPostRowDeletePost.setVisibility(View.GONE);
             binding.userPostRowEditLikeIcon.setImageResource(isLikedPost(userPost, currentUserId) ?
                     R.drawable.baseline_thumb_up_alt_24 : R.drawable.baseline_thumb_up_off_alt_24);
         }
@@ -52,8 +62,8 @@ public class UserPostsRecyclerAdapter extends RecyclerView.Adapter<UserPostsView
     String currentUserId;
     LayoutInflater inflater;
     OnItemClickListener listener;
-
     OnIconClickListener onIconClickListener;
+    OnIconClickListener onDeleteClickListener;
 
     public UserPostsRecyclerAdapter(LayoutInflater inflater, List<UserPost> data, String currentUserId) {
         this.inflater = inflater;
@@ -80,6 +90,9 @@ public class UserPostsRecyclerAdapter extends RecyclerView.Adapter<UserPostsView
         this.onIconClickListener = onIconClickListener;
     }
 
+    public void setOnDeleteClickListener(OnIconClickListener onDeleteClickListener) {
+        this.onDeleteClickListener = onDeleteClickListener;
+    }
     @Override
     public void onBindViewHolder(@NonNull UserPostsViewHolder holder, int position) {
         holder.bind(data.get(position), currentUserId);
@@ -96,6 +109,6 @@ public class UserPostsRecyclerAdapter extends RecyclerView.Adapter<UserPostsView
     @Override
     public UserPostsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         FragmentUserPostRowBinding binding = FragmentUserPostRowBinding.inflate(this.inflater, parent, false);
-        return new UserPostsViewHolder(binding, listener, onIconClickListener, data);
+        return new UserPostsViewHolder(binding, listener, onIconClickListener, onDeleteClickListener, data);
     }
 }

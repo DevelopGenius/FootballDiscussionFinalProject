@@ -43,6 +43,9 @@ public class OwnUserPostsFragment extends Fragment {
         binding.ownUserPostsSwipeRefresh.setOnRefreshListener(()->{
             viewModel.refreshAllUserPosts();
         });
+        ownUserPostsRecyclerAdapter.setOnDeleteClickListener((userPost)->{
+            viewModel.deleteUserPost(userPost);
+        });
 
         return binding.getRoot();
     }
