@@ -42,6 +42,12 @@ public class UserPostsFragment extends Fragment {
             Log.d("TAG", "Clicked Row " + pos);
         });
 
+        userPostsRecyclerAdapter.setOnIconClickListener(userPost -> {
+            if(!viewModel.isOwnPost(userPost)){
+                viewModel.handleUserPostLike(userPost);
+            }
+        });
+
         viewModel.getAllUserPosts().observe(getViewLifecycleOwner(),list->{
             userPostsRecyclerAdapter.setData(list);
         });

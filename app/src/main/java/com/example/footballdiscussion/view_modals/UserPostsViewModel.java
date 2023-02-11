@@ -55,5 +55,10 @@ public class UserPostsViewModel extends ViewModel {
         userPostModel.publishUserPost(userPost, callback);
     }
 
-
+    public boolean isOwnPost(UserPost userPost){
+        return userPost.getUserId().equals(getCurrentUser().getId());
+    }
+    public void handleUserPostLike(UserPost userPost){
+        userPostModel.handleUserPostLike(userPost, getCurrentUser().getId());
+    }
 }

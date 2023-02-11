@@ -2,6 +2,7 @@ package com.example.footballdiscussion.models.firebase;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -15,6 +16,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -134,12 +136,53 @@ public class FirebaseModel {
                         if (task.isSuccessful()) {
                             QuerySnapshot jsonsList = task.getResult();
                             for (DocumentSnapshot json : jsonsList) {
-                                UserPost st = UserPost.fromJson(json.getData());
-                                list.add(st);
+                                UserPost userPost = UserPost.fromJson(json.getData());
+                                list.add(userPost);
                             }
                         }
                         callback.onComplete(list);
                     }
                 });
     }
+
+    public void removeLikeToPost(String userPostId, String userId, Listener<Void> callback) {
+        db.collection(USER_POSTS_COLLECTION).whereEqualTo("id", userPostId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot QuerySnapshots = task.getResult();
+                    QuerySnapshots.forEach(queryDocumentSnapshot -> {
+                        queryDocumentSnapshot.getReference().update("usersLike", FieldValue.arrayRemove(userId)).addOnCompleteListener(command -> {
+                            if (command.isSuccessful()) {
+                                callback.onComplete(null);
+                            }
+                        });
+                    });
+                }
+            }
+        });
+    }
+
+    public void addLikeToPost(String userPostId, String userId, Listener<Void> callback) {
+        Log.d("TAG", "addLikeToPost: " + userPostId);
+        db.collection(USER_POSTS_COLLECTION).whereEqualTo("id", userPostId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                Log.d("TAG", "addLikeToPost: SUCESS");
+
+                if (task.isSuccessful()) {
+                    QuerySnapshot QuerySnapshots = task.getResult();
+                    QuerySnapshots.forEach(queryDocumentSnapshot -> {
+                        queryDocumentSnapshot.getReference().update("usersLike", FieldValue.arrayUnion(userId)).addOnCompleteListener(command -> {
+                            if (command.isSuccessful()) {
+                                callback.onComplete(null);
+                            }
+                        });
+                    });
+
+                }
+            }
+        });
+    }
 }
+

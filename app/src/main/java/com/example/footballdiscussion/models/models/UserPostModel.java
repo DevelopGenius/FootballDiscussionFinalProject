@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.footballdiscussion.enums.LoadingState;
 import com.example.footballdiscussion.models.common.Listener;
+import com.example.footballdiscussion.models.entities.User;
 import com.example.footballdiscussion.models.entities.UserPost;
 import com.example.footballdiscussion.models.firebase.FirebaseModel;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDb;
@@ -31,37 +32,38 @@ public class UserPostModel {
     final public MutableLiveData<LoadingState> eventUserPostsLoadingState = new MutableLiveData<>(LoadingState.NOT_LOADING);
     private LiveData<List<UserPost>> userPostList;
 
-    public static UserPostModel instance(){
+    public static UserPostModel instance() {
         return _instance;
     }
-    private UserPostModel(){
+
+    private UserPostModel() {
     }
 
 
     public void uploadImage(String name, Bitmap bitmap, Listener<String> listener) {
-        firebaseModel.uploadImage(name,bitmap,listener);
+        firebaseModel.uploadImage(name, bitmap, listener);
     }
 
-    public void publishUserPost(UserPost userPost, Listener<Void> callback){
-        firebaseModel.addUserPost(userPost,(Void)->{
-           refreshAllUserPosts();
+    public void publishUserPost(UserPost userPost, Listener<Void> callback) {
+        firebaseModel.addUserPost(userPost, (Void) -> {
+            refreshAllUserPosts();
             callback.onComplete(null);
         });
     }
 
-    public void refreshAllUserPosts(){
+    public void refreshAllUserPosts() {
         eventUserPostsLoadingState.setValue(LoadingState.LOADING);
         Long localLastUpdate = UserPost.getLocalLastUpdate();
-        firebaseModel.getAllUserPostsSince(localLastUpdate, list->{
-            executor.execute(()->{
+        firebaseModel.getAllUserPostsSince(localLastUpdate, list -> {
+            executor.execute(() -> {
                 Long time = localLastUpdate;
 
-                for(UserPost userPost:list){
+                for (UserPost userPost : list) {
                     localDb.userPostDao().insertAll(userPost);
-                    if(userPost.isDeleted()){
+                    if (userPost.isDeleted()) {
                         localDb.userPostDao().delete(userPost);
                     }
-                    if (time < userPost.getLastUpdated()){
+                    if (time < userPost.getLastUpdated()) {
                         time = userPost.getLastUpdated();
                     }
                 }
@@ -70,15 +72,34 @@ public class UserPostModel {
             });
         });
     }
-    public LiveData<List<UserPost>>  getAllUserPosts(){
-        if(userPostList == null){
+
+    public LiveData<List<UserPost>> getAllUserPosts() {
+        if (userPostList == null) {
             userPostList = localDb.userPostDao().getAll();
             refreshAllUserPosts();
         }
         return userPostList;
     }
 
-    public MutableLiveData<LoadingState> getEventUserPostsLoadingState(){
+    public MutableLiveData<LoadingState> getEventUserPostsLoadingState() {
         return eventUserPostsLoadingState;
+    }
+
+    public void handleUserPostLike(UserPost userPost, String userId) {
+        if (userPost.getUserLikes().contains(userId)) {
+            firebaseModel.removeLikeToPost(userPost.getId(), userId, (unused) -> {
+                executor.execute(() -> {
+                    userPost.getUserLikes().remove(userId);
+                    localDb.userPostDao().insertAll(userPost);
+                });
+            });
+        } else {
+            firebaseModel.addLikeToPost(userPost.getId(), userId, (unused) -> {
+                executor.execute(() -> {
+                    userPost.getUserLikes().add(userId);
+                    localDb.userPostDao().insertAll(userPost);
+                });
+            });
+        }
     }
 }
