@@ -1,5 +1,6 @@
 package com.example.footballdiscussion.models.models;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -123,9 +124,74 @@ public class UserModel {
         if (firebaseAuthentication.isUserLoggedIn()) {
             String loggedInEmail = firebaseAuthentication.getCurrentLogInUserEmail();
 
-            getUserByEmail(loggedInEmail,onLoggedInCallback);
+            getUserByEmail(loggedInEmail, onLoggedInCallback);
         } else {
             onLoggedOutCallback.onComplete(null);
+        }
+    }
+
+    public void updateUserProfile(String username, String email, String phone,
+                                  Bitmap bitmap,
+                                  Listener<Void> successCallback,
+                                  Listener<String> failCallback) {
+        User oldUser = currentLoggedInUser.getValue();
+        validateNewEmail(oldUser, email, (unused) -> {
+            validateNewUsername(oldUser, username, (unused1) -> {
+                oldUser.setEmail(email);
+                oldUser.setPhone(phone);
+                oldUser.setUsername(username);
+                if (bitmap != null) {
+                    firebaseModel.uploadImage(username, bitmap, (url) -> {
+                        oldUser.setImageUrl(url);
+                        saveUpdatedUser(oldUser, successCallback, failCallback);
+                    });
+                } else {
+                    saveUpdatedUser(oldUser, successCallback, failCallback);
+                }
+            }, failCallback);
+        }, failCallback);
+    }
+
+    public void saveUpdatedUser(User user, Listener<Void> successCallback,
+                                Listener<String> failCallback) {
+        firebaseAuthentication.updateCurrentUserEmail(user.getEmail(), (unused) ->{
+            firebaseModel.updateUser(user, (unused1 -> {
+                addLoggedInUserToCache(user, successCallback);
+            }));
+        }, failCallback);
+    }
+
+    private void validateNewEmail(User oldUser, String email,
+                                  Listener<Void> successCallback,
+                                  Listener<String> failCallback) {
+        if (oldUser.getEmail().equals(email)) {
+            successCallback.onComplete(null);
+        } else {
+            validateEmail(email, successCallback, failCallback);
+        }
+    }
+
+    private void validateEmail(String email, Listener<Void> successCallback, Listener<String> failCallback) {
+        firebaseAuthentication.isEmailExists(email, (isExist) -> {
+            if (isExist) {
+                failCallback.onComplete("This email already exists");
+            } else {
+                successCallback.onComplete(null);
+            }
+        }, failCallback);
+    }
+
+    private void validateNewUsername(User oldUser, String username, Listener<Void> successCallback, Listener<String> failCallback) {
+        if (oldUser.getUsername().equals(username)) {
+            successCallback.onComplete(null);
+        } else {
+            firebaseModel.isUsernameExists(username, (isExist) -> {
+                if (isExist) {
+                    failCallback.onComplete("This username already exists");
+                } else {
+                    successCallback.onComplete(null);
+                }
+            });
         }
     }
 }
