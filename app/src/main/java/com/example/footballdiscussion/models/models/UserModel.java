@@ -22,7 +22,7 @@ public class UserModel {
     private FirebaseModel firebaseModel = new FirebaseModel();
     FootballDiscussionLocalDbRepository localDb = FootballDiscussionLocalDb.getAppDb();
     final public MutableLiveData<LoadingState> EventUsersListLoadingState = new MutableLiveData<>(LoadingState.NOT_LOADING);
-
+    final public MutableLiveData<LoadingState> eventLoggedInUserLoadingState = new MutableLiveData<>(LoadingState.NOT_LOADING);
     private final MutableLiveData<User> currentLoggedInUser = new MutableLiveData<>(null);
 
     public static UserModel instance() {
@@ -105,5 +105,27 @@ public class UserModel {
 
     public void successfulLogin(String email, Listener<Void> onSuccessCallback) {
         firebaseModel.getUserByEmail(email, (user) -> addLoggedInUserToCache(user, onSuccessCallback));
+    }
+
+
+    public void getUserByEmail(String email, Listener<Void> callback) {
+        eventLoggedInUserLoadingState.setValue(LoadingState.LOADING);
+        firebaseModel.getUserByEmail(email, (user) -> {
+            addLoggedInUserToCache(user, (unused) -> {
+                eventLoggedInUserLoadingState.postValue(LoadingState.NOT_LOADING);
+                callback.onComplete(null);
+            });
+        });
+
+    }
+
+    public void userLoggedInHandler(Listener<Void> onLoggedInCallback, Listener<Void> onLoggedOutCallback) {
+        if (firebaseAuthentication.isUserLoggedIn()) {
+            String loggedInEmail = firebaseAuthentication.getCurrentLogInUserEmail();
+
+            getUserByEmail(loggedInEmail,onLoggedInCallback);
+        } else {
+            onLoggedOutCallback.onComplete(null);
+        }
     }
 }

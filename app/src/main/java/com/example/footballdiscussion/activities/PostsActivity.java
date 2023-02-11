@@ -20,7 +20,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class PostsActivity extends AppCompatActivity {
     private ActivityPostsBinding binding;
     NavController navController;
-private  PostsViewModel postsViewModel;
+    private PostsViewModel postsViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +33,7 @@ private  PostsViewModel postsViewModel;
         NavigationUI.setupActionBarWithNavController(this, navController);
 
         BottomNavigationView navView = findViewById(R.id.bottom_navigation_view_posts);
-        NavigationUI.setupWithNavController(navView,navController);
+        NavigationUI.setupWithNavController(navView, navController);
         postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
     }
 
@@ -45,7 +46,7 @@ private  PostsViewModel postsViewModel;
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() ==  R.id.logout_icon){
+        if (item.getItemId() == R.id.logout_icon) {
             postsViewModel.logout((unused) -> logoutActivity());
         }
         if (item.getItemId() == android.R.id.home) {
@@ -55,7 +56,7 @@ private  PostsViewModel postsViewModel;
         return super.onOptionsItemSelected(item);
     }
 
-    private void logoutActivity(){
+    private void logoutActivity() {
         Intent mainActivity = new Intent(this, MainActivity.class);
         startActivity(mainActivity);
         finish();

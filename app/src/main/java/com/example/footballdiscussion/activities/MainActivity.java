@@ -1,32 +1,17 @@
 package com.example.footballdiscussion.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.NavigationUI;
-
-import com.example.footballdiscussion.R;
+import androidx.lifecycle.ViewModelProvider;
 import com.example.footballdiscussion.databinding.ActivityMainBinding;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.example.footballdiscussion.view_modals.MainViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    NavController navController;
+    private MainViewModel mainViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,31 +19,22 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
-        navController = navHostFragment.getNavController();
-        NavigationUI.setupActionBarWithNavController(this, navController);
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        binding.startApplicationProgressIndicator.show();
+        mainViewModel.userLoggedInHandler((unused) -> startLoggedInActivity(),
+                (unused) -> startLoggedOutActivity());
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+
+    public void startLoggedOutActivity() {
+        Intent intent = new Intent(this, LoggedOutActivity.class);
+        startActivity(intent);
+        finish();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public void startLoggedInActivity() {
+        Intent intent = new Intent(this, PostsActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
