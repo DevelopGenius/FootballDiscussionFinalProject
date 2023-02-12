@@ -10,6 +10,7 @@
         android:title="User posts" />
     <item
         android:id="@+id/ownUserPostsFragment"
+        android:icon="@drawable/baseline_library_books_24"
         android:title="My posts" />
 
     <item
