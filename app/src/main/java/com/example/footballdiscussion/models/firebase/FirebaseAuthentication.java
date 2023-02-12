@@ -6,6 +6,7 @@ import com.example.footballdiscussion.models.common.Listener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.SignInMethodQueryResult;
 
 public class FirebaseAuthentication {
     private FirebaseAuth firebaseAuth;
@@ -44,4 +45,21 @@ public class FirebaseAuthentication {
             onFailureCallback.onComplete(null);
         });
     }
+
+    public void isEmailExists(String email, Listener<Boolean> callback, Listener<String> failCallback) {
+        firebaseAuth.fetchSignInMethodsForEmail(email)
+                .addOnSuccessListener((SignInMethodQueryResult signInMethodQueryResult) -> {
+                    boolean isNewUser = signInMethodQueryResult.getSignInMethods().isEmpty();
+                    callback.onComplete(isNewUser);
+
+                }).addOnFailureListener(e -> {
+                    failCallback.onComplete(e.getMessage());
+                });
+    }
+
+    public void updateCurrentUserEmail(String email, Listener<Void> callback, Listener<String> failCallback) {
+        firebaseAuth.getCurrentUser().updateEmail(email).addOnSuccessListener(unused -> callback.onComplete(null)).addOnFailureListener(e ->
+                failCallback.onComplete(e.getMessage()));
+    }
+
 }

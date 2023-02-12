@@ -40,7 +40,6 @@ public class PostsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_posts_bar, menu);
         return true;
     }
@@ -54,7 +53,7 @@ public class PostsActivity extends AppCompatActivity {
             navController.popBackStack();
         }
 
-        return super.onOptionsItemSelected(item);
+        return NavigationUI.onNavDestinationSelected(item, navController);
     }
 
     private void logoutActivity() {

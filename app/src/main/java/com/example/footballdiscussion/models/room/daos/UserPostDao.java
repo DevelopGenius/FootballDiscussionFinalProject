@@ -14,7 +14,7 @@ import java.util.List;
 
 @Dao
 public interface UserPostDao {
-    @Query("select * from UserPost")
+    @Query("select * from UserPost order by id")
     LiveData<List<UserPost>> getAll();
 
     @Query("select * from UserPost where id = :id")

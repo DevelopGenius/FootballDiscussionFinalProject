@@ -27,6 +27,7 @@ import com.example.footballdiscussion.databinding.FragmentRegisterPageBinding;
 import com.example.footballdiscussion.models.entities.User;
 import com.example.footballdiscussion.models.models.UserModel;
 import com.example.footballdiscussion.models.models.UserPostModel;
+import com.example.footballdiscussion.utils.UserUtils;
 import com.example.footballdiscussion.view_modals.RegisterPageViewModel;
 
 import java.util.UUID;
@@ -79,7 +80,7 @@ public class RegisterPageFragment extends Fragment {
             String password = binding.passwordRegisterEt.getText().toString();
             String phone = binding.phoneRegisterEt.getText().toString();
             String email = binding.emailRegisterEt.getText().toString();
-            if (!isEmailValid(email) || password.length() < 6) {
+            if (!UserUtils.isEmailValid(email) || password.length() < 6) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(view1.getContext());
                 builder.setTitle("Invalid Email or password too short")
                         .setMessage("The email address is invalid or the password isn't 6 characters at least")
@@ -95,11 +96,15 @@ public class RegisterPageFragment extends Fragment {
                     UserPostModel.instance().uploadImage(user.getUsername(), bitmap, url -> {
                         if (url != null) {
                             user.setImageUrl(url);
+                            binding.registerProgressIndicator.show();
+                            mViewModel.addUser(user, password, (e) -> openPostsActivity());
                         }
                     });
+                } else{
+                    binding.registerProgressIndicator.show();
+                    mViewModel.addUser(user, password, (e) -> openPostsActivity());
                 }
-                binding.registerProgressIndicator.show();
-                mViewModel.addUser(user, password, (e) -> openPostsActivity());
+
             }
         });
 
@@ -118,14 +123,6 @@ public class RegisterPageFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mViewModel = new ViewModelProvider(this).get(RegisterPageViewModel.class);
-    }
-
-    public static boolean isEmailValid(String email) {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-
-        Pattern pattern = Pattern.compile(emailRegex);
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
     }
 
     private void openPostsActivity() {

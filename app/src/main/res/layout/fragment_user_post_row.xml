@@ -68,6 +68,17 @@
                         app:layout_constraintStart_toEndOf="@id/user_post_row_user_icon" />
 
                     <ImageButton
+                        android:id="@+id/user_post_row_delete_post"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/baseline_delete_24"
+                        android:visibility="gone"
+                        android:layout_marginRight="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/user_post_row_edit_like_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    <ImageButton
                         android:id="@+id/user_post_row_edit_like_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

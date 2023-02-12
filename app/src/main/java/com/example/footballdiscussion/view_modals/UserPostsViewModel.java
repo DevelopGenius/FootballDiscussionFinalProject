@@ -6,12 +6,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.footballdiscussion.utils.LoadingState;
 import com.example.footballdiscussion.models.common.Listener;
 import com.example.footballdiscussion.models.entities.User;
 import com.example.footballdiscussion.models.entities.UserPost;
 import com.example.footballdiscussion.models.models.UserModel;
 import com.example.footballdiscussion.models.models.UserPostModel;
+import com.example.footballdiscussion.utils.LoadingState;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,8 +34,8 @@ public class UserPostsViewModel extends ViewModel {
 
     public List<UserPost> getOwnUserPosts() {
         User currentUser = getCurrentUser();
-
-        return userPostModel.getAllUserPosts().getValue().stream()
+        List<UserPost> userPosts = userPostModel.getAllUserPosts().getValue();
+        return userPosts == null ? null : userPosts.stream()
                 .filter(userPost -> userPost.getUserId().equals(currentUser.id))
                 .collect(Collectors.toList());
     }
@@ -52,10 +52,15 @@ public class UserPostsViewModel extends ViewModel {
         userPostModel.publishUserPost(userPost, callback);
     }
 
-    public boolean isOwnPost(UserPost userPost){
+    public boolean isOwnPost(UserPost userPost) {
         return userPost.getUserId().equals(getCurrentUser().getId());
     }
-    public void handleUserPostLike(UserPost userPost){
+
+    public void handleUserPostLike(UserPost userPost) {
         userPostModel.handleUserPostLike(userPost, getCurrentUser().getId());
+    }
+
+    public void deleteUserPost(UserPost userPost) {
+        userPostModel.deleteUserPost(userPost);
     }
 }

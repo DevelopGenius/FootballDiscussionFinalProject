@@ -142,4 +142,11 @@ public class UserPostModel {
             });
         }
     }
+
+    public void deleteUserPost(UserPost userPost) {
+        firebaseModel.deleteUserPost(userPost.getId(), (unused) -> executor.execute(() -> {
+                    localDb.userPostDao().delete(userPost);
+                })
+        );
+    }
 }
