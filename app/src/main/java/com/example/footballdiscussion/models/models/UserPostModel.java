@@ -39,17 +39,8 @@ public class UserPostModel {
     private UserPostModel() {
     }
 
-    // Probably need to fix
-    public UserPost getUserPostById(String userPostId, Listener<UserPost> callback) {
-        AtomicReference<UserPost> userPostToReturn = new AtomicReference<>();
-        firebaseModel.getUserPostById(userPostId, (userPost) -> {
-            executor.execute(() -> {
-                userPostToReturn.set(userPost);
-                callback.onComplete(null);
-            });
-        });
-
-        return userPostToReturn.get();
+    public LiveData<UserPost> getUserPostById(String userPostId) {
+        return localDb.userPostDao().getUserPostById(userPostId);
     }
 
 
