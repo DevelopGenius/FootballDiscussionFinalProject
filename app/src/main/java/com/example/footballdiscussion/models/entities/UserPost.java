@@ -30,18 +30,13 @@ public class UserPost {
     private String postTitle;
     private String imageUrl;
     private boolean isDeleted;
-
-    @TypeConverters(Converters.class)
     private List<String> userLikes;
-
+    private List<String> userPostComments;
     private Long lastUpdated;
-
-    @TypeConverters(UserPostCommentConverter.class)
-    private List<UserPostComment> userPostComments;
 
     public UserPost(
             @NonNull String id, String userId, String username, String postTitle,
-            String imageUrl,List<String> userLikes, List<UserPostComment> userPostComments, boolean isDeleted
+            String imageUrl,List<String> userLikes, List<String> userPostComments, boolean isDeleted
     ) {
         this.id = id;
         this.userId = userId;
@@ -83,7 +78,7 @@ public class UserPost {
         String imageUrl = (String)json.get(IMAGE_URL);
         Boolean isDeleted = (Boolean)json.get(IS_DELETED);
         List<String> userLikes =  ((List<String>) json.get(USERS_LIKE));
-        List<UserPostComment> userPostComments = ((List<UserPostComment>) json.get(USER_COMMENTS));
+        List<String> userPostComments = ((List<String>) json.get(USER_COMMENTS));
 
         UserPost userPost = new UserPost(id,userId,username, postTitle,imageUrl,userLikes, userPostComments, isDeleted);
         try{
@@ -189,11 +184,11 @@ public class UserPost {
         this.userLikes = userLikes;
     }
 
-    public List<UserPostComment> getUserPostComments() {
+    public List<String> getUserPostComments() {
         return userPostComments;
     }
 
-    public void setUserPostComments(List<UserPostComment> userPostComments) {
+    public void setUserPostComments(List<String> userPostComments) {
         this.userPostComments = userPostComments;
     }
 }
