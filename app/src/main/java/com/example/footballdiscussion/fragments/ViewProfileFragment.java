@@ -18,6 +18,7 @@ import com.example.footballdiscussion.R;
 import com.example.footballdiscussion.databinding.FragmentUserPostsBinding;
 import com.example.footballdiscussion.databinding.FragmentViewProfileBinding;
 import com.example.footballdiscussion.models.entities.User;
+import com.example.footballdiscussion.utils.ImageUtils;
 import com.example.footballdiscussion.view_modals.ProfileViewModel;
 import com.squareup.picasso.Picasso;
 
@@ -51,12 +52,8 @@ public class ViewProfileFragment extends Fragment {
 
     private void loadProfileData() {
         User currentUser = viewModel.getCurrentUser();
-        if (currentUser.getImageUrl()  != null && currentUser.getImageUrl().length() > 5) {
-            Picasso.get().load(currentUser.getImageUrl())
-                    .placeholder(R.drawable.empty_profile).into(binding.viewProfileImg);
-        } else{
-            binding.viewProfileImg.setImageResource(R.drawable.empty_profile);
-        }
+        ImageUtils.loadImage(currentUser.getImageUrl(), binding.viewProfileImg, R.drawable.empty_profile);
+
         binding.viewProfileEmail.setText(currentUser.getEmail());
         binding.viewProfilePhone.setText(currentUser.getPhone());
         binding.viewProfileUsername.setText(currentUser.getUsername());

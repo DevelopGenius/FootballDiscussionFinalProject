@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import com.example.footballdiscussion.R;
 import com.example.footballdiscussion.databinding.FragmentEditProfileBinding;
 import com.example.footballdiscussion.models.entities.User;
+import com.example.footballdiscussion.utils.ImageUtils;
 import com.example.footballdiscussion.view_modals.ProfileViewModel;
 import com.squareup.picasso.Picasso;
 
@@ -106,12 +107,7 @@ public class EditProfileFragment extends Fragment {
 
     private void loadProfileData() {
         User currentUser = viewModel.getCurrentUser();
-        if (currentUser.getImageUrl()  != null && currentUser.getImageUrl().length() > 5) {
-            Picasso.get().load(currentUser.getImageUrl())
-                    .placeholder(R.drawable.empty_profile).into(binding.editProfileImg);
-        } else{
-            binding.editProfileImg.setImageResource(R.drawable.empty_profile);
-        }
+        ImageUtils.loadImage(currentUser.getImageUrl(), binding.editProfileImg, R.drawable.empty_profile);
 
         binding.emailEditProfileEt.setText(currentUser.getEmail());
         binding.phoneEditProfileEt.setText(currentUser.getPhone());

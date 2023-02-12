@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.footballdiscussion.R;
 import com.example.footballdiscussion.databinding.FragmentUserPostRowBinding;
 import com.example.footballdiscussion.models.entities.UserPost;
+import com.example.footballdiscussion.utils.ImageUtils;
 
 import java.util.List;
 
@@ -53,6 +54,7 @@ class UserPostsViewHolder extends RecyclerView.ViewHolder {
         binding.userPostRowEditLikeIcon.setTag(userPost.getId());
         binding.userPostRowTitle.setText(userPost.getPostTitle());
         binding.userPostRowUsername.setText(userPost.getUsername());
+        ImageUtils.loadImage(userPost.getImageUrl(), binding.userPostRowImage, R.drawable.football_stadium);
     }
 }
 

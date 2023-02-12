@@ -70,9 +70,10 @@ public class UserPostModel {
                 Long time = localLastUpdate;
 
                 for (UserPost userPost : list) {
-                    localDb.userPostDao().insertAll(userPost);
                     if (userPost.isDeleted()) {
                         localDb.userPostDao().delete(userPost);
+                    } else{
+                        localDb.userPostDao().insertAll(userPost);
                     }
                     if (time < userPost.getLastUpdated()) {
                         time = userPost.getLastUpdated();
