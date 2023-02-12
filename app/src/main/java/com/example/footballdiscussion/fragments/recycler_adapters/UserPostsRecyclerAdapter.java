@@ -22,7 +22,6 @@ class UserPostsViewHolder extends RecyclerView.ViewHolder {
         binding.userPostRowEditLikeIcon.setOnClickListener(view -> onIconClickListener.onIconClick(data.stream().filter(userPost -> userPost.getId().equals(binding
                 .userPostRowEditLikeIcon.getTag())).findFirst().get())
         );
-
     }
 
     private boolean isOwnPost(UserPost userPost, String currentUserId) {

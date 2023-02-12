@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.footballdiscussion.databinding.FragmentUpcomingGamesBinding;
-import com.example.footballdiscussion.enums.LoadingState;
+import com.example.footballdiscussion.utils.LoadingState;
 import com.example.footballdiscussion.fragments.recycler_adapters.UpcomingGamesRecyclerAdapter;
 import com.example.footballdiscussion.models.models.UpcomingGameModel;
 import com.example.footballdiscussion.view_modals.UpcomingGamesViewModel;

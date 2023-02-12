@@ -7,6 +7,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import com.example.footballdiscussion.models.entities.User;
 import com.example.footballdiscussion.models.entities.UserPost;
 
 import java.util.List;
@@ -15,6 +16,9 @@ import java.util.List;
 public interface UserPostDao {
     @Query("select * from UserPost")
     LiveData<List<UserPost>> getAll();
+
+    @Query("select * from UserPost where id = :id")
+    LiveData<UserPost> getUserPostById(String id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(UserPost... userPosts);

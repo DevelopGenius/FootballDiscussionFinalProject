@@ -14,6 +14,7 @@ import android.view.MenuItem;
 
 import com.example.footballdiscussion.R;
 import com.example.footballdiscussion.databinding.ActivityPostsBinding;
+import com.example.footballdiscussion.utils.Logout;
 import com.example.footballdiscussion.view_modals.PostsViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -47,7 +48,7 @@ public class PostsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.logout_icon) {
-            postsViewModel.logout((unused) -> logoutActivity());
+            Logout.logout((unused) -> logoutActivity());
         }
         if (item.getItemId() == android.R.id.home) {
             navController.popBackStack();

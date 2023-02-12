@@ -4,7 +4,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.footballdiscussion.enums.LoadingState;
+import com.example.footballdiscussion.utils.LoadingState;
 import com.example.footballdiscussion.models.common.Listener;
 import com.example.footballdiscussion.models.entities.User;
 import com.example.footballdiscussion.models.firebase.FirebaseAuthentication;

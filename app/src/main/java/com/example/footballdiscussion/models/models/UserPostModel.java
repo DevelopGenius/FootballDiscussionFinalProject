@@ -3,15 +3,13 @@ package com.example.footballdiscussion.models.models;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.footballdiscussion.enums.LoadingState;
+import com.example.footballdiscussion.utils.LoadingState;
 import com.example.footballdiscussion.models.common.Listener;
-import com.example.footballdiscussion.models.entities.User;
 import com.example.footballdiscussion.models.entities.UserPost;
 import com.example.footballdiscussion.models.firebase.FirebaseModel;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDb;
@@ -38,6 +36,10 @@ public class UserPostModel {
     }
 
     private UserPostModel() {
+    }
+
+    public LiveData<UserPost> getUserPostById(String userPostId) {
+        return localDb.userPostDao().getUserPostById(userPostId);
     }
 
 
@@ -87,6 +89,36 @@ public class UserPostModel {
             refreshAllUserPosts();
         }
         return userPostList;
+    }
+
+    public LiveData<List<String>> getAllUserPostComments() {
+        return null;
+    }
+
+    public void refreshAllUserPostComments() {
+//        eventUserPostsLoadingState.setValue(LoadingState.LOADING);
+//        Long localLastUpdate = UserPost.getLocalLastUpdate();
+//        firebaseModel.getAllUserPostsSince(localLastUpdate, list -> {
+//            executor.execute(() -> {
+//                Long time = localLastUpdate;
+//
+//                for (UserPost userPost : list) {
+//                    localDb.userPostDao().insertAll(userPost);
+//                    if (userPost.isDeleted()) {
+//                        localDb.userPostDao().delete(userPost);
+//                    }
+//                    if (time < userPost.getLastUpdated()) {
+//                        time = userPost.getLastUpdated();
+//                    }
+//                }
+//                UserPost.setLocalLastUpdate(time);
+//                eventUserPostsLoadingState.postValue(LoadingState.NOT_LOADING);
+//            });
+//        });
+    }
+
+    public MutableLiveData<LoadingState> getEventUserPostCommentsLoadingState() {
+        return eventUserPostsLoadingState;
     }
 
     public MutableLiveData<LoadingState> getEventUserPostsLoadingState() {

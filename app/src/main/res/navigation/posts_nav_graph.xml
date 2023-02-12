@@ -9,7 +9,7 @@
         android:id="@+id/upcomingGamesFragment"
         android:name="com.example.footballdiscussion.fragments.UpcomingGamesFragment"
         android:label="fragment_upcoming_games"
-        tools:layout="@layout/fragment_upcoming_games" >
+        tools:layout="@layout/fragment_upcoming_games">
         <action
             android:id="@+id/action_upcomingGamesFragment_to_userPostsFragment"
             app:destination="@id/userPostsFragment" />
@@ -19,12 +19,16 @@
         <action
             android:id="@+id/action_upcomingGamesFragment_to_createPostFragment"
             app:destination="@id/createPostFragment" />
+        <action
+            android:id="@+id/action_upcomingGamesFragment_to_userPostDetailsFragment"
+            app:destination="@id/userPostDetailsFragment">
+        </action>
     </fragment>
     <fragment
         android:id="@+id/userPostsFragment"
         android:name="com.example.footballdiscussion.fragments.UserPostsFragment"
         android:label="fragment_user_posts"
-        tools:layout="@layout/fragment_user_posts" >
+        tools:layout="@layout/fragment_user_posts">
         <action
             android:id="@+id/action_userPostsFragment_to_upcomingGamesFragment"
             app:destination="@id/upcomingGamesFragment" />
@@ -37,12 +41,19 @@
         <action
             android:id="@+id/action_userPostsFragment_to_createPostFragment2"
             app:destination="@id/createPostFragment" />
+        <action
+            android:id="@+id/action_userPostsFragment_to_userPostDetailsFragment"
+            app:destination="@id/userPostDetailsFragment">
+            <argument
+                android:name="userPostId"
+                app:argType="string" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/ownUserPostsFragment"
         android:name="com.example.footballdiscussion.fragments.OwnUserPostsFragment"
         android:label="fragment_own_user_posts"
-        tools:layout="@layout/fragment_own_user_posts" >
+        tools:layout="@layout/fragment_own_user_posts">
         <action
             android:id="@+id/action_ownUserPostsFragment_to_upcomingGamesFragment"
             app:destination="@id/upcomingGamesFragment" />
@@ -60,7 +71,7 @@
         android:id="@+id/createPostFragment"
         android:name="com.example.footballdiscussion.fragments.CreatePostFragment"
         android:label="fragment_create_post"
-        tools:layout="@layout/fragment_create_post" >
+        tools:layout="@layout/fragment_create_post">
         <action
             android:id="@+id/action_createPostFragment_to_ownUserPostsFragment"
             app:destination="@id/ownUserPostsFragment" />
@@ -70,5 +81,14 @@
         <action
             android:id="@+id/action_createPostFragment_to_userPostsFragment"
             app:destination="@id/userPostsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userPostDetailsFragment"
+        android:name="com.example.footballdiscussion.fragments.UserPostDetailsFragment"
+        android:label="fragment_post_details"
+        tools:layout="@layout/fragment_post_details">
+        <argument
+            android:name="userPostId"
+            app:argType="string" />
     </fragment>
 </navigation>

@@ -3,7 +3,7 @@ package com.example.footballdiscussion.models.models;
 import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.footballdiscussion.enums.LoadingState;
+import com.example.footballdiscussion.utils.LoadingState;
 import com.example.footballdiscussion.models.API.GetUpcomingGamesDto;
 import com.example.footballdiscussion.models.API.UpcomingGameAdapter;
 import com.example.footballdiscussion.models.API.UpcomingGamesApi;

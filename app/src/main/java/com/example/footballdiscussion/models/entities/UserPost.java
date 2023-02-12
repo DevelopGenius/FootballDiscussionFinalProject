@@ -7,8 +7,11 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 import com.example.footballdiscussion.ApplicationContext;
+import com.example.footballdiscussion.models.room.Converters;
+import com.example.footballdiscussion.models.room.UserPostCommentConverter;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
 
@@ -26,19 +29,27 @@ public class UserPost {
     private String username;
     private String postTitle;
     private String imageUrl;
-
-    private List<String> userLikes;
     private boolean isDeleted;
+
+    @TypeConverters(Converters.class)
+    private List<String> userLikes;
 
     private Long lastUpdated;
 
-    public UserPost(@NonNull String id, String userId, String username, String postTitle, String imageUrl,List<String> userLikes, boolean isDeleted) {
+    @TypeConverters(UserPostCommentConverter.class)
+    private List<UserPostComment> userPostComments;
+
+    public UserPost(
+            @NonNull String id, String userId, String username, String postTitle,
+            String imageUrl,List<String> userLikes, List<UserPostComment> userPostComments, boolean isDeleted
+    ) {
         this.id = id;
         this.userId = userId;
         this.username = username;
         this.postTitle = postTitle;
         this.imageUrl = imageUrl;
         this.userLikes = userLikes;
+        this.userPostComments = userPostComments;
         this.isDeleted = isDeleted;
     }
 
@@ -51,8 +62,8 @@ public class UserPost {
         this.imageUrl = imageUrl;
         this.isDeleted = false;
         this.userLikes = new ArrayList<>();
+        this.userPostComments = new ArrayList<>();
     }
-
 
     static final String ID = "id";
     static final String USER_ID = "userId";
@@ -61,6 +72,7 @@ public class UserPost {
     static final String IMAGE_URL = "imageUrl";
     static final String IS_DELETED = "isDeleted";
     static final String USERS_LIKE= "usersLike";
+    static final String USER_COMMENTS = "userComments";
     public static final String LAST_UPDATED = "lastUpdated";
     static final String LOCAL_LAST_UPDATED =  "USER_POST_LOCAL_LAST_UPDATED";
     public static UserPost fromJson(Map<String,Object> json){
@@ -71,8 +83,9 @@ public class UserPost {
         String imageUrl = (String)json.get(IMAGE_URL);
         Boolean isDeleted = (Boolean)json.get(IS_DELETED);
         List<String> userLikes =  ((List<String>) json.get(USERS_LIKE));
+        List<UserPostComment> userPostComments = ((List<UserPostComment>) json.get(USER_COMMENTS));
 
-        UserPost userPost = new UserPost(id,userId,username, postTitle,imageUrl,userLikes, isDeleted);
+        UserPost userPost = new UserPost(id,userId,username, postTitle,imageUrl,userLikes, userPostComments, isDeleted);
         try{
             Timestamp time = (Timestamp) json.get(LAST_UPDATED);
             userPost.setLastUpdated(time.getSeconds());
@@ -92,6 +105,7 @@ public class UserPost {
         json.put(IMAGE_URL, getImageUrl());
         json.put(IS_DELETED, isDeleted());
         json.put(USERS_LIKE, getUserLikes());
+        json.put(USER_COMMENTS, getUserPostComments());
         json.put(LAST_UPDATED, FieldValue.serverTimestamp());
         return json;
     }
@@ -173,5 +187,13 @@ public class UserPost {
 
     public void setUserLikes(List<String> userLikes) {
         this.userLikes = userLikes;
+    }
+
+    public List<UserPostComment> getUserPostComments() {
+        return userPostComments;
+    }
+
+    public void setUserPostComments(List<UserPostComment> userPostComments) {
+        this.userPostComments = userPostComments;
     }
 }

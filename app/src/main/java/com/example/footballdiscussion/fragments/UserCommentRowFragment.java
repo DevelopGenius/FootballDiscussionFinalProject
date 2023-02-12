@@ -11,12 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.footballdiscussion.databinding.FragmentUserPostRowBinding;
+import com.example.footballdiscussion.view_modals.UserCommentRowViewModel;
 import com.example.footballdiscussion.view_modals.UserPostRowViewModel;
 
-public class UserPostRowFragment extends Fragment {
-    private UserPostRowViewModel viewModel;
-    private FragmentUserPostRowBinding binding;
+public class UserCommentRowFragment extends Fragment {
+    private UserCommentRowViewModel viewModel;
+    private com.example.footballdiscussion.databinding.FragmentCommentRowBinding binding;
     public static UserPostRowFragment newInstance() {
         return new UserPostRowFragment();
     }
@@ -24,7 +24,7 @@ public class UserPostRowFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentUserPostRowBinding.inflate(inflater, container, false);
+        binding = com.example.footballdiscussion.databinding.FragmentCommentRowBinding.inflate(inflater, container, false);
 
         return binding.getRoot();
     }
@@ -32,6 +32,6 @@ public class UserPostRowFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        viewModel = new ViewModelProvider(this).get(UserPostRowViewModel.class);
+        viewModel = new ViewModelProvider(this).get(UserCommentRowViewModel.class);
     }
 }

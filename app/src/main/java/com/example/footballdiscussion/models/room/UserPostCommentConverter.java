@@ -9,15 +9,16 @@ import com.google.gson.Gson;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class Converters {
+public class UserPostCommentConverter {
     @TypeConverter
-    public static List<String> fromString(String value) {
-        Type listType = new TypeToken<List<String>>() {}.getType();
+    public static List<UserPostComment> fromString(String value) {
+        Type listType = new TypeToken<List<UserPostComment>>() {
+        }.getType();
         return new Gson().fromJson(value, listType);
     }
 
     @TypeConverter
-    public static String fromList(List<String> list) {
+    public static String fromList(List<UserPostComment> list) {
         Gson gson = new Gson();
         String json = gson.toJson(list);
         return json;

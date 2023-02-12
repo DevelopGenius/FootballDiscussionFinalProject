@@ -8,17 +8,20 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.footballdiscussion.databinding.FragmentUserPostsBinding;
-import com.example.footballdiscussion.enums.LoadingState;
+import com.example.footballdiscussion.models.entities.UserPost;
+import com.example.footballdiscussion.utils.LoadingState;
 import com.example.footballdiscussion.fragments.recycler_adapters.UserPostsRecyclerAdapter;
 import com.example.footballdiscussion.view_modals.UserPostsViewModel;
+
+import java.util.List;
 
 public class UserPostsFragment extends Fragment {
 
@@ -35,11 +38,14 @@ public class UserPostsFragment extends Fragment {
         binding = FragmentUserPostsBinding.inflate(inflater, container, false);
         binding.userPostsRecyclerView.setHasFixedSize(true);
         binding.userPostsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        userPostsRecyclerAdapter = new UserPostsRecyclerAdapter(getLayoutInflater(), viewModel.getAllUserPosts().getValue(), this.viewModel.getCurrentUser().getId());
+        List<UserPost> allUsersPosts = viewModel.getAllUserPosts().getValue();
+        userPostsRecyclerAdapter = new UserPostsRecyclerAdapter(getLayoutInflater(), allUsersPosts, this.viewModel.getCurrentUser().getId());
         binding.userPostsRecyclerView.setAdapter(this.userPostsRecyclerAdapter);
 
         userPostsRecyclerAdapter.setOnItemClickListener(pos -> {
-            Log.d("TAG", "Clicked Row " + pos);
+            UserPostsFragmentDirections.ActionUserPostsFragmentToUserPostDetailsFragment action =
+                    UserPostsFragmentDirections.actionUserPostsFragmentToUserPostDetailsFragment(allUsersPosts.get(pos).getUserId());
+            Navigation.findNavController(binding.getRoot()).navigate(action);
         });
 
         userPostsRecyclerAdapter.setOnIconClickListener(userPost -> {
