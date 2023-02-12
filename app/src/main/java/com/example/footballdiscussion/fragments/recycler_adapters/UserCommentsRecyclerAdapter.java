@@ -1,6 +1,7 @@
 package com.example.footballdiscussion.fragments.recycler_adapters;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -10,19 +11,24 @@ import com.example.footballdiscussion.R;
 import com.example.footballdiscussion.databinding.FragmentCommentRowBinding;
 import com.example.footballdiscussion.models.entities.UserPost;
 import com.example.footballdiscussion.models.entities.UserPostComment;
+import com.example.footballdiscussion.utils.ImageUtils;
 
 import java.util.List;
 
 class UserCommentsViewHolder extends RecyclerView.ViewHolder {
+    List<UserPostComment> data;
     private FragmentCommentRowBinding binding;
 
     public UserCommentsViewHolder(@NonNull FragmentCommentRowBinding binding, List<UserPostComment> data) {
         super(binding.getRoot());
         this.binding = binding;
+        this.data = data;
     }
 
-    public void bind() {
-
+    public void bind(UserPostComment userPostComment) {
+        binding.userPostCommentUserIcon.setImageResource(R.drawable.baseline_person_24);
+        binding.userPostCommentUsername.setText(userPostComment.getUsername());
+        binding.userPostCommentTextView.setText(userPostComment.getComment());
     }
 }
 
@@ -31,7 +37,6 @@ public class UserCommentsRecyclerAdapter extends RecyclerView.Adapter<UserCommen
     String currentUserId;
     LayoutInflater inflater;
     OnItemClickListener listener;
-    OnIconClickListener onIconClickListener;
 
     public UserCommentsRecyclerAdapter(LayoutInflater inflater, List<UserPostComment> data, String currentUserId) {
         this.inflater = inflater;
@@ -44,13 +49,9 @@ public class UserCommentsRecyclerAdapter extends RecyclerView.Adapter<UserCommen
         notifyDataSetChanged();
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
-    }
-
     @Override
     public void onBindViewHolder(@NonNull UserCommentsViewHolder holder, int position) {
-        holder.bind();
+        holder.bind(data.get(position));
     }
 
     @Override
@@ -58,7 +59,6 @@ public class UserCommentsRecyclerAdapter extends RecyclerView.Adapter<UserCommen
         if (data == null) return 0;
         return data.size();
     }
-
 
     @NonNull
     @Override

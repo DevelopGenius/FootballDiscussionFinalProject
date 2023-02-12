@@ -4,29 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/user_post_comment_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="50dp"
     tools:context=".fragments.UserCommentRowFragment">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/postComment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/user_post_comment_user_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toStartOf="@+id/user_post_comment_username"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/baseline_person_24" />
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="@+id/user_post_comment_user_icon"
+            app:layout_constraintTop_toBottomOf="@+id/user_post_comment_user_icon">
 
             <TextView
                 android:id="@+id/user_post_comment_username"
@@ -36,6 +28,15 @@
                 android:text="Username"
                 app:layout_constraintStart_toEndOf="@+id/user_post_comment_user_icon"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/user_post_comment_user_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@+id/user_post_comment_username"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/baseline_person_24" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout3"
