@@ -1,10 +1,6 @@
 package com.example.footballdiscussion.models.models;
 
 import android.graphics.Bitmap;
-import android.os.Handler;
-import android.os.Looper;
-
-import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -23,7 +19,6 @@ public class UserPostModel {
     private static final UserPostModel _instance = new UserPostModel();
 
     private Executor executor = Executors.newSingleThreadExecutor();
-    private Handler mainHandler = HandlerCompat.createAsync(Looper.getMainLooper());
     private UserModel userModel = UserModel.instance();
     private FirebaseModel firebaseModel = new FirebaseModel();
     FootballDiscussionLocalDbRepository localDb = FootballDiscussionLocalDb.getAppDb();
