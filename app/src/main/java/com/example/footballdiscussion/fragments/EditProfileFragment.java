@@ -137,8 +137,7 @@ public class EditProfileFragment extends Fragment {
                                    String phone, Bitmap bitmap) {
         viewModel.updateUserProfile(username, email, phone, bitmap, (unused) -> {
             binding.editProfileProgressIndicator.setVisibility(View.GONE);
-            Navigation.findNavController(binding.getRoot()).navigate(EditProfileFragmentDirections
-                    .actionEditProfileFragmentToViewProfileFragment());
+            Navigation.findNavController(binding.getRoot()).popBackStack();
         }, (error) -> {
             binding.editProfileProgressIndicator.setVisibility(View.GONE);
             AlertDialog.Builder builder = new AlertDialog.Builder(binding.getRoot().getContext());
