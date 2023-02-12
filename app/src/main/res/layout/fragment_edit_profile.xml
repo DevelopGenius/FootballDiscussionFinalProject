@@ -22,34 +22,38 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp">
 
                 <ImageView
                     android:id="@+id/edit_profile_img"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginRight="50dp"
                     android:scaleType="fitXY"
                     app:srcCompat="@drawable/empty_profile" />
-
-                <ImageButton
-                    android:id="@+id/edit_profile_gallery_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top|right"
-                    android:layout_margin="40dp"
-                    android:backgroundTint="#4D69B1"
-                    android:src="@drawable/baseline_edit_24" />
 
                 <ImageButton
                     android:id="@+id/edit_profile_camera_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="top|right"
-                    android:layout_marginTop="85dp"
-                    android:layout_marginRight="40dp"
-                    android:backgroundTint="#4D69B1"
-                    android:src="@drawable/ic_baseline_camera_alt_24" />
+                    android:layout_gravity="bottom|right"
+                    android:layout_marginBottom="40dp"
+                    android:backgroundTint="#2B2D42"
+                    android:src="@drawable/ic_baseline_camera_alt_24"
+                    app:tint="#EDF2F4" />
+
+                <ImageButton
+                    android:id="@+id/edit_profile_gallery_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
+                    android:backgroundTint="#2B2D42"
+                    android:src="@drawable/baseline_edit_24"
+                    app:tint="#EDF2F4" />
             </FrameLayout>
 
             <androidx.appcompat.widget.LinearLayoutCompat

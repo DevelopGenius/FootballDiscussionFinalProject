@@ -22,18 +22,32 @@
                 android:id="@+id/new_post_img"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
+                android:layout_marginLeft="50dp"
                 android:layout_marginTop="8dp"
-                android:scaleType="fitCenter"
+                android:layout_marginRight="50dp"
+                android:scaleType="fitXY"
                 app:srcCompat="@drawable/empty_post" />
+
+            <ImageButton
+                android:id="@+id/new_post_camera_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="40dp"
+                android:backgroundTint="#2B2D42"
+                android:src="@drawable/ic_baseline_camera_alt_24"
+                app:tint="#EDF2F4" />
 
             <ImageButton
                 android:id="@+id/new_post_gallery_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="top|right"
-                android:layout_margin="40dp"
-                android:backgroundTint="#4D69B1"
-                android:src="@drawable/baseline_edit_24" />
+                android:layout_gravity="bottom|right"
+                android:backgroundTint="#2B2D42"
+                android:src="@drawable/baseline_edit_24"
+                app:tint="#EDF2F4" />
+
+
         </FrameLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -60,7 +74,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:text="Publish"/>
+            android:text="Publish" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
