@@ -157,8 +157,9 @@ public class FirebaseModel {
         });
     }
 
+    //.whereGreaterThanOrEqualTo(UserPost.LAST_UPDATED, new Timestamp(since, 0))
     public void getAllUserPostsSince(Long since, Listener<List<UserPost>> callback) {
-        db.collection(USER_POSTS_COLLECTION).whereGreaterThanOrEqualTo(UserPost.LAST_UPDATED, new Timestamp(since, 0)).get()
+        db.collection(USER_POSTS_COLLECTION).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -171,6 +172,20 @@ public class FirebaseModel {
                             }
                         }
                         callback.onComplete(list);
+                    }
+                });
+    }
+
+    public void getUserPostById(String userPostId, Listener<UserPost> callback) {
+        db.collection(USER_POSTS_COLLECTION).whereEqualTo("id", userPostId)
+                .get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot jsonList = task.getResult();
+                        UserPost userPost = null;
+                        for (DocumentSnapshot json : jsonList) {
+                            userPost = UserPost.fromJson(json.getData());
+                        }
+                        callback.onComplete(userPost);
                     }
                 });
     }

@@ -117,7 +117,6 @@ public class UserModel {
                 callback.onComplete(null);
             });
         });
-
     }
 
     public void userLoggedInHandler(Listener<Void> onLoggedInCallback, Listener<Void> onLoggedOutCallback) {

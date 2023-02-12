@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.footballdiscussion.databinding.FragmentPostDetailsBinding;
+import com.example.footballdiscussion.models.common.Listener;
 import com.example.footballdiscussion.models.entities.UserPost;
 import com.example.footballdiscussion.models.models.UserPostModel;
 import com.example.footballdiscussion.view_modals.UserPostDetailsViewModel;
@@ -23,28 +24,19 @@ public class UserPostDetailsFragment extends Fragment {
     private String userPostId;
     private FragmentPostDetailsBinding binding;
     public static UserPostRowFragment newInstance(String userPostId) {
-        UserPostRowFragment fragment = new UserPostRowFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString("userPostId", userPostId);
-        fragment.setArguments(bundle);
-        return fragment;
+        return new UserPostRowFragment();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getArguments();
-        if (bundle != null){
-            this.userPostId = null;
-        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentPostDetailsBinding.inflate(inflater, container, false);
-        this.userPostId = UserPostDetailsFragmentArgs.fromBundle(getArguments()).getUserPostId();
-        UserPost userPost = userPostModel.getUserPostById(this.userPostId).getValue();
+
 
         return binding.getRoot();
     }
@@ -52,6 +44,13 @@ public class UserPostDetailsFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        this.userPostId = UserPostDetailsFragmentArgs.fromBundle(getArguments()).getUserPostId();
+        userPostModel.getUserPostById(this.userPostId, new Listener<UserPost>() {
+            @Override
+            public void onComplete(UserPost data) {
+                UserPost userPost = data;
+            }
+        });
         viewModel = new ViewModelProvider(this).get(UserPostDetailsViewModel.class);
     }
 }

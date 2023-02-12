@@ -18,6 +18,7 @@ import com.example.footballdiscussion.models.room.FootballDiscussionLocalDbRepos
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class UserPostModel {
     private static final UserPostModel _instance = new UserPostModel();
@@ -38,8 +39,17 @@ public class UserPostModel {
     private UserPostModel() {
     }
 
-    public LiveData<UserPost> getUserPostById(String userPostId) {
-        return localDb.userPostDao().getUserPostById(userPostId);
+    // Probably need to fix
+    public UserPost getUserPostById(String userPostId, Listener<UserPost> callback) {
+        AtomicReference<UserPost> userPostToReturn = new AtomicReference<>();
+        firebaseModel.getUserPostById(userPostId, (userPost) -> {
+            executor.execute(() -> {
+                userPostToReturn.set(userPost);
+                callback.onComplete(null);
+            });
+        });
+
+        return userPostToReturn.get();
     }
 
 
@@ -96,25 +106,7 @@ public class UserPostModel {
     }
 
     public void refreshAllUserPostComments() {
-//        eventUserPostsLoadingState.setValue(LoadingState.LOADING);
-//        Long localLastUpdate = UserPost.getLocalLastUpdate();
-//        firebaseModel.getAllUserPostsSince(localLastUpdate, list -> {
-//            executor.execute(() -> {
-//                Long time = localLastUpdate;
-//
-//                for (UserPost userPost : list) {
-//                    localDb.userPostDao().insertAll(userPost);
-//                    if (userPost.isDeleted()) {
-//                        localDb.userPostDao().delete(userPost);
-//                    }
-//                    if (time < userPost.getLastUpdated()) {
-//                        time = userPost.getLastUpdated();
-//                    }
-//                }
-//                UserPost.setLocalLastUpdate(time);
-//                eventUserPostsLoadingState.postValue(LoadingState.NOT_LOADING);
-//            });
-//        });
+
     }
 
     public MutableLiveData<LoadingState> getEventUserPostCommentsLoadingState() {

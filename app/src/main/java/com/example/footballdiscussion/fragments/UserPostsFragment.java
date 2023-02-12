@@ -39,13 +39,18 @@ public class UserPostsFragment extends Fragment {
         binding = FragmentUserPostsBinding.inflate(inflater, container, false);
         binding.userPostsRecyclerView.setHasFixedSize(true);
         binding.userPostsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        List<UserPost> allUsersPosts = viewModel.getAllUserPosts().getValue();
-        userPostsRecyclerAdapter = new UserPostsRecyclerAdapter(getLayoutInflater(), allUsersPosts, this.viewModel.getCurrentUser().getId());
+
+        userPostsRecyclerAdapter = new UserPostsRecyclerAdapter(getLayoutInflater(), viewModel.getAllUserPosts().getValue(), this.viewModel.getCurrentUser().getId());
         binding.userPostsRecyclerView.setAdapter(this.userPostsRecyclerAdapter);
+
+        viewModel.getAllUserPosts().observe(getViewLifecycleOwner(), list -> {
+            userPostsRecyclerAdapter.setData(list);
+        });
 
         userPostsRecyclerAdapter.setOnItemClickListener(pos -> {
             UserPostsFragmentDirections.ActionUserPostsFragmentToUserPostDetailsFragment action =
-                    UserPostsFragmentDirections.actionUserPostsFragmentToUserPostDetailsFragment(allUsersPosts.get(pos).getUserId());
+                    UserPostsFragmentDirections.actionUserPostsFragmentToUserPostDetailsFragment(viewModel.getAllUserPosts()
+                            .getValue().get(pos).getId());
             Navigation.findNavController(binding.getRoot()).navigate(action);
         });
 
@@ -56,10 +61,6 @@ public class UserPostsFragment extends Fragment {
         });
         userPostsRecyclerAdapter.setOnDeleteClickListener((userPost) -> {
             viewModel.deleteUserPost(userPost);
-        });
-
-        viewModel.getAllUserPosts().observe(getViewLifecycleOwner(), list -> {
-            userPostsRecyclerAdapter.setData(list);
         });
 
         viewModel.getEventUserPostsLoadingState().observe(getViewLifecycleOwner(), status -> {
