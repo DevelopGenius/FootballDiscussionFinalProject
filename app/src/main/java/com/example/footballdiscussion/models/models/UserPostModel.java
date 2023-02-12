@@ -18,7 +18,6 @@ import com.example.footballdiscussion.models.room.FootballDiscussionLocalDbRepos
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class UserPostModel {
     private static final UserPostModel _instance = new UserPostModel();
@@ -72,7 +71,7 @@ public class UserPostModel {
                 for (UserPost userPost : list) {
                     if (userPost.isDeleted()) {
                         localDb.userPostDao().delete(userPost);
-                    } else{
+                    } else {
                         localDb.userPostDao().insertAll(userPost);
                     }
                     if (time < userPost.getLastUpdated()) {
@@ -132,5 +131,13 @@ public class UserPostModel {
                     localDb.userPostDao().delete(userPost);
                 })
         );
+    }
+
+    public void updateUserPost(UserPost userPost, Listener<Void> successCallback, Listener<String> failCallback) {
+        firebaseModel.updateUserPost(userPost, (unused) -> {
+            refreshAllUserPosts();
+            successCallback.onComplete(null);
+
+        }, failCallback);
     }
 }

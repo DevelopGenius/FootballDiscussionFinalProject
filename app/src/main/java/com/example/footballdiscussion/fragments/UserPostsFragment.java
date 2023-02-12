@@ -16,12 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.footballdiscussion.databinding.FragmentUserPostsBinding;
-import com.example.footballdiscussion.models.entities.UserPost;
 import com.example.footballdiscussion.utils.LoadingState;
 import com.example.footballdiscussion.fragments.recycler_adapters.UserPostsRecyclerAdapter;
 import com.example.footballdiscussion.view_modals.UserPostsViewModel;
 
-import java.util.List;
 
 public class UserPostsFragment extends Fragment {
 
@@ -57,6 +55,9 @@ public class UserPostsFragment extends Fragment {
         userPostsRecyclerAdapter.setOnIconClickListener(userPost -> {
             if (!viewModel.isOwnPost(userPost)) {
                 viewModel.handleUserPostLike(userPost);
+            } else {
+                Navigation.findNavController(binding.getRoot()).navigate(UserPostsFragmentDirections
+                        .actionUserPostsFragmentToEditOwnUserPostFragment(userPost.getId()));
             }
         });
         userPostsRecyclerAdapter.setOnDeleteClickListener((userPost) -> {

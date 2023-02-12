@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -27,27 +28,33 @@ public class OwnUserPostsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentOwnUserPostsBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
         binding.ownUserPostsRecyclerView.setHasFixedSize(true);
         binding.ownUserPostsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         ownUserPostsRecyclerAdapter = new UserPostsRecyclerAdapter(getLayoutInflater(), this.viewModel.getOwnUserPosts(), this.viewModel.getCurrentUser().getId());
         binding.ownUserPostsRecyclerView.setAdapter(this.ownUserPostsRecyclerAdapter);
 
-        viewModel.getAllUserPosts().observe(getViewLifecycleOwner(),list->{
+        viewModel.getAllUserPosts().observe(getViewLifecycleOwner(), list -> {
             ownUserPostsRecyclerAdapter.setData(this.viewModel.getOwnUserPosts());
         });
 
-        viewModel.getEventUserPostsLoadingState().observe(getViewLifecycleOwner(),status->{
+        viewModel.getEventUserPostsLoadingState().observe(getViewLifecycleOwner(), status -> {
             binding.ownUserPostsSwipeRefresh.setRefreshing(status == LoadingState.LOADING);
         });
 
-        binding.ownUserPostsSwipeRefresh.setOnRefreshListener(()->{
+        binding.ownUserPostsSwipeRefresh.setOnRefreshListener(() -> {
             viewModel.refreshAllUserPosts();
         });
-        ownUserPostsRecyclerAdapter.setOnDeleteClickListener((userPost)->{
+        ownUserPostsRecyclerAdapter.setOnDeleteClickListener((userPost) -> {
             viewModel.deleteUserPost(userPost);
         });
 
-        return binding.getRoot();
+        ownUserPostsRecyclerAdapter.setOnIconClickListener(userPost -> {
+            Navigation.findNavController(view).navigate(OwnUserPostsFragmentDirections
+                    .actionOwnUserPostsFragmentToEditOwnUserPostFragment(userPost.getId()));
+        });
+
+        return view;
     }
 
     @Override

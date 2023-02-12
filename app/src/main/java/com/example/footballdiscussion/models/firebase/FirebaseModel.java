@@ -2,6 +2,7 @@ package com.example.footballdiscussion.models.firebase;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -132,6 +133,7 @@ public class FirebaseModel {
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
+                Log.d("TAG", "onFailure: " + exception.getMessage());
                 listener.onComplete(null);
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -246,6 +248,22 @@ public class FirebaseModel {
 
                 }
             }
+        });
+    }
+
+    public void updateUserPost(UserPost userPost, Listener<Void> successCallback, Listener<String> failCallback) {
+        db.collection(USER_POSTS_COLLECTION).whereEqualTo("id", userPost.getId()).get().addOnSuccessListener(queryDocumentSnapshots -> {
+            queryDocumentSnapshots.forEach(queryDocumentSnapshot -> {
+                queryDocumentSnapshot.getReference().update("postTitle", userPost.getPostTitle(),
+                        "imageUrl", userPost.getImageUrl(),
+                        "lastUpdated", FieldValue.serverTimestamp()).addOnSuccessListener(unused -> {
+                    successCallback.onComplete(null);
+                }).addOnFailureListener(e -> {
+                    failCallback.onComplete(e.getMessage());
+                });
+            });
+        }).addOnFailureListener(e -> {
+            failCallback.onComplete(e.getMessage());
         });
     }
 }

@@ -63,4 +63,12 @@ public class UserPostsViewModel extends ViewModel {
     public void deleteUserPost(UserPost userPost) {
         userPostModel.deleteUserPost(userPost);
     }
+
+    public LiveData<UserPost> getUserPostById(String userPostId){
+        return userPostModel.getUserPostById(userPostId);
+    }
+
+    public void updateUserPost(UserPost userPost, Listener<Void> successCallback, Listener<String> failCallback) {
+        userPostModel.updateUserPost(userPost,successCallback, failCallback);
+    }
 }

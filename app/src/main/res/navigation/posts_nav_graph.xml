@@ -49,6 +49,9 @@
         <action
             android:id="@+id/action_userPostsFragment_to_userPostDetailsFragment"
             app:destination="@id/userPostDetailsFragment" />
+        <action
+            android:id="@+id/action_userPostsFragment_to_editOwnUserPostFragment"
+            app:destination="@id/editOwnUserPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/ownUserPostsFragment"
@@ -73,6 +76,9 @@
         <action
             android:id="@+id/action_ownUserPostsFragment_to_upcomingGamesFragment2"
             app:destination="@id/upcomingGamesFragment" />
+        <action
+            android:id="@+id/action_ownUserPostsFragment_to_editOwnUserPostFragment"
+            app:destination="@id/editOwnUserPostFragment" />
     </fragment>
     <fragment
         android:id="@+id/createPostFragment"
@@ -111,6 +117,21 @@
         android:name="com.example.footballdiscussion.fragments.UserPostDetailsFragment"
         android:label="fragment_post_details"
         tools:layout="@layout/fragment_post_details">
+        <argument
+            android:name="userPostId"
+            app:argType="string"/>
+    </fragment>
+    <fragment
+        android:id="@+id/editOwnUserPostFragment"
+        android:name="com.example.footballdiscussion.fragments.EditOwnUserPostFragment"
+        android:label="fragment_edit_own_user_post"
+        tools:layout="@layout/fragment_edit_own_user_post" >
+        <action
+            android:id="@+id/action_editOwnUserPostFragment_to_ownUserPostsFragment"
+            app:destination="@id/ownUserPostsFragment" />
+        <action
+            android:id="@+id/action_editOwnUserPostFragment_to_userPostsFragment"
+            app:destination="@id/userPostsFragment" />
         <argument
             android:name="userPostId"
             app:argType="string"/>
