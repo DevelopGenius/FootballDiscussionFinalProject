@@ -20,6 +20,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -261,6 +262,23 @@ public class FirebaseModel {
                 }).addOnFailureListener(e -> {
                     failCallback.onComplete(e.getMessage());
                 });
+            });
+        }).addOnFailureListener(e -> {
+            failCallback.onComplete(e.getMessage());
+        });
+    }
+
+    public void updateUserPostsUsername(String userId, String username, Listener<Void> successCallback, Listener<String> failCallback) {
+        db.collection(USER_POSTS_COLLECTION).whereEqualTo("userId", userId).get().addOnSuccessListener(queryDocumentSnapshots -> {
+            WriteBatch writeBatch = db.batch();
+            queryDocumentSnapshots.forEach(queryDocumentSnapshot -> {
+                writeBatch.update(queryDocumentSnapshot.getReference(), "username", username,
+                        "lastUpdated", FieldValue.serverTimestamp());
+            });
+            writeBatch.commit().addOnSuccessListener(unused -> {
+                successCallback.onComplete(null);
+            }).addOnFailureListener(e -> {
+                failCallback.onComplete(e.getMessage());
             });
         }).addOnFailureListener(e -> {
             failCallback.onComplete(e.getMessage());

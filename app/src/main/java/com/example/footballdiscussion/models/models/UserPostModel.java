@@ -140,4 +140,11 @@ public class UserPostModel {
 
         }, failCallback);
     }
+
+    public void updateUserPostsUsername(String userId, String username, Listener<Void> successCallback, Listener<String> failCallback) {
+        firebaseModel.updateUserPostsUsername(userId, username, (unused) -> {
+            refreshAllUserPosts();
+            successCallback.onComplete(null);
+        }, failCallback);
+    }
 }
