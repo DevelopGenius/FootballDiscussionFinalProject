@@ -89,7 +89,7 @@ public class EditProfileFragment extends Fragment {
         });
 
         binding.editProfileGalleryButton.setOnClickListener(view -> {
-            galleryLauncher.launch("media/*");
+            galleryLauncher.launch("image/*");
         });
 
 

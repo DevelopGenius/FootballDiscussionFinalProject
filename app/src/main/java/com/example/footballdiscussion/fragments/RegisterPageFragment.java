@@ -113,7 +113,7 @@ public class RegisterPageFragment extends Fragment {
         });
 
         binding.galleryButton.setOnClickListener(view1 -> {
-            galleryLauncher.launch("media/*");
+            galleryLauncher.launch("image/*");
         });
 
         return binding.getRoot();
