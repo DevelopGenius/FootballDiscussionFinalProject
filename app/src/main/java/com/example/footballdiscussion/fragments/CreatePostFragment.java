@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -13,9 +14,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.example.footballdiscussion.R;
 import com.example.footballdiscussion.databinding.FragmentCreatePostBinding;
 import com.example.footballdiscussion.models.entities.User;
@@ -96,12 +99,14 @@ public class CreatePostFragment extends Fragment {
                         userPost.setImageUrl(url);
                     }
                     viewModel.publishUserPost(userPost, (unused) -> {
-                        Navigation.findNavController(view).navigate(R.id.action_createPostFragment_to_ownUserPostsFragment);
+                        Navigation.findNavController(view).navigate(
+                                CreatePostFragmentDirections.actionCreatePostFragmentToOwnUserPostsFragment());
                     });
                 });
             } else {
                 viewModel.publishUserPost(userPost, (unused) -> {
-                    Navigation.findNavController(view).navigate(R.id.action_createPostFragment_to_ownUserPostsFragment);
+                    Navigation.findNavController(view).navigate(CreatePostFragmentDirections
+                            .actionCreatePostFragmentToOwnUserPostsFragment());
                 });
             }
         });
