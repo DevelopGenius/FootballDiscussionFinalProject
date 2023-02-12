@@ -33,13 +33,13 @@ public class UserPostsViewModel extends ViewModel {
     }
 
     public List<UserPost> getOwnUserPosts() {
-        User currentUser = getCurrentUser();
         List<UserPost> userPosts = userPostModel.getAllUserPosts().getValue();
-        return userPosts == null ? null : userPosts.stream()
-                .filter(userPost -> userPost.getUserId().equals(currentUser.id))
-                .collect(Collectors.toList());
+        return userPosts == null ? null : filterOwnPosts(userPosts);
     }
 
+    public List<UserPost> filterOwnPosts(List<UserPost> userPosts){
+        return userPosts.stream().filter(this::isOwnPost).collect(Collectors.toList());
+    }
     public User getCurrentUser() {
         return userModel.getCurrentLogInUser();
     }
