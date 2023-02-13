@@ -8,11 +8,12 @@ import android.util.Log;
 import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.footballdiscussion.models.firebase.FirebaseImageStorage;
+import com.example.footballdiscussion.models.firebase.UserFirebaseModal;
 import com.example.footballdiscussion.utils.LoadingState;
 import com.example.footballdiscussion.models.common.Listener;
 import com.example.footballdiscussion.models.entities.User;
 import com.example.footballdiscussion.models.firebase.FirebaseAuthentication;
-import com.example.footballdiscussion.models.firebase.FirebaseModel;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDb;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDbRepository;
 
@@ -25,7 +26,8 @@ public class UserModel {
     private Executor executor = Executors.newSingleThreadExecutor();
     private Handler mainHandler = HandlerCompat.createAsync(Looper.getMainLooper());
 
-    private FirebaseModel firebaseModel = new FirebaseModel();
+    private UserFirebaseModal userFirebaseModal = new UserFirebaseModal();
+    private FirebaseImageStorage firebaseImageStorage = new FirebaseImageStorage();
     FootballDiscussionLocalDbRepository localDb = FootballDiscussionLocalDb.getAppDb();
     final public MutableLiveData<LoadingState> EventUsersListLoadingState = new MutableLiveData<>(LoadingState.NOT_LOADING);
     final public MutableLiveData<LoadingState> eventLoggedInUserLoadingState = new MutableLiveData<>(LoadingState.NOT_LOADING);
@@ -44,7 +46,7 @@ public class UserModel {
         // get local last update
         Long localLastUpdate = User.getLocalLastUpdate();
         // get all updated recorde from firebase since local last update
-        firebaseModel.getAllUsersSince(localLastUpdate, list -> {
+        userFirebaseModal.getAllUsersSince(localLastUpdate, list -> {
             executor.execute(() -> {
                 Log.d("TAG", " firebase return : " + list.size());
                 Long time = localLastUpdate;
@@ -70,7 +72,7 @@ public class UserModel {
     public void addUser(User user, String password, Listener<Void> listener) {
         firebaseAuthentication.register(user.getEmail(), password, (userId) -> {
             user.setId(userId);
-            firebaseModel.addUser(user, (newUser) -> {
+            userFirebaseModal.addUser(user, (newUser) -> {
                 addLoggedInUserToCache(newUser, listener);
             });
         });
@@ -102,13 +104,13 @@ public class UserModel {
     }
 
     public void successfulLogin(String email, Listener<Void> onSuccessCallback) {
-        firebaseModel.getUserByEmail(email, (user) -> addLoggedInUserToCache(user, onSuccessCallback));
+        userFirebaseModal.getUserByEmail(email, (user) -> addLoggedInUserToCache(user, onSuccessCallback));
     }
 
 
     public void getUserByEmail(String email, Listener<Void> callback) {
         eventLoggedInUserLoadingState.setValue(LoadingState.LOADING);
-        firebaseModel.getUserByEmail(email, (user) -> {
+        userFirebaseModal.getUserByEmail(email, (user) -> {
             addLoggedInUserToCache(user, (unused) -> {
                 eventLoggedInUserLoadingState.postValue(LoadingState.NOT_LOADING);
                 callback.onComplete(null);
@@ -137,7 +139,7 @@ public class UserModel {
                 oldUser.setPhone(phone);
                 oldUser.setUsername(username);
                 if (bitmap != null) {
-                    firebaseModel.uploadImage(username, bitmap, (url) -> {
+                    firebaseImageStorage.uploadImage(username, bitmap, (url) -> {
                         oldUser.setImageUrl(url);
                         saveUpdatedUser(oldUser, successCallback, failCallback);
                     });
@@ -151,7 +153,7 @@ public class UserModel {
     public void saveUpdatedUser(User user, Listener<Void> successCallback,
                                 Listener<String> failCallback) {
         firebaseAuthentication.updateCurrentUserEmail(user.getEmail(), (unused) -> {
-            firebaseModel.updateUser(user, (unused1 -> {
+            userFirebaseModal.updateUser(user, (unused1 -> {
                 addLoggedInUserToCache(user, successCallback);
             }));
         }, failCallback);
@@ -181,7 +183,7 @@ public class UserModel {
         if (oldUser.getUsername().equals(username)) {
             successCallback.onComplete(null);
         } else {
-            firebaseModel.isUsernameExists(username, (isExist) -> {
+            userFirebaseModal.isUsernameExists(username, (isExist) -> {
                 if (isExist) {
                     failCallback.onComplete("This username already exists");
                 } else {

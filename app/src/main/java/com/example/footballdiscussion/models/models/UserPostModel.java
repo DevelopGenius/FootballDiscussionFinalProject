@@ -4,10 +4,11 @@ import android.graphics.Bitmap;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.footballdiscussion.models.firebase.FirebaseImageStorage;
+import com.example.footballdiscussion.models.firebase.UserPostFirebaseModal;
 import com.example.footballdiscussion.utils.LoadingState;
 import com.example.footballdiscussion.models.common.Listener;
 import com.example.footballdiscussion.models.entities.UserPost;
-import com.example.footballdiscussion.models.firebase.FirebaseModel;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDb;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDbRepository;
 
@@ -20,7 +21,8 @@ public class UserPostModel {
 
     private Executor executor = Executors.newSingleThreadExecutor();
     private UserModel userModel = UserModel.instance();
-    private FirebaseModel firebaseModel = new FirebaseModel();
+    private UserPostFirebaseModal userPostFirebaseModal = new UserPostFirebaseModal();
+    private FirebaseImageStorage firebaseImageStorage = new FirebaseImageStorage();
     FootballDiscussionLocalDbRepository localDb = FootballDiscussionLocalDb.getAppDb();
 
     final public MutableLiveData<LoadingState> eventUserPostsLoadingState = new MutableLiveData<>(LoadingState.NOT_LOADING);
@@ -39,18 +41,18 @@ public class UserPostModel {
 
 
     public void uploadImage(String name, Bitmap bitmap, Listener<String> listener) {
-        firebaseModel.uploadImage(name, bitmap, listener);
+        firebaseImageStorage.uploadImage(name, bitmap, listener);
     }
 
     public void publishUserPost(UserPost userPost, Listener<Void> callback) {
-        firebaseModel.addUserPost(userPost, (Void) -> {
+        userPostFirebaseModal.addUserPost(userPost, (Void) -> {
             refreshAllUserPosts();
             callback.onComplete(null);
         });
     }
 
     public void publishUserComment(String comment, UserPost userPost, Listener<Void> callback) {
-        firebaseModel.addUserComment(userModel.getCurrentLogInUser(), userPost, comment, (Void) -> {
+        userPostFirebaseModal.addUserComment(userModel.getCurrentLogInUser(), userPost, comment, (Void) -> {
             callback.onComplete(null);
         });
     }
@@ -58,7 +60,7 @@ public class UserPostModel {
     public void refreshAllUserPosts() {
         eventUserPostsLoadingState.setValue(LoadingState.LOADING);
         Long localLastUpdate = UserPost.getLocalLastUpdate();
-        firebaseModel.getAllUserPostsSince(localLastUpdate, list -> {
+        userPostFirebaseModal.getAllUserPostsSince(localLastUpdate, list -> {
             executor.execute(() -> {
                 Long time = localLastUpdate;
 
@@ -92,14 +94,14 @@ public class UserPostModel {
 
     public void handleUserPostLike(UserPost userPost, String userId) {
         if (userPost.getUserLikes().contains(userId)) {
-            firebaseModel.removeLikeToPost(userPost.getId(), userId, (unused) -> {
+            userPostFirebaseModal.removeLikeToPost(userPost.getId(), userId, (unused) -> {
                 executor.execute(() -> {
                     userPost.getUserLikes().remove(userId);
                     localDb.userPostDao().insertAll(userPost);
                 });
             });
         } else {
-            firebaseModel.addLikeToPost(userPost.getId(), userId, (unused) -> {
+            userPostFirebaseModal.addLikeToPost(userPost.getId(), userId, (unused) -> {
                 executor.execute(() -> {
                     userPost.getUserLikes().add(userId);
                     localDb.userPostDao().insertAll(userPost);
@@ -109,14 +111,14 @@ public class UserPostModel {
     }
 
     public void deleteUserPost(UserPost userPost) {
-        firebaseModel.deleteUserPost(userPost.getId(), (unused) -> executor.execute(() -> {
+        userPostFirebaseModal.deleteUserPost(userPost.getId(), (unused) -> executor.execute(() -> {
                     localDb.userPostDao().delete(userPost);
                 })
         );
     }
 
     public void updateUserPost(UserPost userPost, Listener<Void> successCallback, Listener<String> failCallback) {
-        firebaseModel.updateUserPost(userPost, (unused) -> {
+        userPostFirebaseModal.updateUserPost(userPost, (unused) -> {
             refreshAllUserPosts();
             successCallback.onComplete(null);
 
@@ -124,7 +126,7 @@ public class UserPostModel {
     }
 
     public void updateUserPostsUsername(String userId, String username, Listener<Void> successCallback, Listener<String> failCallback) {
-        firebaseModel.updateUserPostsUsername(userId, username, (unused) -> {
+        userPostFirebaseModal.updateUserPostsUsername(userId, username, (unused) -> {
             refreshAllUserPosts();
             successCallback.onComplete(null);
         }, failCallback);
