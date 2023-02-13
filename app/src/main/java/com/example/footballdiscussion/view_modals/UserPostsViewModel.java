@@ -71,4 +71,8 @@ public class UserPostsViewModel extends ViewModel {
     public void updateUserPost(UserPost userPost, Listener<Void> successCallback, Listener<String> failCallback) {
         userPostModel.updateUserPost(userPost,successCallback, failCallback);
     }
+
+    public void publishUserComment(String comment, UserPost userPost, Listener<Void> callback) {
+        userPostModel.publishUserComment(comment, userPost, callback);
+    }
 }

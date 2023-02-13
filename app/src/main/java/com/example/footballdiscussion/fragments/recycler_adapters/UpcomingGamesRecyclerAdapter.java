@@ -13,10 +13,9 @@ import java.util.List;
 class UpcomingGamesViewHolder extends RecyclerView.ViewHolder {
     private FragmentUpcomingGameRowBinding binding;
 
-    public UpcomingGamesViewHolder(@NonNull FragmentUpcomingGameRowBinding binding, OnItemClickListener listener, List<UpcomingGame> data) {
+    public UpcomingGamesViewHolder(@NonNull FragmentUpcomingGameRowBinding binding, List<UpcomingGame> data) {
         super(binding.getRoot());
         this.binding = binding;
-        itemView.setOnClickListener(view -> listener.onItemClick(getAdapterPosition()));
     }
 
     public void bind(UpcomingGame upcomingGame) {
@@ -30,7 +29,6 @@ class UpcomingGamesViewHolder extends RecyclerView.ViewHolder {
 public class UpcomingGamesRecyclerAdapter extends RecyclerView.Adapter<UpcomingGamesViewHolder> {
     List<UpcomingGame> data;
     LayoutInflater inflater;
-    OnItemClickListener listener;
 
     public UpcomingGamesRecyclerAdapter(LayoutInflater inflater, List<UpcomingGame> data) {
         this.inflater = inflater;
@@ -40,11 +38,6 @@ public class UpcomingGamesRecyclerAdapter extends RecyclerView.Adapter<UpcomingG
     public void setData(List<UpcomingGame> data) {
         this.data = data;
         notifyDataSetChanged();
-    }
-
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
     }
 
     @Override
@@ -63,6 +56,6 @@ public class UpcomingGamesRecyclerAdapter extends RecyclerView.Adapter<UpcomingG
     @Override
     public UpcomingGamesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         FragmentUpcomingGameRowBinding binding = FragmentUpcomingGameRowBinding.inflate(this.inflater, parent, false);
-        return new UpcomingGamesViewHolder(binding, listener, data);
+        return new UpcomingGamesViewHolder(binding, data);
     }
 }

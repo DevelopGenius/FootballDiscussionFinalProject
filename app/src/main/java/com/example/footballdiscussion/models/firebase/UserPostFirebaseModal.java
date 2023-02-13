@@ -36,7 +36,8 @@ public class UserPostFirebaseModal {
                     QuerySnapshot QuerySnapshots = task.getResult();
                     QuerySnapshots.forEach(queryDocumentSnapshot -> {
                         UserPostComment userPostComment = new UserPostComment(user.getUsername(), comment);
-                        queryDocumentSnapshot.getReference().update("userComments", FieldValue.arrayUnion(userPostComment))
+                        queryDocumentSnapshot.getReference().update("userComments", FieldValue.arrayUnion(userPostComment),
+                                        "lastUpdated", FieldValue.serverTimestamp())
                                 .addOnCompleteListener(command -> {
                                     if (command.isSuccessful()) {
                                         callback.onComplete(null);

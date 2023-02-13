@@ -53,6 +53,7 @@ public class UserPostModel {
 
     public void publishUserComment(String comment, UserPost userPost, Listener<Void> callback) {
         userPostFirebaseModal.addUserComment(userModel.getCurrentLogInUser(), userPost, comment, (Void) -> {
+            refreshAllUserPosts();
             callback.onComplete(null);
         });
     }
