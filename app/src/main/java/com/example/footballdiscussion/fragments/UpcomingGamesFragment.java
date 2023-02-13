@@ -28,10 +28,6 @@ public class UpcomingGamesFragment extends Fragment {
     private UpcomingGamesRecyclerAdapter upcomingGamesRecyclerAdapter;
     private UpcomingGamesViewModel viewModel;
 
-    public static UpcomingGamesFragment newInstance() {
-        return new UpcomingGamesFragment();
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {

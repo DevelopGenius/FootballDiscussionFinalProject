@@ -33,7 +33,18 @@ public class OwnUserPostsFragment extends Fragment {
         binding.ownUserPostsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         ownUserPostsRecyclerAdapter = new UserPostsRecyclerAdapter(getLayoutInflater(), this.viewModel.getOwnUserPosts(), this.viewModel.getCurrentUser().getId());
         binding.ownUserPostsRecyclerView.setAdapter(this.ownUserPostsRecyclerAdapter);
+        setListeners(view);
 
+        return view;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        viewModel = new ViewModelProvider(this).get(UserPostsViewModel.class);
+    }
+
+    private void setListeners(View view) {
         viewModel.getAllUserPosts().observe(getViewLifecycleOwner(), list -> {
             ownUserPostsRecyclerAdapter.setData(this.viewModel.getOwnUserPosts());
         });
@@ -61,13 +72,6 @@ public class OwnUserPostsFragment extends Fragment {
                                     (viewModel.getOwnUserPosts().get(pos).getId());
             Navigation.findNavController(binding.getRoot()).navigate(action);
         });
-        return view;
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        viewModel = new ViewModelProvider(this).get(UserPostsViewModel.class);
 
     }
 }

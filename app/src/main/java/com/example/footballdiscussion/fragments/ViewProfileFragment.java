@@ -36,9 +36,7 @@ public class ViewProfileFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentViewProfileBinding.inflate(inflater, container, false);
         loadProfileData();
-        binding.viewProfileEditButton.setOnClickListener(view -> {
-            Navigation.findNavController(view).navigate(ViewProfileFragmentDirections.actionViewProfileFragmentToEditProfileFragment());
-        });
+        setListeners();
         return binding.getRoot();
     }
 
@@ -57,5 +55,11 @@ public class ViewProfileFragment extends Fragment {
         binding.viewProfileEmail.setText(currentUser.getEmail());
         binding.viewProfilePhone.setText(currentUser.getPhone());
         binding.viewProfileUsername.setText(currentUser.getUsername());
+    }
+
+    private void setListeners() {
+        binding.viewProfileEditButton.setOnClickListener(view -> {
+            Navigation.findNavController(view).navigate(ViewProfileFragmentDirections.actionViewProfileFragmentToEditProfileFragment());
+        });
     }
 }

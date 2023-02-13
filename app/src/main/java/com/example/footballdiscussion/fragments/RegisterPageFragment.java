@@ -38,10 +38,6 @@ public class RegisterPageFragment extends Fragment {
     private FragmentRegisterPageBinding binding;
     private RegisterPageViewModel mViewModel;
 
-    public static RegisterPageFragment newInstance() {
-        return new RegisterPageFragment();
-    }
-
     ActivityResultLauncher<Void> cameraLauncher;
     ActivityResultLauncher<String> galleryLauncher;
     private Boolean isImageSelected = false;

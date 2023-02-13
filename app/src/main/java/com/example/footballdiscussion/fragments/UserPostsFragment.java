@@ -27,20 +27,26 @@ public class UserPostsFragment extends Fragment {
     private UserPostsRecyclerAdapter userPostsRecyclerAdapter;
     private FragmentUserPostsBinding binding;
 
-    public static UserPostsFragment newInstance() {
-        return new UserPostsFragment();
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentUserPostsBinding.inflate(inflater, container, false);
         binding.userPostsRecyclerView.setHasFixedSize(true);
         binding.userPostsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         userPostsRecyclerAdapter = new UserPostsRecyclerAdapter(getLayoutInflater(), viewModel.getAllUserPosts().getValue(), this.viewModel.getCurrentUser().getId());
         binding.userPostsRecyclerView.setAdapter(this.userPostsRecyclerAdapter);
+        setListeners();
 
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        viewModel = new ViewModelProvider(this).get(UserPostsViewModel.class);
+    }
+
+    private void setListeners() {
         viewModel.getAllUserPosts().observe(getViewLifecycleOwner(), list -> {
             userPostsRecyclerAdapter.setData(list);
         });
@@ -71,13 +77,5 @@ public class UserPostsFragment extends Fragment {
         binding.userPostsSwipeRefresh.setOnRefreshListener(() -> {
             viewModel.refreshAllUserPosts();
         });
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        viewModel = new ViewModelProvider(this).get(UserPostsViewModel.class);
-
     }
 }

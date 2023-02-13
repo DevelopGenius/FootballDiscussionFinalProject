@@ -17,9 +17,6 @@ import com.example.footballdiscussion.view_modals.UserPostRowViewModel;
 public class UserPostRowFragment extends Fragment {
     private UserPostRowViewModel viewModel;
     private FragmentUserPostRowBinding binding;
-    public static UserPostRowFragment newInstance() {
-        return new UserPostRowFragment();
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
