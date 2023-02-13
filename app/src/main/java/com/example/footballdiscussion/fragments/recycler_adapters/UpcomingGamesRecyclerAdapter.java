@@ -1,18 +1,14 @@
 package com.example.footballdiscussion.fragments.recycler_adapters;
 
-
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.example.footballdiscussion.R;
 import com.example.footballdiscussion.databinding.FragmentUpcomingGameRowBinding;
 import com.example.footballdiscussion.models.entities.UpcomingGame;
-
+import com.example.footballdiscussion.utils.ImageUtils;
 import java.util.List;
-
 
 class UpcomingGamesViewHolder extends RecyclerView.ViewHolder {
     private FragmentUpcomingGameRowBinding binding;
@@ -26,6 +22,7 @@ class UpcomingGamesViewHolder extends RecyclerView.ViewHolder {
     public void bind(UpcomingGame upcomingGame) {
         binding.upcomingGameRowTitle.setText(upcomingGame.getGameTitle());
         binding.upcomingGameRowDescription.setText(upcomingGame.getGameDescription());
+        ImageUtils.loadImage(upcomingGame.getImageUrl(), binding.upcomingGameRowImage, R.drawable.football_stadium);
     }
 }
 

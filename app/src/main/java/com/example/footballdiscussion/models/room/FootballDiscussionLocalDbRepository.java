@@ -11,7 +11,7 @@ import com.example.footballdiscussion.models.room.daos.UpcomingGameDao;
 import com.example.footballdiscussion.models.room.daos.UserDao;
 import com.example.footballdiscussion.models.room.daos.UserPostDao;
 
-@Database(entities = {User.class, UpcomingGame.class, UserPost.class}, version = 18)
+@Database(entities = {User.class, UpcomingGame.class, UserPost.class}, version = 19)
 @TypeConverters({Converters.class, UserPostCommentConverter.class})
 public abstract class FootballDiscussionLocalDbRepository extends RoomDatabase {
     public abstract UserDao userDao();

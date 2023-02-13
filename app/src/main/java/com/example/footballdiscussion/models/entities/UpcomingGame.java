@@ -20,18 +20,20 @@ public class UpcomingGame {
     private String gameDate;
     private String firstTeamName;
     private String secondTeamName;
+    private String imageUrl;
 
     @Ignore
     public UpcomingGame() {
 
     }
 
-    public UpcomingGame(@NonNull String id, String leagueName, String gameDate, String firstTeamName, String secondTeamName) {
+    public UpcomingGame(@NonNull String id, String leagueName, String gameDate, String firstTeamName, String secondTeamName, String imageUrl) {
         this.id = id;
         this.leagueName = leagueName;
         this.gameDate = gameDate;
         this.firstTeamName = firstTeamName;
         this.secondTeamName = secondTeamName;
+        this.imageUrl = imageUrl;
     }
 
     @NonNull
@@ -93,5 +95,13 @@ public class UpcomingGame {
                 .edit()
                 .putLong(UpcomingGame.LOCAL_LAST_UPDATE_TIME, localLastUpdateTime)
                 .apply();
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

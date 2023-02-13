@@ -36,7 +36,8 @@ public class UpcomingGameAdapter extends TypeAdapter<UpcomingGame> {
         currGame.setSecondTeamName(gamesJsonObject.get("teams").getAsJsonObject()
                 .get("away").getAsJsonObject().get("name").getAsString());
         currGame.setLeagueName(gamesJsonObject.get("league").getAsJsonObject().get("name").getAsString());
-
+        currGame.setImageUrl(gamesJsonObject.get("teams").getAsJsonObject()
+                .get("home").getAsJsonObject().get("logo").getAsString());
         return currGame;
     }
 }
