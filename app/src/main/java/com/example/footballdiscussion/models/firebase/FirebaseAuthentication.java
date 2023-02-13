@@ -15,12 +15,12 @@ public class FirebaseAuthentication {
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
-    public void register(String email, String password, Listener<String> callback) {
+    public void register(String email, String password, Listener<String> callback, Listener<String> failCallback) {
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener((Task<AuthResult> task) -> {
             if (task.isSuccessful() && task.getResult().getUser() != null) {
                 callback.onComplete(task.getResult().getUser().getUid());
             }
-        }).addOnFailureListener((e) -> Log.d("TAG", "register: " + e));
+        }).addOnFailureListener((e) -> failCallback.onComplete(e.getMessage()));
     }
 
 

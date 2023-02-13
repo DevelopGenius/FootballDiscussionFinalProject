@@ -17,6 +17,7 @@ import com.example.footballdiscussion.models.room.FootballDiscussionLocalDb;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDbRepository;
 import com.example.footballdiscussion.utils.LoadingState;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -29,7 +30,6 @@ public class UserModel {
     private UserFirebaseModal userFirebaseModal = new UserFirebaseModal();
     private FirebaseImageStorage firebaseImageStorage = new FirebaseImageStorage();
     FootballDiscussionLocalDbRepository localDb = FootballDiscussionLocalDb.getAppDb();
-    final public MutableLiveData<LoadingState> EventUsersListLoadingState = new MutableLiveData<>(LoadingState.NOT_LOADING);
     final public MutableLiveData<LoadingState> eventLoggedInUserLoadingState = new MutableLiveData<>(LoadingState.NOT_LOADING);
     private final MutableLiveData<User> currentLoggedInUser = new MutableLiveData<>(null);
 
@@ -41,41 +41,13 @@ public class UserModel {
         firebaseAuthentication = new FirebaseAuthentication();
     }
 
-    public void refreshAllUsers() {
-        EventUsersListLoadingState.setValue(LoadingState.LOADING);
-        // get local last update
-        Long localLastUpdate = User.getLocalLastUpdate();
-        // get all updated recorde from firebase since local last update
-        userFirebaseModal.getAllUsersSince(localLastUpdate, list -> {
-            executor.execute(() -> {
-                Log.d("TAG", " firebase return : " + list.size());
-                Long time = localLastUpdate;
-                for (User user : list) {
-                    // insert new records into ROOM
-                    localDb.userDao().insertAll(user);
-                    if (time < user.getLastUpdated()) {
-                        time = user.getLastUpdated();
-                    }
-                }
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                // update local last update
-                User.setLocalLastUpdate(time);
-                EventUsersListLoadingState.postValue(LoadingState.NOT_LOADING);
-            });
-        });
-    }
-
-    public void addUser(User user, String password, Listener<Void> listener) {
-        firebaseAuthentication.register(user.getEmail(), password, (userId) -> {
+    public void addUser(User user, String password, Listener<Void> listener, Listener<String> failCallback) {
+        validateEmail(user.getEmail(), (unused) -> validateUsername(user.getUsername(), (unused1) -> firebaseAuthentication.register(user.getEmail(), password, (userId) -> {
             user.setId(userId);
             userFirebaseModal.addUser(user, (newUser) -> {
                 addLoggedInUserToCache(newUser, listener);
             });
-        });
+        }, failCallback), failCallback), failCallback);
     }
 
     private void addLoggedInUserToCache(User user, Listener<Void> listener) {
@@ -170,8 +142,8 @@ public class UserModel {
     }
 
     private void validateEmail(String email, Listener<Void> successCallback, Listener<String> failCallback) {
-        firebaseAuthentication.isEmailExists(email, (isExist) -> {
-            if (isExist) {
+        firebaseAuthentication.isEmailExists(email, (isNewUser) -> {
+            if (!isNewUser) {
                 failCallback.onComplete("This email already exists");
             } else {
                 successCallback.onComplete(null);
@@ -183,13 +155,17 @@ public class UserModel {
         if (oldUser.getUsername().equals(username)) {
             successCallback.onComplete(null);
         } else {
-            userFirebaseModal.isUsernameExists(username, (isExist) -> {
-                if (isExist) {
-                    failCallback.onComplete("This username already exists");
-                } else {
-                    successCallback.onComplete(null);
-                }
-            });
+            validateUsername(username, successCallback, failCallback);
         }
+    }
+
+    private void validateUsername(String username, Listener<Void> successCallback, Listener<String> failCallback) {
+        userFirebaseModal.isUsernameExists(username, (isExist) -> {
+            if (isExist) {
+                failCallback.onComplete("This username already exists");
+            } else {
+                successCallback.onComplete(null);
+            }
+        });
     }
 }

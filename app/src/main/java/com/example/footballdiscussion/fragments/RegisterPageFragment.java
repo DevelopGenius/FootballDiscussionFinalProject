@@ -62,47 +62,7 @@ public class RegisterPageFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentRegisterPageBinding.inflate(inflater, container, false);
-
-        binding.registerButton.setOnClickListener(view1 -> {
-            String username = binding.usernameRegisterEt.getText().toString();
-            String password = binding.passwordRegisterEt.getText().toString();
-            String phone = binding.phoneRegisterEt.getText().toString();
-            String email = binding.emailRegisterEt.getText().toString();
-            if (!UserUtils.isEmailValid(email) || password.length() < 6) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(view1.getContext());
-                builder.setTitle("Invalid Email or password too short")
-                        .setMessage("The email address is invalid or the password isn't 6 characters at least")
-                        .setPositiveButton("OK", null)
-                        .show();
-            } else {
-                User user = new User(username, phone, email, "");
-
-                if (isImageSelected) {
-                    binding.avatarImg.setDrawingCacheEnabled(true);
-                    binding.avatarImg.buildDrawingCache();
-                    Bitmap bitmap = ((BitmapDrawable) binding.avatarImg.getDrawable()).getBitmap();
-                    UserPostModel.instance().uploadImage(user.getUsername(), bitmap, url -> {
-                        if (url != null) {
-                            user.setImageUrl(url);
-                            binding.registerProgressIndicator.show();
-                            mViewModel.addUser(user, password, (e) -> openPostsActivity());
-                        }
-                    });
-                } else {
-                    binding.registerProgressIndicator.show();
-                    mViewModel.addUser(user, password, (e) -> openPostsActivity());
-                }
-
-            }
-        });
-
-        binding.cameraButton.setOnClickListener(view1 -> {
-            cameraLauncher.launch(null);
-        });
-
-        binding.galleryButton.setOnClickListener(view1 -> {
-            galleryLauncher.launch("image/*");
-        });
+        setListeners();
 
         return binding.getRoot();
     }
@@ -113,9 +73,63 @@ public class RegisterPageFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(RegisterPageViewModel.class);
     }
 
+    private void setListeners() {
+        binding.registerButton.setOnClickListener(view -> {
+            String username = binding.usernameRegisterEt.getText().toString();
+            String password = binding.passwordRegisterEt.getText().toString();
+            String phone = binding.phoneRegisterEt.getText().toString();
+            String email = binding.emailRegisterEt.getText().toString();
+            if (!UserUtils.isEmailValid(email) || password.length() < 6) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle("Invalid Email or password too short")
+                        .setMessage("The email address is invalid or the password isn't 6 characters at least")
+                        .setPositiveButton("OK", null)
+                        .show();
+            } else {
+                User user = new User(username, phone, email, "");
+                createUser(user, password, view);
+            }
+        });
+
+        binding.cameraButton.setOnClickListener(view1 -> {
+            cameraLauncher.launch(null);
+        });
+
+        binding.galleryButton.setOnClickListener(view1 -> {
+            galleryLauncher.launch("image/*");
+        });
+    }
+
+    private void createUser(User user, String password, View view){
+        if (isImageSelected) {
+            binding.avatarImg.setDrawingCacheEnabled(true);
+            binding.avatarImg.buildDrawingCache();
+            Bitmap bitmap = ((BitmapDrawable) binding.avatarImg.getDrawable()).getBitmap();
+            UserPostModel.instance().uploadImage(user.getUsername(), bitmap, url -> {
+                if (url != null) {
+                    user.setImageUrl(url);
+                    binding.registerProgressIndicator.show();
+                    mViewModel.addUser(user, password, (e) -> openPostsActivity(), (e) -> onCallbackFail(view, e));
+                }
+            });
+        } else {
+            binding.registerProgressIndicator.show();
+            mViewModel.addUser(user, password, (e) -> openPostsActivity(), (e) -> onCallbackFail(view, e));
+        }
+    }
+
     private void openPostsActivity() {
         Intent postsActivityIntent = new Intent(getActivity(), PostsActivity.class);
         startActivity(postsActivityIntent);
         getActivity().finish();
+    }
+
+    private void onCallbackFail(View view, String errorMessage) {
+        binding.registerProgressIndicator.hide();
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setTitle("Error at registration")
+                .setMessage(errorMessage)
+                .setPositiveButton("OK", null)
+                .show();
     }
 }

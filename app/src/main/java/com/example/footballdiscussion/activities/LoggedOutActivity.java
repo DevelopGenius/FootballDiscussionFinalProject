@@ -3,6 +3,7 @@ package com.example.footballdiscussion.activities;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -10,6 +11,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.footballdiscussion.R;
 import com.example.footballdiscussion.databinding.ActivityLoggedOutBinding;
+import com.example.footballdiscussion.utils.Logout;
 
 public class LoggedOutActivity extends AppCompatActivity {
 
@@ -28,7 +30,11 @@ public class LoggedOutActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            navController.popBackStack();
+        }
+
+        return NavigationUI.onNavDestinationSelected(item, navController);
     }
 }
