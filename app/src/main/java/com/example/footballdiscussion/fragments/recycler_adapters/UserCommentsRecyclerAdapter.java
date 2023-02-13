@@ -33,7 +33,6 @@ public class UserCommentsRecyclerAdapter extends RecyclerView.Adapter<UserCommen
     List<UserPostComment> data;
     String currentUserId;
     LayoutInflater inflater;
-    OnItemClickListener listener;
 
     public UserCommentsRecyclerAdapter(LayoutInflater inflater, List<UserPostComment> data, String currentUserId) {
         this.inflater = inflater;

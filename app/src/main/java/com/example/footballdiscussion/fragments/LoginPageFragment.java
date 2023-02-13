@@ -42,14 +42,23 @@ public class LoginPageFragment extends Fragment {
             binding.loginProgressIndicator.show();
             String email = binding.emailEditText.getText().toString();
             String password = binding.passwordEditText.getText().toString();
-            viewModel.login(email, password, (unused) -> openPostsActivity(), (unused) -> {
-                binding.loginProgressIndicator.hide();
+            if(email.isEmpty() || password.isEmpty()){
                 AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setTitle("Unable to login")
-                        .setMessage("Your email or password are incorrect")
+                builder.setTitle("Invalid email or password")
+                        .setMessage("Your email or password are empty")
                         .setPositiveButton("OK", null)
                         .show();
-            });
+            }
+            else {
+                viewModel.login(email, password, (unused) -> openPostsActivity(), (unused) -> {
+                    binding.loginProgressIndicator.hide();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                    builder.setTitle("Unable to login")
+                            .setMessage("Your email or password are incorrect")
+                            .setPositiveButton("OK", null)
+                            .show();
+                });
+            }
         });
         return binding.getRoot();
 

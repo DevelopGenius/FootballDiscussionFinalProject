@@ -100,15 +100,13 @@ public class CreatePostFragment extends Fragment {
                         }
                         viewModel.publishUserPost(userPost, (unused) -> {
                             binding.createPostProgressIndicator.hide();
-                            Navigation.findNavController(view).navigate(
-                                    CreatePostFragmentDirections.actionCreatePostFragmentToOwnUserPostsFragment());
+                            Navigation.findNavController(view).popBackStack();
                         });
                     });
                 } else {
                     viewModel.publishUserPost(userPost, (unused) -> {
                         binding.createPostProgressIndicator.hide();
-                        Navigation.findNavController(view).navigate(CreatePostFragmentDirections
-                                .actionCreatePostFragmentToOwnUserPostsFragment());
+                        Navigation.findNavController(view).popBackStack();
                     });
                 }
             } else {

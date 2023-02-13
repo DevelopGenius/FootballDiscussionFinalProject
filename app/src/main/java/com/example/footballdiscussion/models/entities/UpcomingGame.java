@@ -1,18 +1,12 @@
 package com.example.footballdiscussion.models.entities;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.example.footballdiscussion.ApplicationContext;
-
 @Entity
 public class UpcomingGame {
-    private static final String LOCAL_LAST_UPDATE_TIME = "upcomingGameLocalLastUpdateTime";
-
     @PrimaryKey
     @NonNull
     private String id;
@@ -83,18 +77,6 @@ public class UpcomingGame {
 
     public String getGameDescription() {
         return firstTeamName + " vs " + secondTeamName;
-    }
-
-    public static Long getLocalLastUpdateTime() {
-        return ApplicationContext.getContext().getSharedPreferences("TAG", Context.MODE_PRIVATE)
-                .getLong(UpcomingGame.LOCAL_LAST_UPDATE_TIME, 0);
-    }
-
-    public static void setLocalLastUpdateTime(Long localLastUpdateTime) {
-        ApplicationContext.getContext().getSharedPreferences("TAG", Context.MODE_PRIVATE)
-                .edit()
-                .putLong(UpcomingGame.LOCAL_LAST_UPDATE_TIME, localLastUpdateTime)
-                .apply();
     }
 
     public String getImageUrl() {

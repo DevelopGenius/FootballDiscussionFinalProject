@@ -32,14 +32,14 @@ public class UserPostsViewModel extends ViewModel {
         userPostModel.refreshAllUserPosts();
     }
 
-    public List<UserPost> getOwnUserPosts() {
-        List<UserPost> userPosts = userPostModel.getAllUserPosts().getValue();
-        return userPosts == null ? null : filterOwnPosts(userPosts);
+    public void refreshOwnUserPosts() {
+        userPostModel.refreshMyUserPosts(getCurrentUser().getId());
     }
 
-    public List<UserPost> filterOwnPosts(List<UserPost> userPosts) {
-        return userPosts.stream().filter(this::isOwnPost).collect(Collectors.toList());
+    public LiveData<List<UserPost>> getOwnUserPosts() {
+       return userPostModel.getOwnUserPosts();
     }
+
 
     public User getCurrentUser() {
         return userModel.getCurrentLogInUser();

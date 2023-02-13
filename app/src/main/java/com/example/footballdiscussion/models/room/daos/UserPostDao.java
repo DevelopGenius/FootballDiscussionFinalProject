@@ -16,6 +16,10 @@ public interface UserPostDao {
     @Query("select * from UserPost order by id")
     LiveData<List<UserPost>> getAll();
 
+
+    @Query("select * from UserPost where userId = :userId")
+    LiveData<List<UserPost>> getUserPostsByUserId(String userId);
+
     @Query("select * from UserPost where id = :id")
     LiveData<UserPost> getUserPostById(String id);
 

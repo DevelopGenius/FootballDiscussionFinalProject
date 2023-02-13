@@ -7,16 +7,12 @@ import com.example.footballdiscussion.models.entities.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class UserFirebaseModal {
     FirebaseFirestore db;
@@ -28,7 +24,6 @@ public class UserFirebaseModal {
                 .setPersistenceEnabled(false)
                 .build();
         db.setFirestoreSettings(settings);
-//        storage = FirebaseStorage.getInstance();
     }
 
     public void getUserByEmail(String email, Listener<User> callback) {
@@ -52,26 +47,6 @@ public class UserFirebaseModal {
                     if (task.isSuccessful()) {
                         QuerySnapshot jsonList = task.getResult();
                         callback.onComplete(!jsonList.isEmpty());
-                    }
-                });
-    }
-
-    public void getAllUsersSince(Long since, Listener<List<User>> callback) {
-        db.collection(USERS_COLLECTION)
-                .whereGreaterThanOrEqualTo(User.LAST_UPDATED, new Timestamp(since, 0))
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        List<User> list = new LinkedList<>();
-                        if (task.isSuccessful()) {
-                            QuerySnapshot jsonList = task.getResult();
-                            for (DocumentSnapshot json : jsonList) {
-                                User user = User.fromJson(json.getData());
-                                list.add(user);
-                            }
-                        }
-                        callback.onComplete(list);
                     }
                 });
     }

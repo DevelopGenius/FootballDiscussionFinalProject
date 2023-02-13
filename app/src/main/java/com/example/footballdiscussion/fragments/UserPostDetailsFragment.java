@@ -52,24 +52,7 @@ public class UserPostDetailsFragment extends Fragment {
         binding.userCommentsRecyclerView.setAdapter(this.userCommentsRecyclerAdapter);
 
         refreshUserPost();
-
-        viewModel.getEventUserPostsLoadingState().observe(getViewLifecycleOwner(), status -> {
-            binding.userPostDetailsSwipeRefresh.setRefreshing(status == LoadingState.LOADING);
-        });
-
-        binding.userPostDetailsSwipeRefresh.setOnRefreshListener(() -> {
-            viewModel.refreshAllUserPosts();
-        });
-
-        binding.publishButton.setOnClickListener(view -> {
-            viewModel.publishUserComment(String.valueOf(binding.commentInputText.getText()), this.userPost, (unused) -> {
-                Log.d("TAG", "Added comment");
-            });
-            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-            builder.setTitle("Added new comment!")
-                    .setPositiveButton("OK", null)
-                    .show();
-        });
+        setListeners();
 
         return binding.getRoot();
     }
@@ -93,6 +76,26 @@ public class UserPostDetailsFragment extends Fragment {
             setUserPostData(userPost);
             this.userPost = userPost;
             userCommentsRecyclerAdapter.setData(this.userPost.getUserPostComments());
+        });
+    }
+
+    private void setListeners() {
+        viewModel.getEventUserPostsLoadingState().observe(getViewLifecycleOwner(), status -> {
+            binding.userPostDetailsSwipeRefresh.setRefreshing(status == LoadingState.LOADING);
+        });
+
+        binding.userPostDetailsSwipeRefresh.setOnRefreshListener(() -> {
+            viewModel.refreshAllUserPosts();
+        });
+
+        binding.publishButton.setOnClickListener(view -> {
+            viewModel.publishUserComment(String.valueOf(binding.commentInputText.getText()), this.userPost, (unused) -> {
+                Log.d("TAG", "Added comment");
+            });
+            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+            builder.setTitle("Added new comment!")
+                    .setPositiveButton("OK", null)
+                    .show();
         });
     }
 }

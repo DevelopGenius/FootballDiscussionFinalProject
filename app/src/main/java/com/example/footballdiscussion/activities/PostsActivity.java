@@ -7,7 +7,6 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
@@ -15,13 +14,11 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.footballdiscussion.R;
 import com.example.footballdiscussion.databinding.ActivityPostsBinding;
 import com.example.footballdiscussion.utils.Logout;
-import com.example.footballdiscussion.view_modals.PostsViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class PostsActivity extends AppCompatActivity {
     private ActivityPostsBinding binding;
     NavController navController;
-    private PostsViewModel postsViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +32,6 @@ public class PostsActivity extends AppCompatActivity {
 
         BottomNavigationView navView = findViewById(R.id.bottom_navigation_view_posts);
         NavigationUI.setupWithNavController(navView, navController);
-        postsViewModel = new ViewModelProvider(this).get(PostsViewModel.class);
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.example.footballdiscussion.models.entities.UserPost;
 import com.example.footballdiscussion.models.entities.UserPostComment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -17,6 +18,7 @@ import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class UserPostFirebaseModal {
     FirebaseFirestore db;
@@ -38,7 +40,7 @@ public class UserPostFirebaseModal {
                 if (task.isSuccessful()) {
                     QuerySnapshot QuerySnapshots = task.getResult();
                     QuerySnapshots.forEach(queryDocumentSnapshot -> {
-                        UserPostComment userPostComment = new UserPostComment(user.getUsername(), comment);
+                        UserPostComment userPostComment = new UserPostComment(user.getUsername(), comment, UUID.randomUUID().toString());
                         queryDocumentSnapshot.getReference().update("userComments", FieldValue.arrayUnion(userPostComment),
                                         "lastUpdated", FieldValue.serverTimestamp())
                                 .addOnCompleteListener(command -> {
@@ -61,9 +63,27 @@ public class UserPostFirebaseModal {
         });
     }
 
-    //.whereGreaterThanOrEqualTo(UserPost.LAST_UPDATED, new Timestamp(since, 0))
     public void getAllUserPostsSince(Long since, Listener<List<UserPost>> callback) {
-        db.collection(USER_POSTS_COLLECTION).get()
+        db.collection(USER_POSTS_COLLECTION).whereGreaterThanOrEqualTo(UserPost.LAST_UPDATED, new Timestamp(since, 0)).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        List<UserPost> list = new ArrayList<>();
+                        if (task.isSuccessful()) {
+                            QuerySnapshot jsonsList = task.getResult();
+                            for (DocumentSnapshot json : jsonsList) {
+                                UserPost userPost = UserPost.fromJson(json.getData());
+                                list.add(userPost);
+                            }
+                        }
+                        callback.onComplete(list);
+                    }
+                });
+    }
+
+
+    public void getOwnUserPosts(String userId, Listener<List<UserPost>> callback) {
+        db.collection(USER_POSTS_COLLECTION).whereEqualTo("userId", userId).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -113,7 +133,6 @@ public class UserPostFirebaseModal {
                             }
                         });
                     });
-
                 }
             }
         });

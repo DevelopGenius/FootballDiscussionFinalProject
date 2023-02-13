@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.footballdiscussion.databinding.FragmentUserPostsBinding;
 import com.example.footballdiscussion.fragments.recycler_adapters.UserPostsRecyclerAdapter;
+import com.example.footballdiscussion.models.entities.UserPost;
 import com.example.footballdiscussion.utils.LoadingState;
 import com.example.footballdiscussion.view_modals.UserPostsViewModel;
 
@@ -56,7 +57,8 @@ public class UserPostsFragment extends Fragment {
             Navigation.findNavController(binding.getRoot()).navigate(action);
         });
 
-        userPostsRecyclerAdapter.setOnIconClickListener(userPost -> {
+        userPostsRecyclerAdapter.setOnIconClickListener(pos -> {
+            UserPost userPost = viewModel.getAllUserPosts().getValue().get(pos);
             if (!viewModel.isOwnPost(userPost)) {
                 viewModel.handleUserPostLike(userPost);
             } else {
@@ -64,8 +66,8 @@ public class UserPostsFragment extends Fragment {
                         .actionUserPostsFragmentToEditOwnUserPostFragment(userPost.getId()));
             }
         });
-        userPostsRecyclerAdapter.setOnDeleteClickListener((userPost) -> {
-            viewModel.deleteUserPost(userPost);
+        userPostsRecyclerAdapter.setOnDeleteClickListener((pos) -> {
+            viewModel.deleteUserPost(viewModel.getAllUserPosts().getValue().get(pos));
         });
 
         viewModel.getEventUserPostsLoadingState().observe(getViewLifecycleOwner(), status -> {

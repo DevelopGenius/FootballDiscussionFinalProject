@@ -46,7 +46,7 @@ public class UpcomingGameModel {
             @Override
             public okhttp3.Response intercept(Chain chain) throws IOException {
                 Request request = chain.request().newBuilder()
-                        .addHeader("x-rapidapi-key", "9f6bb1ad071d43e9090651f98edb5b3c")
+                        .addHeader("x-rapidapi-key", "9d083960607bdb82d54a20d8fa2c2420")
                         .addHeader("x-rapidapi-host", "v3.football.api-sports.io")
                         .build();
                 return chain.proceed(request);
@@ -84,6 +84,7 @@ public class UpcomingGameModel {
                 if (upcomingGamesResponse.body().getResponse() != null) {
                     executor.execute(() -> {
                         if (upcomingGamesResponse.isSuccessful()) {
+//                            localDb.upcomingGameDao().deleteAll();
                             Log.d("TAG", "----- Received upcomingGames from API successfully");
                             upcomingGamesLoadingState.postValue(LoadingState.NOT_LOADING);
                             upcomingGamesResponse.body().getResponse().forEach(game -> {

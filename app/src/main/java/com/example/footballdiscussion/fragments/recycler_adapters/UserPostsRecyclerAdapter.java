@@ -1,5 +1,6 @@
 package com.example.footballdiscussion.fragments.recycler_adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,17 +20,12 @@ class UserPostsViewHolder extends RecyclerView.ViewHolder {
 
     public UserPostsViewHolder(@NonNull FragmentUserPostRowBinding binding, OnItemClickListener listener,
                                OnIconClickListener onIconClickListener,
-                               OnIconClickListener onDeleteClickListener,
-                               List<UserPost> data) {
+                               OnIconClickListener onDeleteClickListener) {
         super(binding.getRoot());
         this.binding = binding;
         itemView.setOnClickListener(view -> listener.onItemClick(getAdapterPosition()));
-        binding.userPostRowEditLikeIcon.setOnClickListener(view -> onIconClickListener.onIconClick(data.stream()
-                .filter(userPost -> userPost.getId().equals(binding
-                        .userPostRowEditLikeIcon.getTag())).findFirst().get()));
-        binding.userPostRowDeletePost.setOnClickListener(view -> onDeleteClickListener.onIconClick(data.stream()
-                .filter(userPost -> userPost.getId().equals(binding
-                        .userPostRowEditLikeIcon.getTag())).findFirst().get()));
+        binding.userPostRowEditLikeIcon.setOnClickListener(view -> onIconClickListener.onIconClick(getAdapterPosition()));
+        binding.userPostRowDeletePost.setOnClickListener(view -> onDeleteClickListener.onIconClick(getAdapterPosition()));
 
     }
 
@@ -45,6 +41,7 @@ class UserPostsViewHolder extends RecyclerView.ViewHolder {
         if (isOwnPost(userPost, currentUserId)) {
             binding.userPostRowEditLikeIcon.setImageResource(R.drawable.baseline_edit_24);
             binding.userPostRowDeletePost.setVisibility(View.VISIBLE);
+            Log.d("TAG", "bind: " + userPost.getId());
             binding.userPostRowDeletePost.setTag(userPost.getId());
         } else {
             binding.userPostRowDeletePost.setVisibility(View.GONE);
@@ -113,6 +110,6 @@ public class UserPostsRecyclerAdapter extends RecyclerView.Adapter<UserPostsView
     @Override
     public UserPostsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         FragmentUserPostRowBinding binding = FragmentUserPostRowBinding.inflate(this.inflater, parent, false);
-        return new UserPostsViewHolder(binding, listener, onIconClickListener, onDeleteClickListener, data);
+        return new UserPostsViewHolder(binding, listener, onIconClickListener, onDeleteClickListener);
     }
 }

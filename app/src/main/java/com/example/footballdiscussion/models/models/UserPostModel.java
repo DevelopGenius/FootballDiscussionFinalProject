@@ -1,7 +1,10 @@
 package com.example.footballdiscussion.models.models;
 
 import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.Looper;
 
+import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -21,6 +24,7 @@ public class UserPostModel {
     private static final UserPostModel _instance = new UserPostModel();
 
     private Executor executor = Executors.newSingleThreadExecutor();
+    private Handler mainHandler = HandlerCompat.createAsync(Looper.getMainLooper());
     private UserModel userModel = UserModel.instance();
     private UserPostFirebaseModal userPostFirebaseModal = new UserPostFirebaseModal();
     private FirebaseImageStorage firebaseImageStorage = new FirebaseImageStorage();
@@ -28,6 +32,7 @@ public class UserPostModel {
 
     final public MutableLiveData<LoadingState> eventUserPostsLoadingState = new MutableLiveData<>(LoadingState.NOT_LOADING);
     private LiveData<List<UserPost>> userPostList;
+    private LiveData<List<UserPost>> ownPostList;
 
     public static UserPostModel instance() {
         return _instance;
@@ -56,6 +61,7 @@ public class UserPostModel {
         userPostFirebaseModal.addUserComment(userModel.getCurrentLogInUser(), userPost, comment, (Void) -> {
             refreshAllUserPosts();
             callback.onComplete(null);
+
         });
     }
 
@@ -65,7 +71,6 @@ public class UserPostModel {
         userPostFirebaseModal.getAllUserPostsSince(localLastUpdate, list -> {
             executor.execute(() -> {
                 Long time = localLastUpdate;
-
                 for (UserPost userPost : list) {
                     if (userPost.isDeleted()) {
                         localDb.userPostDao().delete(userPost);
@@ -82,12 +87,39 @@ public class UserPostModel {
         });
     }
 
+
+    public void refreshMyUserPosts(String userId) {
+        eventUserPostsLoadingState.setValue(LoadingState.LOADING);
+        userPostFirebaseModal.getOwnUserPosts(userId, list -> {
+            executor.execute(() -> {
+                for (UserPost userPost : list) {
+                    if (userPost.isDeleted()) {
+                        localDb.userPostDao().delete(userPost);
+                    } else {
+                        localDb.userPostDao().insertAll(userPost);
+                    }
+
+                }
+                eventUserPostsLoadingState.postValue(LoadingState.NOT_LOADING);
+            });
+        });
+    }
+
     public LiveData<List<UserPost>> getAllUserPosts() {
         if (userPostList == null) {
             userPostList = localDb.userPostDao().getAll();
             refreshAllUserPosts();
         }
         return userPostList;
+    }
+
+    public LiveData<List<UserPost>> getOwnUserPosts() {
+        if (ownPostList == null) {
+            String userId = userModel.getCurrentLogInUser().getId();
+            ownPostList = localDb.userPostDao().getUserPostsByUserId(userId);
+            refreshMyUserPosts(userId);
+        }
+        return ownPostList;
     }
 
     public MutableLiveData<LoadingState> getEventUserPostsLoadingState() {
@@ -115,6 +147,7 @@ public class UserPostModel {
     public void deleteUserPost(UserPost userPost) {
         userPostFirebaseModal.deleteUserPost(userPost.getId(), (unused) -> executor.execute(() -> {
                     localDb.userPostDao().delete(userPost);
+                    mainHandler.post(() -> refreshAllUserPosts());
                 })
         );
     }
@@ -123,7 +156,6 @@ public class UserPostModel {
         userPostFirebaseModal.updateUserPost(userPost, (unused) -> {
             refreshAllUserPosts();
             successCallback.onComplete(null);
-
         }, failCallback);
     }
 

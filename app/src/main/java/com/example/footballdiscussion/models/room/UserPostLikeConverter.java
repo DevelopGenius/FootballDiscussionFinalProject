@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class Converters {
+public class UserPostLikeConverter {
     @TypeConverter
     public static List<String> fromString(String value) {
         Type listType = new TypeToken<List<String>>() {
