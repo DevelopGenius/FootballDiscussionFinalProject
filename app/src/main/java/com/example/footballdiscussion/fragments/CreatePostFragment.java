@@ -1,5 +1,6 @@
 package com.example.footballdiscussion.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -86,28 +87,38 @@ public class CreatePostFragment extends Fragment {
 
         binding.publishPostButton.setOnClickListener(view -> {
             String title = binding.postTitleEt.getText().toString();
-            User currentUser = viewModel.getCurrentUser();
-            String postId = currentUser.getId() + "_" + UUID.randomUUID().toString();
-            UserPost userPost = new UserPost(postId, currentUser.getId(), currentUser.getUsername(), title, "");
-
-            if (isPostImageSelected) {
-                binding.newPostImg.setDrawingCacheEnabled(true);
-                binding.newPostImg.buildDrawingCache();
-                Bitmap bitmap = ((BitmapDrawable) binding.newPostImg.getDrawable()).getBitmap();
-                viewModel.uploadImage(postId, bitmap, url -> {
-                    if (url != null) {
-                        userPost.setImageUrl(url);
-                    }
-                    viewModel.publishUserPost(userPost, (unused) -> {
-                        Navigation.findNavController(view).navigate(
-                                CreatePostFragmentDirections.actionCreatePostFragmentToOwnUserPostsFragment());
+            if (title.length() > 0) {
+                binding.createPostProgressIndicator.show();
+                User currentUser = viewModel.getCurrentUser();
+                String postId = currentUser.getId() + "_" + UUID.randomUUID().toString();
+                UserPost userPost = new UserPost(postId, currentUser.getId(), currentUser.getUsername(), title, "");
+                if (isPostImageSelected) {
+                    binding.newPostImg.setDrawingCacheEnabled(true);
+                    binding.newPostImg.buildDrawingCache();
+                    Bitmap bitmap = ((BitmapDrawable) binding.newPostImg.getDrawable()).getBitmap();
+                    viewModel.uploadImage(postId, bitmap, url -> {
+                        if (url != null) {
+                            userPost.setImageUrl(url);
+                        }
+                        viewModel.publishUserPost(userPost, (unused) -> {
+                            binding.createPostProgressIndicator.hide();
+                            Navigation.findNavController(view).navigate(
+                                    CreatePostFragmentDirections.actionCreatePostFragmentToOwnUserPostsFragment());
+                        });
                     });
-                });
+                } else {
+                    viewModel.publishUserPost(userPost, (unused) -> {
+                        binding.createPostProgressIndicator.hide();
+                        Navigation.findNavController(view).navigate(CreatePostFragmentDirections
+                                .actionCreatePostFragmentToOwnUserPostsFragment());
+                    });
+                }
             } else {
-                viewModel.publishUserPost(userPost, (unused) -> {
-                    Navigation.findNavController(view).navigate(CreatePostFragmentDirections
-                            .actionCreatePostFragmentToOwnUserPostsFragment());
-                });
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setTitle("Title empty")
+                        .setMessage("The post title must not be empty")
+                        .setPositiveButton("OK", null)
+                        .show();
             }
         });
     }
