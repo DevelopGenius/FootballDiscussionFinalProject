@@ -54,11 +54,10 @@ public class UserPostModel {
         });
     }
 
-    public void publishUserComment(String comment, Listener<Void> callback) {
-//        firebaseModel.addUserComment(userModel.getCurrentLogInUser(), comment, (Void) -> {
-//            refreshUserPost();
-//            callback.onComplete(null);
-//        });
+    public void publishUserComment(String comment, UserPost userPost, Listener<Void> callback) {
+        firebaseModel.addUserComment(userModel.getCurrentLogInUser(), userPost, comment, (Void) -> {
+            callback.onComplete(null);
+        });
     }
 
     public void refreshAllUserPosts() {
@@ -90,18 +89,6 @@ public class UserPostModel {
             refreshAllUserPosts();
         }
         return userPostList;
-    }
-
-    public LiveData<List<String>> getAllUserPostComments() {
-        return null;
-    }
-
-    public void refreshAllUserPostComments() {
-
-    }
-
-    public MutableLiveData<LoadingState> getEventUserPostCommentsLoadingState() {
-        return eventUserPostsLoadingState;
     }
 
     public MutableLiveData<LoadingState> getEventUserPostsLoadingState() {

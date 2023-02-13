@@ -17,12 +17,4 @@ public class UserCommentsViewModel extends ViewModel {
     public User getCurrentUser() {
         return userModel.getCurrentLogInUser();
     }
-
-    public LiveData<List<String>> getAllUserPostComments() {
-        return userPostModel.getAllUserPostComments();
-    }
-
-    public void refreshAllUserPostComments() {
-        userPostModel.refreshAllUserPostComments();
-    }
 }

@@ -34,16 +34,6 @@ public class UserModel {
         firebaseAuthentication = new FirebaseAuthentication();
     }
 
-
-//    private LiveData<List<User>> usersList;
-//    public LiveData<List<User>> getAllUsers() {
-//        if(usersList == null){
-//            usersList = localDb.userDao().getAll();
-//            refreshAllUsers();
-//        }
-//        return usersList;
-//    }
-
     public void refreshAllUsers() {
         EventUsersListLoadingState.setValue(LoadingState.LOADING);
         // get local last update

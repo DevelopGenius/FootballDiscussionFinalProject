@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import com.example.footballdiscussion.models.common.Listener;
 import com.example.footballdiscussion.models.entities.User;
 import com.example.footballdiscussion.models.entities.UserPost;
+import com.example.footballdiscussion.models.entities.UserPostComment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -111,6 +112,26 @@ public class FirebaseModel {
         });
     }
 
+    public void addUserComment(User user, UserPost userPost, String comment, Listener<Void> callback) {
+        db.collection(USER_POSTS_COLLECTION).whereEqualTo("id", userPost.getId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot QuerySnapshots = task.getResult();
+                    QuerySnapshots.forEach(queryDocumentSnapshot -> {
+                        UserPostComment userPostComment = new UserPostComment(user.getUsername(), comment);
+                        queryDocumentSnapshot.getReference().update("userComments", FieldValue.arrayUnion(userPostComment))
+                                .addOnCompleteListener(command -> {
+                            if (command.isSuccessful()) {
+                                callback.onComplete(null);
+                            }
+                        });
+                    });
+                }
+            }
+        });
+    }
+
     public void addUser(User user, Listener<User> listener) {
         db.collection(USERS_COLLECTION).add(user.toJson())
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -175,20 +196,6 @@ public class FirebaseModel {
                             }
                         }
                         callback.onComplete(list);
-                    }
-                });
-    }
-
-    public void getUserPostById(String userPostId, Listener<UserPost> callback) {
-        db.collection(USER_POSTS_COLLECTION).whereEqualTo("id", userPostId)
-                .get().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot jsonList = task.getResult();
-                        UserPost userPost = null;
-                        for (DocumentSnapshot json : jsonList) {
-                            userPost = UserPost.fromJson(json.getData());
-                        }
-                        callback.onComplete(userPost);
                     }
                 });
     }

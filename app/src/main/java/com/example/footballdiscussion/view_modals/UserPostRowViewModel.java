@@ -14,8 +14,4 @@ public class UserPostRowViewModel extends ViewModel {
     public User getCurrentUser() {
         return userModel.getCurrentLogInUser();
     }
-
-    public void publishUserComment(String comment, Listener<Void> callback) {
-        userPostModel.publishUserComment(comment, callback);
-    }
 }
