@@ -1,8 +1,11 @@
 package com.example.footballdiscussion.models.models;
 
 import android.util.Log;
+
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.footballdiscussion.models.entities.UserPost;
 import com.example.footballdiscussion.utils.LoadingState;
 import com.example.footballdiscussion.models.API.GetUpcomingGamesDto;
 import com.example.footballdiscussion.models.API.UpcomingGameAdapter;
@@ -14,6 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -34,6 +38,7 @@ public class UpcomingGameModel {
     final String BASE_URL = "https://v3.football.api-sports.io";
     Retrofit retrofit;
     UpcomingGamesApi upcomingGamesApi;
+    private LiveData<List<UpcomingGame>> upcomingGamesList;
 
     private UpcomingGameModel() {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
@@ -62,6 +67,14 @@ public class UpcomingGameModel {
 
     public static UpcomingGameModel getInstance() {
         return _instance;
+    }
+
+    public LiveData<List<UpcomingGame>> getAllUpcomingGames() {
+        if (upcomingGamesList == null) {
+            upcomingGamesList = localDb.upcomingGameDao().getAll();
+            refreshAllUpcomingGames();
+        }
+        return upcomingGamesList;
     }
 
     public void refreshAllUpcomingGames() {

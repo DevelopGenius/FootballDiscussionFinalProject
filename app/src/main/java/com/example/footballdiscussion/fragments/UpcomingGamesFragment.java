@@ -35,19 +35,9 @@ public class UpcomingGamesFragment extends Fragment {
 
         binding.upcomingGamesRecyclerView.setHasFixedSize(true);
         binding.upcomingGamesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        upcomingGamesRecyclerAdapter = new UpcomingGamesRecyclerAdapter(getLayoutInflater(), null);
-        refreshUpcomingGames();
-        binding.upcomingGamesRecyclerView.setAdapter(this.upcomingGamesRecyclerAdapter);
-
-        upcomingGamesRecyclerAdapter.setOnItemClickListener(pos -> {
-            Log.d("TAG", "Clicked Row " + pos);
-        });
-
-        binding.upcomingGamesSwipeRefresh.setOnRefreshListener(()->{
-            refreshUpcomingGames();
-        });
-
+        upcomingGamesRecyclerAdapter = new UpcomingGamesRecyclerAdapter(getLayoutInflater(), viewModel.getUpcomingGames().getValue());
+        binding.upcomingGamesRecyclerView.setAdapter(upcomingGamesRecyclerAdapter);
+        setListeners();
         return binding.getRoot();
     }
 
@@ -57,13 +47,16 @@ public class UpcomingGamesFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(UpcomingGamesViewModel.class);
     }
 
-    private void refreshUpcomingGames() {
-        UpcomingGameModel.getInstance().upcomingGamesLoadingState.observe(getViewLifecycleOwner(),status->{
+    public void setListeners(){
+        binding.upcomingGamesSwipeRefresh.setOnRefreshListener(() -> {
+            viewModel.refreshAllUpcomingGames();
+        });
+
+        viewModel.getUpcomingGamesLoadingState().observe(getViewLifecycleOwner(), status -> {
             binding.upcomingGamesSwipeRefresh.setRefreshing(status == LoadingState.LOADING);
         });
 
-        this.viewModel.getUpcomingGames();
-        this.viewModel.localDb.upcomingGameDao().getAll().observe(getViewLifecycleOwner(), list -> {
+        viewModel.getUpcomingGames().observe(getViewLifecycleOwner(), list -> {
             upcomingGamesRecyclerAdapter.setData(list);
         });
     }
