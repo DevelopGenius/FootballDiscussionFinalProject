@@ -41,9 +41,6 @@
             android:id="@+id/action_userPostsFragment_to_createPostFragment"
             app:destination="@id/createPostFragment" />
         <action
-            android:id="@+id/action_userPostsFragment_to_createPostFragment2"
-            app:destination="@id/createPostFragment" />
-        <action
             android:id="@+id/action_userPostsFragment_to_viewProfileFragment"
             app:destination="@id/viewProfileFragment" />
         <action

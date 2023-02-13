@@ -67,6 +67,25 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@id/user_post_row_user_icon" />
 
+                    <TextView
+                        android:id="@+id/user_post_row_likes_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Likes:"
+                        android:textAppearance="?attr/textAppearanceHeadline6"
+                        android:layout_marginLeft="40dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/user_post_row_username" />
+                    <TextView
+                        android:id="@+id/user_post_row_likes_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textAppearance="?attr/textAppearanceHeadline6"
+                        android:layout_marginLeft="5dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/user_post_row_likes_text" />
+
                     <ImageButton
                         android:id="@+id/user_post_row_delete_post"
                         android:layout_width="wrap_content"

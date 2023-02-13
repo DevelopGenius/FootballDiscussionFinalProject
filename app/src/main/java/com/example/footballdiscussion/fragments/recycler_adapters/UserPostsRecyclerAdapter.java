@@ -54,6 +54,7 @@ class UserPostsViewHolder extends RecyclerView.ViewHolder {
         binding.userPostRowEditLikeIcon.setTag(userPost.getId());
         binding.userPostRowTitle.setText(userPost.getPostTitle());
         binding.userPostRowUsername.setText(userPost.getUsername());
+        binding.userPostRowLikesNumber.setText(Integer.toString(userPost.getUserLikes().size()));
         ImageUtils.loadImage(userPost.getImageUrl(), binding.userPostRowImage, R.drawable.football_stadium);
     }
 }
