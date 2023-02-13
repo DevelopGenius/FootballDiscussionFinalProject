@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/loginPageFragment"
         android:name="com.example.footballdiscussion.fragments.LoginPageFragment"
-        android:label="fragment_login_page"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_login_page" >
         <action
             android:id="@+id/action_loginPageFragment_to_registerPageFragment"
@@ -17,6 +17,6 @@
     <fragment
         android:id="@+id/registerPageFragment"
         android:name="com.example.footballdiscussion.fragments.RegisterPageFragment"
-        android:label="fragment_register_page"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_register_page" />
 </navigation>

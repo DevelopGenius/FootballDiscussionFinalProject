@@ -3,12 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/posts_nav_graph"
+    android:label="@string/app_name"
     app:startDestination="@id/upcomingGamesFragment">
 
     <fragment
         android:id="@+id/upcomingGamesFragment"
         android:name="com.example.footballdiscussion.fragments.UpcomingGamesFragment"
-        android:label="fragment_upcoming_games"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_upcoming_games">
         <action
             android:id="@+id/action_upcomingGamesFragment_to_userPostsFragment"
@@ -29,7 +30,7 @@
     <fragment
         android:id="@+id/userPostsFragment"
         android:name="com.example.footballdiscussion.fragments.UserPostsFragment"
-        android:label="fragment_user_posts"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_user_posts">
         <action
             android:id="@+id/action_userPostsFragment_to_upcomingGamesFragment"
@@ -53,7 +54,7 @@
     <fragment
         android:id="@+id/ownUserPostsFragment"
         android:name="com.example.footballdiscussion.fragments.OwnUserPostsFragment"
-        android:label="fragment_own_user_posts"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_own_user_posts">
         <action
             android:id="@+id/action_ownUserPostsFragment_to_upcomingGamesFragment"
@@ -77,7 +78,7 @@
     <fragment
         android:id="@+id/createPostFragment"
         android:name="com.example.footballdiscussion.fragments.CreatePostFragment"
-        android:label="fragment_create_post"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_create_post">
         <action
             android:id="@+id/action_createPostFragment_to_ownUserPostsFragment"
@@ -95,7 +96,7 @@
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.example.footballdiscussion.fragments.EditProfileFragment"
-        android:label="fragment_edit_profile"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_edit_profile">
         <action
             android:id="@+id/action_editProfileFragment_to_viewProfileFragment"
@@ -104,7 +105,7 @@
     <fragment
         android:id="@+id/viewProfileFragment"
         android:name="com.example.footballdiscussion.fragments.ViewProfileFragment"
-        android:label="fragment_view_profile"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_view_profile">
         <action
             android:id="@+id/action_viewProfileFragment_to_editProfileFragment"
@@ -113,17 +114,17 @@
     <fragment
         android:id="@+id/userPostDetailsFragment"
         android:name="com.example.footballdiscussion.fragments.UserPostDetailsFragment"
-        android:label="fragment_post_details"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_post_details">
         <argument
             android:name="userPostId"
-            app:argType="string"/>
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/editOwnUserPostFragment"
         android:name="com.example.footballdiscussion.fragments.EditOwnUserPostFragment"
-        android:label="fragment_edit_own_user_post"
-        tools:layout="@layout/fragment_edit_own_user_post" >
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_edit_own_user_post">
         <action
             android:id="@+id/action_editOwnUserPostFragment_to_ownUserPostsFragment"
             app:destination="@id/ownUserPostsFragment" />
@@ -132,6 +133,6 @@
             app:destination="@id/userPostsFragment" />
         <argument
             android:name="userPostId"
-            app:argType="string"/>
+            app:argType="string" />
     </fragment>
 </navigation>
