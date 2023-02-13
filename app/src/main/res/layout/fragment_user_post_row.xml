@@ -76,6 +76,7 @@
                         android:layout_marginLeft="40dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@id/user_post_row_username" />
+
                     <TextView
                         android:id="@+id/user_post_row_likes_number"
                         android:layout_width="wrap_content"
@@ -97,6 +98,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/user_post_row_edit_like_icon"
                         app:layout_constraintTop_toTopOf="parent" />
+
                     <ImageButton
                         android:id="@+id/user_post_row_edit_like_icon"
                         android:layout_width="wrap_content"
@@ -105,7 +107,7 @@
                         android:src="@drawable/baseline_thumb_up_off_alt_24"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintBottom_toBottomOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>

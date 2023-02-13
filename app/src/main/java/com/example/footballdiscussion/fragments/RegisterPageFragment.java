@@ -1,10 +1,5 @@
 package com.example.footballdiscussion.fragments;
 
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -12,27 +7,24 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.footballdiscussion.activities.PostsActivity;
 import com.example.footballdiscussion.databinding.FragmentRegisterPageBinding;
 import com.example.footballdiscussion.models.entities.User;
-import com.example.footballdiscussion.models.models.UserModel;
 import com.example.footballdiscussion.models.models.UserPostModel;
 import com.example.footballdiscussion.utils.UserUtils;
 import com.example.footballdiscussion.view_modals.RegisterPageViewModel;
-
-import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class RegisterPageFragment extends Fragment {
     private FragmentRegisterPageBinding binding;
@@ -96,7 +88,7 @@ public class RegisterPageFragment extends Fragment {
                             mViewModel.addUser(user, password, (e) -> openPostsActivity());
                         }
                     });
-                } else{
+                } else {
                     binding.registerProgressIndicator.show();
                     mViewModel.addUser(user, password, (e) -> openPostsActivity());
                 }

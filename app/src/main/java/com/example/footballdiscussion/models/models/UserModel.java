@@ -8,14 +8,14 @@ import android.util.Log;
 import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.footballdiscussion.models.firebase.FirebaseImageStorage;
-import com.example.footballdiscussion.models.firebase.UserFirebaseModal;
-import com.example.footballdiscussion.utils.LoadingState;
 import com.example.footballdiscussion.models.common.Listener;
 import com.example.footballdiscussion.models.entities.User;
 import com.example.footballdiscussion.models.firebase.FirebaseAuthentication;
+import com.example.footballdiscussion.models.firebase.FirebaseImageStorage;
+import com.example.footballdiscussion.models.firebase.UserFirebaseModal;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDb;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDbRepository;
+import com.example.footballdiscussion.utils.LoadingState;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;

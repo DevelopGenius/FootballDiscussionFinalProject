@@ -1,7 +1,6 @@
 package com.example.footballdiscussion.fragments.recycler_adapters;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -9,9 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.footballdiscussion.R;
 import com.example.footballdiscussion.databinding.FragmentCommentRowBinding;
-import com.example.footballdiscussion.models.entities.UserPost;
 import com.example.footballdiscussion.models.entities.UserPostComment;
-import com.example.footballdiscussion.utils.ImageUtils;
 
 import java.util.List;
 

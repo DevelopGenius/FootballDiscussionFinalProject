@@ -19,22 +19,22 @@ import java.util.Map;
 public class User {
     @PrimaryKey
     @NonNull
-    public String id="";
-    public String username="";
-    public String phone="";
-    public String email="";
-    public String imageUrl="";
+    public String id = "";
+    public String username = "";
+    public String phone = "";
+    public String email = "";
+    public String imageUrl = "";
     public Long lastUpdated;
 
     @Ignore
-    public User(String username, String phone, String email, String imageUrl){
+    public User(String username, String phone, String email, String imageUrl) {
         this.username = username;
         this.phone = phone;
         this.email = email;
         this.imageUrl = imageUrl;
     }
 
-    public User( String id,String username, String phone, String email, String imageUrl) {
+    public User(String id, String username, String phone, String email, String imageUrl) {
         this.id = id;
         this.username = username;
         this.phone = phone;
@@ -51,17 +51,17 @@ public class User {
     public static final String LAST_UPDATED = "lastUpdated";
     static final String LOCAL_LAST_UPDATED = "users_local_last_update";
 
-    public static User fromJson(Map<String,Object> json){
-        String id = (String)json.get(ID);
-        String username = (String)json.get(USERNAME);
-        String phone = (String)json.get(PHONE);
-        String email = (String)json.get(EMAIL);
-        String imageUrl = (String)json.get(IMAGE_URL);
+    public static User fromJson(Map<String, Object> json) {
+        String id = (String) json.get(ID);
+        String username = (String) json.get(USERNAME);
+        String phone = (String) json.get(PHONE);
+        String email = (String) json.get(EMAIL);
+        String imageUrl = (String) json.get(IMAGE_URL);
         User user = new User(id, username, phone, email, imageUrl);
-        try{
+        try {
             Timestamp time = (Timestamp) json.get(LAST_UPDATED);
             user.setLastUpdated(time.getSeconds());
-        }catch(Exception e){
+        } catch (Exception e) {
             throw e;
         }
 
@@ -76,11 +76,11 @@ public class User {
     public static void setLocalLastUpdate(Long time) {
         SharedPreferences sharedPref = ApplicationContext.getContext().getSharedPreferences("TAG", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putLong(LOCAL_LAST_UPDATED,time);
+        editor.putLong(LOCAL_LAST_UPDATED, time);
         editor.commit();
     }
 
-    public Map<String,Object> toJson(){
+    public Map<String, Object> toJson() {
         Map<String, Object> json = new HashMap<>();
         json.put(ID, getId());
         json.put(USERNAME, getUsername());

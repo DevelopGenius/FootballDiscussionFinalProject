@@ -5,14 +5,13 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.footballdiscussion.models.entities.UserPost;
-import com.example.footballdiscussion.utils.LoadingState;
 import com.example.footballdiscussion.models.API.GetUpcomingGamesDto;
 import com.example.footballdiscussion.models.API.UpcomingGameAdapter;
 import com.example.footballdiscussion.models.API.UpcomingGamesApi;
 import com.example.footballdiscussion.models.entities.UpcomingGame;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDb;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDbRepository;
+import com.example.footballdiscussion.utils.LoadingState;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

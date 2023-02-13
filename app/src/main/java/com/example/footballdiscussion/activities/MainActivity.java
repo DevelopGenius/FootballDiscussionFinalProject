@@ -2,8 +2,10 @@ package com.example.footballdiscussion.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+
 import com.example.footballdiscussion.databinding.ActivityMainBinding;
 import com.example.footballdiscussion.view_modals.MainViewModel;
 

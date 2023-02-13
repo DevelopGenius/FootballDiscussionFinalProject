@@ -7,7 +7,6 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.example.footballdiscussion.models.entities.User;
 import com.example.footballdiscussion.models.entities.UserPost;
 
 import java.util.List;

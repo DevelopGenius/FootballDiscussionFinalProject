@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.footballdiscussion.view_modals.UserCommentRowViewModel;
-import com.example.footballdiscussion.view_modals.UserPostRowViewModel;
 
 public class UserCommentRowFragment extends Fragment {
     private UserCommentRowViewModel viewModel;

@@ -8,21 +8,22 @@ import com.example.footballdiscussion.models.entities.UpcomingGame;
 import com.example.footballdiscussion.models.models.UpcomingGameModel;
 import com.example.footballdiscussion.utils.LoadingState;
 
-
 import java.util.List;
 
 public class UpcomingGamesViewModel extends ViewModel {
 
     UpcomingGameModel upcomingGameModel = UpcomingGameModel.getInstance();
+
     public LiveData<List<UpcomingGame>> getUpcomingGames() {
         return upcomingGameModel.getAllUpcomingGames();
     }
 
-    public void refreshAllUpcomingGames(){
-        upcomingGameModel.refreshAllUpcomingGames();;
+    public void refreshAllUpcomingGames() {
+        upcomingGameModel.refreshAllUpcomingGames();
+        ;
     }
 
-    public MutableLiveData<LoadingState> getUpcomingGamesLoadingState(){
+    public MutableLiveData<LoadingState> getUpcomingGamesLoadingState() {
         return upcomingGameModel.upcomingGamesLoadingState;
     }
 }

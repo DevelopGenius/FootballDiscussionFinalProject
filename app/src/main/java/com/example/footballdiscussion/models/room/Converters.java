@@ -2,7 +2,6 @@ package com.example.footballdiscussion.models.room;
 
 import androidx.room.TypeConverter;
 
-import com.example.footballdiscussion.models.entities.UserPostComment;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
@@ -12,7 +11,8 @@ import java.util.List;
 public class Converters {
     @TypeConverter
     public static List<String> fromString(String value) {
-        Type listType = new TypeToken<List<String>>() {}.getType();
+        Type listType = new TypeToken<List<String>>() {
+        }.getType();
         return new Gson().fromJson(value, listType);
     }
 

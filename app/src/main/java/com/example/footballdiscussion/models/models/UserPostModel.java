@@ -1,16 +1,17 @@
 package com.example.footballdiscussion.models.models;
 
 import android.graphics.Bitmap;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.footballdiscussion.models.firebase.FirebaseImageStorage;
-import com.example.footballdiscussion.models.firebase.UserPostFirebaseModal;
-import com.example.footballdiscussion.utils.LoadingState;
 import com.example.footballdiscussion.models.common.Listener;
 import com.example.footballdiscussion.models.entities.UserPost;
+import com.example.footballdiscussion.models.firebase.FirebaseImageStorage;
+import com.example.footballdiscussion.models.firebase.UserPostFirebaseModal;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDb;
 import com.example.footballdiscussion.models.room.FootballDiscussionLocalDbRepository;
+import com.example.footballdiscussion.utils.LoadingState;
 
 import java.util.List;
 import java.util.concurrent.Executor;

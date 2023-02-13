@@ -1,6 +1,5 @@
 package com.example.footballdiscussion.utils;
 
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;

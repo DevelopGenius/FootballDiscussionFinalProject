@@ -1,5 +1,7 @@
 package com.example.footballdiscussion.models.firebase;
+
 import androidx.annotation.NonNull;
+
 import com.example.footballdiscussion.models.common.Listener;
 import com.example.footballdiscussion.models.entities.User;
 import com.example.footballdiscussion.models.entities.UserPost;
@@ -12,6 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
+
 import java.util.ArrayList;
 import java.util.List;
 

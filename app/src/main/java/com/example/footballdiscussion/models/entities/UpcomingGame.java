@@ -77,12 +77,12 @@ public class UpcomingGame {
         this.secondTeamName = secondTeamName;
     }
 
-    public String getGameTitle(){
+    public String getGameTitle() {
         return leagueName + " " + gameDate;
     }
 
-    public String getGameDescription(){
-        return firstTeamName + " vs "+ secondTeamName;
+    public String getGameDescription() {
+        return firstTeamName + " vs " + secondTeamName;
     }
 
     public static Long getLocalLastUpdateTime() {

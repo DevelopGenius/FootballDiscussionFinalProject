@@ -80,8 +80,8 @@ public class UserPostDetailsFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(UserPostsViewModel.class);
     }
 
-    private void setUserPostData(UserPost userPost){
-        if(userPost != null){
+    private void setUserPostData(UserPost userPost) {
+        if (userPost != null) {
             binding.postDetailsRowTitle.setText(userPost.getPostTitle());
             binding.postDetailsRowUsername.setText(userPost.getUsername());
             ImageUtils.loadImage(userPost.getImageUrl(), binding.postDetailsRowImage, R.drawable.football_stadium);

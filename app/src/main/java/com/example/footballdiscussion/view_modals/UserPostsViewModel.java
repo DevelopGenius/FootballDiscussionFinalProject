@@ -37,9 +37,10 @@ public class UserPostsViewModel extends ViewModel {
         return userPosts == null ? null : filterOwnPosts(userPosts);
     }
 
-    public List<UserPost> filterOwnPosts(List<UserPost> userPosts){
+    public List<UserPost> filterOwnPosts(List<UserPost> userPosts) {
         return userPosts.stream().filter(this::isOwnPost).collect(Collectors.toList());
     }
+
     public User getCurrentUser() {
         return userModel.getCurrentLogInUser();
     }
@@ -64,12 +65,12 @@ public class UserPostsViewModel extends ViewModel {
         userPostModel.deleteUserPost(userPost);
     }
 
-    public LiveData<UserPost> getUserPostById(String userPostId){
+    public LiveData<UserPost> getUserPostById(String userPostId) {
         return userPostModel.getUserPostById(userPostId);
     }
 
     public void updateUserPost(UserPost userPost, Listener<Void> successCallback, Listener<String> failCallback) {
-        userPostModel.updateUserPost(userPost,successCallback, failCallback);
+        userPostModel.updateUserPost(userPost, successCallback, failCallback);
     }
 
     public void publishUserComment(String comment, UserPost userPost, Listener<Void> callback) {

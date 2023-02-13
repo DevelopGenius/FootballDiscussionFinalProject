@@ -13,5 +13,6 @@ public class FootballDiscussionLocalDb {
                 .build();
     }
 
-    private FootballDiscussionLocalDb(){}
+    private FootballDiscussionLocalDb() {
+    }
 }

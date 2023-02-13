@@ -1,7 +1,5 @@
 package com.example.footballdiscussion.models.entities;
 
-import com.example.footballdiscussion.models.models.UserModel;
-
 public class UserPostComment {
     private String comment;
     private String username;

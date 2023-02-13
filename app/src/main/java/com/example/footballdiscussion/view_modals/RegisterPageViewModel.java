@@ -11,6 +11,6 @@ public class RegisterPageViewModel extends ViewModel {
 
 
     public void addUser(User user, String password, Listener<Void> listener) {
-        userModel.addUser(user,password, listener);
+        userModel.addUser(user, password, listener);
     }
 }

@@ -9,7 +9,7 @@
         android:id="@+id/loginPageFragment"
         android:name="com.example.footballdiscussion.fragments.LoginPageFragment"
         android:label="@string/app_name"
-        tools:layout="@layout/fragment_login_page" >
+        tools:layout="@layout/fragment_login_page">
         <action
             android:id="@+id/action_loginPageFragment_to_registerPageFragment"
             app:destination="@id/registerPageFragment" />

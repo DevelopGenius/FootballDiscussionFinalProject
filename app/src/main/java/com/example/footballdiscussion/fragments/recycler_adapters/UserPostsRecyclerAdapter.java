@@ -96,6 +96,7 @@ public class UserPostsRecyclerAdapter extends RecyclerView.Adapter<UserPostsView
     public void setOnDeleteClickListener(OnIconClickListener onDeleteClickListener) {
         this.onDeleteClickListener = onDeleteClickListener;
     }
+
     @Override
     public void onBindViewHolder(@NonNull UserPostsViewHolder holder, int position) {
         holder.bind(data.get(position), currentUserId);

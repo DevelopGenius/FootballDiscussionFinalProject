@@ -1,26 +1,22 @@
 package com.example.footballdiscussion.fragments;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+
 import com.example.footballdiscussion.R;
-import com.example.footballdiscussion.databinding.FragmentUserPostsBinding;
 import com.example.footballdiscussion.databinding.FragmentViewProfileBinding;
 import com.example.footballdiscussion.models.entities.User;
 import com.example.footballdiscussion.utils.ImageUtils;
 import com.example.footballdiscussion.view_modals.ProfileViewModel;
-import com.squareup.picasso.Picasso;
 
 public class ViewProfileFragment extends Fragment {
 

@@ -8,7 +8,7 @@ import com.example.footballdiscussion.models.models.UserModel;
 public class MainViewModel extends ViewModel {
     private UserModel userModel = UserModel.instance();
 
-    public void userLoggedInHandler(Listener<Void> onLoggedInCallback, Listener<Void> onLoggedOutCallback){
+    public void userLoggedInHandler(Listener<Void> onLoggedInCallback, Listener<Void> onLoggedOutCallback) {
         userModel.userLoggedInHandler(onLoggedInCallback, onLoggedOutCallback);
     }
 

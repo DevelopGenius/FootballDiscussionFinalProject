@@ -10,7 +10,6 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import com.example.footballdiscussion.ApplicationContext;
-import com.example.footballdiscussion.models.room.Converters;
 import com.example.footballdiscussion.models.room.UserPostCommentConverter;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
@@ -38,7 +37,7 @@ public class UserPost {
 
     public UserPost(
             @NonNull String id, String userId, String username, String postTitle,
-            String imageUrl,List<String> userLikes, List<UserPostComment> userPostComments, boolean isDeleted
+            String imageUrl, List<String> userLikes, List<UserPostComment> userPostComments, boolean isDeleted
     ) {
         this.id = id;
         this.userId = userId;
@@ -68,32 +67,33 @@ public class UserPost {
     static final String POST_TITLE = "postTitle";
     static final String IMAGE_URL = "imageUrl";
     static final String IS_DELETED = "isDeleted";
-    static final String USERS_LIKE= "usersLike";
+    static final String USERS_LIKE = "usersLike";
     static final String USER_COMMENTS = "userComments";
     public static final String LAST_UPDATED = "lastUpdated";
-    static final String LOCAL_LAST_UPDATED =  "USER_POST_LOCAL_LAST_UPDATED";
-    public static UserPost fromJson(Map<String,Object> json){
-        String id = (String)json.get(ID);
-        String userId = (String)json.get(USER_ID);
-        String username = (String)json.get(USERNAME);
-        String postTitle = (String)json.get(POST_TITLE);
-        String imageUrl = (String)json.get(IMAGE_URL);
-        Boolean isDeleted = (Boolean)json.get(IS_DELETED);
-        List<String> userLikes =  ((List<String>) json.get(USERS_LIKE));
+    static final String LOCAL_LAST_UPDATED = "USER_POST_LOCAL_LAST_UPDATED";
+
+    public static UserPost fromJson(Map<String, Object> json) {
+        String id = (String) json.get(ID);
+        String userId = (String) json.get(USER_ID);
+        String username = (String) json.get(USERNAME);
+        String postTitle = (String) json.get(POST_TITLE);
+        String imageUrl = (String) json.get(IMAGE_URL);
+        Boolean isDeleted = (Boolean) json.get(IS_DELETED);
+        List<String> userLikes = ((List<String>) json.get(USERS_LIKE));
         List<UserPostComment> userPostComments = (List<UserPostComment>) json.get(USER_COMMENTS);
 
-        UserPost userPost = new UserPost(id,userId,username, postTitle,imageUrl,userLikes, userPostComments, isDeleted);
-        try{
+        UserPost userPost = new UserPost(id, userId, username, postTitle, imageUrl, userLikes, userPostComments, isDeleted);
+        try {
             Timestamp time = (Timestamp) json.get(LAST_UPDATED);
             userPost.setLastUpdated(time.getSeconds());
-        }catch(Exception e){
+        } catch (Exception e) {
             throw e;
         }
 
         return userPost;
     }
 
-    public Map<String,Object> toJson(){
+    public Map<String, Object> toJson() {
         Map<String, Object> json = new HashMap<>();
         json.put(ID, getId());
         json.put(USER_ID, getUserId());
@@ -115,10 +115,9 @@ public class UserPost {
     public static void setLocalLastUpdate(Long time) {
         SharedPreferences sharedPref = ApplicationContext.getContext().getSharedPreferences("USER_POST", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putLong(LOCAL_LAST_UPDATED,time);
+        editor.putLong(LOCAL_LAST_UPDATED, time);
         editor.commit();
     }
-
 
 
     @NonNull

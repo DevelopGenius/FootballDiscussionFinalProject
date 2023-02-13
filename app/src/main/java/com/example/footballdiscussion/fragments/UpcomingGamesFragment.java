@@ -1,24 +1,20 @@
 package com.example.footballdiscussion.fragments;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.example.footballdiscussion.databinding.FragmentUpcomingGamesBinding;
-import com.example.footballdiscussion.utils.LoadingState;
 import com.example.footballdiscussion.fragments.recycler_adapters.UpcomingGamesRecyclerAdapter;
-import com.example.footballdiscussion.models.models.UpcomingGameModel;
+import com.example.footballdiscussion.utils.LoadingState;
 import com.example.footballdiscussion.view_modals.UpcomingGamesViewModel;
 
 public class UpcomingGamesFragment extends Fragment {
@@ -47,7 +43,7 @@ public class UpcomingGamesFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(UpcomingGamesViewModel.class);
     }
 
-    public void setListeners(){
+    public void setListeners() {
         binding.upcomingGamesSwipeRefresh.setOnRefreshListener(() -> {
             viewModel.refreshAllUpcomingGames();
         });
