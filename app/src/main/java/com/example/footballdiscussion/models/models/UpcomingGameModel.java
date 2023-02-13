@@ -46,7 +46,7 @@ public class UpcomingGameModel {
             @Override
             public okhttp3.Response intercept(Chain chain) throws IOException {
                 Request request = chain.request().newBuilder()
-                        .addHeader("x-rapidapi-key", "9d083960607bdb82d54a20d8fa2c2420")
+                        .addHeader("x-rapidapi-key", "2e1cab524a110fd8e8af6eb3b72b68db")
                         .addHeader("x-rapidapi-host", "v3.football.api-sports.io")
                         .build();
                 return chain.proceed(request);
