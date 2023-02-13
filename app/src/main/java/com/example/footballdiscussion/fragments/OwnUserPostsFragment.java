@@ -54,6 +54,13 @@ public class OwnUserPostsFragment extends Fragment {
                     .actionOwnUserPostsFragmentToEditOwnUserPostFragment(userPost.getId()));
         });
 
+        ownUserPostsRecyclerAdapter.setOnItemClickListener(pos -> {
+            OwnUserPostsFragmentDirections.ActionOwnUserPostsFragmentToUserPostDetailsFragment action =
+                    OwnUserPostsFragmentDirections
+                            .actionOwnUserPostsFragmentToUserPostDetailsFragment
+                                    (viewModel.getOwnUserPosts().get(pos).getId());
+            Navigation.findNavController(binding.getRoot()).navigate(action);
+        });
         return view;
     }
 

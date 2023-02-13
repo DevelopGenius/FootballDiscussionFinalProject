@@ -68,17 +68,14 @@
             android:id="@+id/action_ownUserPostsFragment_to_createPostFragment"
             app:destination="@id/createPostFragment" />
         <action
-            android:id="@+id/action_ownUserPostsFragment_to_createPostFragment2"
-            app:destination="@id/createPostFragment" />
-        <action
             android:id="@+id/action_ownUserPostsFragment_to_viewProfileFragment"
             app:destination="@id/viewProfileFragment" />
         <action
-            android:id="@+id/action_ownUserPostsFragment_to_upcomingGamesFragment2"
-            app:destination="@id/upcomingGamesFragment" />
-        <action
             android:id="@+id/action_ownUserPostsFragment_to_editOwnUserPostFragment"
             app:destination="@id/editOwnUserPostFragment" />
+        <action
+            android:id="@+id/action_ownUserPostsFragment_to_userPostDetailsFragment"
+            app:destination="@id/userPostDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/createPostFragment"
@@ -102,7 +99,11 @@
         android:id="@+id/editProfileFragment"
         android:name="com.example.footballdiscussion.fragments.EditProfileFragment"
         android:label="fragment_edit_profile"
-        tools:layout="@layout/fragment_edit_profile"/>
+        tools:layout="@layout/fragment_edit_profile">
+        <action
+            android:id="@+id/action_editProfileFragment_to_viewProfileFragment"
+            app:destination="@id/viewProfileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/viewProfileFragment"
         android:name="com.example.footballdiscussion.fragments.ViewProfileFragment"

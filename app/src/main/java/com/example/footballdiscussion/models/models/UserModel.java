@@ -1,8 +1,11 @@
 package com.example.footballdiscussion.models.models;
 
 import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
+import androidx.core.os.HandlerCompat;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.footballdiscussion.utils.LoadingState;
@@ -20,6 +23,8 @@ public class UserModel {
     private static final UserModel _instance = new UserModel();
     private FirebaseAuthentication firebaseAuthentication;
     private Executor executor = Executors.newSingleThreadExecutor();
+    private Handler mainHandler = HandlerCompat.createAsync(Looper.getMainLooper());
+
     private FirebaseModel firebaseModel = new FirebaseModel();
     FootballDiscussionLocalDbRepository localDb = FootballDiscussionLocalDb.getAppDb();
     final public MutableLiveData<LoadingState> EventUsersListLoadingState = new MutableLiveData<>(LoadingState.NOT_LOADING);
@@ -75,7 +80,9 @@ public class UserModel {
         executor.execute(() -> {
             localDb.userDao().insertAll(user);
             currentLoggedInUser.postValue(user);
-            listener.onComplete(null);
+            mainHandler.post(
+                    () ->
+                            listener.onComplete(null));
         });
     }
 
@@ -143,7 +150,7 @@ public class UserModel {
 
     public void saveUpdatedUser(User user, Listener<Void> successCallback,
                                 Listener<String> failCallback) {
-        firebaseAuthentication.updateCurrentUserEmail(user.getEmail(), (unused) ->{
+        firebaseAuthentication.updateCurrentUserEmail(user.getEmail(), (unused) -> {
             firebaseModel.updateUser(user, (unused1 -> {
                 addLoggedInUserToCache(user, successCallback);
             }));
